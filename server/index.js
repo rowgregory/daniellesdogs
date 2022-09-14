@@ -11,6 +11,11 @@ const { ApolloError, ApolloServer } = require('apollo-server-express');
 const colors = require('colors');
 const path = require('path');
 const express = require('express');
+const http = require('http');
+const {
+  ApolloServerPluginDrainHttpServer,
+  ApolloServerPluginLandingPageLocalDefault,
+} = require('apollo-server-core');
 // Apollo Server's default caching features use an unbounded cache,
 // which is not safe for production use. If you want to configure
 // the in-memory cache, Apollo provides the InMemoryLRUCache class
@@ -18,6 +23,8 @@ const express = require('express');
 const { InMemoryLRUCache } = require('@apollo/utils.keyvaluecache');
 
 const app = express();
+
+const httpServer = http.createServer(app);
 
 const port = process.env.PORT || 5000;
 
@@ -80,8 +87,13 @@ connectDB();
 const server = new ApolloServer({
   schema: schemaWithPermissions,
   context: createContext,
+  csrfPrevention: true,
   introspection: process.env.NODE_ENV !== 'production',
   cache: new InMemoryLRUCache(),
+  plugins: [
+    ApolloServerPluginDrainHttpServer({ httpServer }),
+    ApolloServerPluginLandingPageLocalDefault({ embed: true }),
+  ],
 });
 
 server.start().then(res => {
