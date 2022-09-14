@@ -42,15 +42,6 @@ const createContext = ({ req, res }) => {
   const { headers } = req;
   let auth = null;
 
-  res.header(
-    'Access-Control-Allow-Origin',
-    'https://shielded-coast-28301.herokuapp.com'
-  );
-  res.header(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept'
-  );
-
   const token = headers?.authorization?.split(' ')[1];
   if (token) {
     const user = jwt.verify(token, 'secret_password');
@@ -108,8 +99,12 @@ const server = new ApolloServer({
   ],
 });
 
+const corsOptions = {
+  origin: ['https://shielded-coast-28301.herokuapp.com'],
+};
+
 server.start().then(res => {
-  server.applyMiddleware({ app, path: '/' });
+  server.applyMiddleware({ app, cors: corsOptions, path: '/graphql' });
 
   app.listen({ port }, () =>
     console.log(`Gateway API running at port: ${port}`.yellow)
