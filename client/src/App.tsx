@@ -17,7 +17,7 @@ import { GET_REFRESH_TOKEN } from './queries/getRefreshToken';
 import jwtDecode from 'jwt-decode';
 
 const httpsLink = createHttpLink({
-  uri: 'http://localhost:5000/graphql',
+  uri: '/graphql',
 }) as any;
 
 const consoleLink = new ApolloLink((operation, forward) => {
