@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useState } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { Routes } from './routes';
 import { ThemeProvider } from 'styled-components';
 import { themes } from './utils/theme';
@@ -94,13 +94,13 @@ const App = () => {
   return (
     <AuthProvider>
       <ApolloProvider client={client}>
-        <Router>
+        <BrowserRouter>
           <ThemeProvider theme={themes[theme]}>
             <Suspense fallback={<></>}>
               <Routes />
             </Suspense>
           </ThemeProvider>
-        </Router>
+        </BrowserRouter>
       </ApolloProvider>
     </AuthProvider>
   );
