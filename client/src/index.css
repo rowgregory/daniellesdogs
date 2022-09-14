@@ -1,0 +1,57 @@
+body {
+  margin: 0;
+  font-family: Cormorant, serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+html body {
+  height: 100%;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Italianno&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
+
+label,
+input,
+::placeholder,
+th {
+  font-family: Cormorant, serif;
+}
+
+tr {
+  vertical-align: middle;
+}
+
+.modal-dialog {
+  max-width: 900px !important;
+  width: 100% !important;
+}
+
+video {
+  filter: brightness(50%);
+}
+
+a[href^="http://maps.google.com/maps"]
+{
+  display: none !important;
+}
+a[href^="https://maps.google.com/maps"]
+{
+  display: none !important;
+}
+
+.gmnoprint a,
+.gmnoprint span,
+.gm-style-cc {
+  display: none;
+}
+.gmnoprint div {
+  background: none !important;
+}
