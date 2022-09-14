@@ -27,18 +27,6 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use((req, res, next) => {
-  res.header(
-    'Access-Control-Allow-Origin',
-    'https://shielded-coast-28301.herokuapp.com'
-  ); // update to match the domain you will make the request from
-  res.header(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept'
-  );
-  next();
-});
-
 const httpServer = http.createServer(app);
 
 const port = process.env.PORT || 5000;
@@ -50,9 +38,18 @@ const isAdmin = rule()(async (_, __, ctx) => {
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 
-const createContext = ({ req }) => {
+const createContext = ({ req, res }) => {
   const { headers } = req;
   let auth = null;
+
+  res.header(
+    'Access-Control-Allow-Origin',
+    'https://shielded-coast-28301.herokuapp.com'
+  );
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
 
   const token = headers?.authorization?.split(' ')[1];
   if (token) {
