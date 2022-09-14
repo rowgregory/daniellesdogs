@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { Logo } from './svg/Logo';
 import SocialMediaNavbar from '../components/SocialMediaNavbar';
-import { Text } from './elements';
 
 const quickLinks = () => {
   return [
@@ -208,7 +207,6 @@ const Footer = () => {
                   >
                     Privacy Policy
                   </StyledExternalLink>
-                  <Text>&nbsp;/&nbsp;</Text>
                   <StyledExternalLink
                     onClick={() =>
                       window.open('https://oag.ca.gov/privacy/ccpa', '_blank')
@@ -216,7 +214,6 @@ const Footer = () => {
                   >
                     California Consumer Privacy Act
                   </StyledExternalLink>
-                  <Text>&nbsp;/&nbsp;</Text>
                   <StyledExternalLink
                     onClick={() =>
                       window.open(

@@ -4,16 +4,24 @@ const typeDefs = require('./graphql/typeDefs.js');
 const resolvers = require('./graphql/resolvers');
 const { makeExecutableSchema } = require('@graphql-tools/schema');
 const { applyMiddleware } = require('graphql-middleware');
-const { ApolloServer } = require('apollo-server');
+// const { ApolloServer } = require('apollo-server');
 const { shield, rule, allow, deny } = require('graphql-shield');
 const jwt = require('jsonwebtoken');
-const { ApolloError } = require('apollo-server-express');
+const { ApolloError, ApolloServer } = require('apollo-server-express');
 const colors = require('colors');
+const path = require('path');
+const express = require('express');
+// Apollo Server's default caching features use an unbounded cache,
+// which is not safe for production use. If you want to configure
+// the in-memory cache, Apollo provides the InMemoryLRUCache class
+// from the @apollo/utils.keyvaluecache package
+const { InMemoryLRUCache } = require('@apollo/utils.keyvaluecache');
+
+const app = express();
 
 const port = process.env.PORT || 5000;
 
 const isAdmin = rule()(async (_, __, ctx) => {
-  console.log('IS ADMIN CONTEXT: ', ctx);
   if (!ctx.auth) throw new ApolloError('not_authorized', 'NOT AUTHORIZED');
   else return ctx.auth.user_type === 'ADMIN';
 });
@@ -27,7 +35,6 @@ const createContext = ({ req }) => {
   const token = headers?.authorization?.split(' ')[1];
   if (token) {
     const user = jwt.verify(token, 'secret_password');
-    console.log('user: ', user);
     if (user) auth = user;
   } else auth = null;
 
@@ -58,6 +65,14 @@ const permissions = shield(
   }
 );
 
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('client/build'));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
+
 const schemaWithPermissions = applyMiddleware(schema, permissions);
 
 connectDB();
@@ -65,7 +80,16 @@ connectDB();
 const server = new ApolloServer({
   schema: schemaWithPermissions,
   context: createContext,
-  introspection: true,
+  introspection: process.env.NODE_ENV !== 'production',
+  cache: new InMemoryLRUCache(),
 });
 
-server.listen(port, console.log(`Server running on port ${port}`.yellow));
+server.start().then(res => {
+  server.applyMiddleware({ app });
+
+  app.listen({ port }, () =>
+    console.log(`Gateway API running at port: ${port}`.yellow)
+  );
+});
+
+// server.listen(port, console.log(`Server running on port ${port}`.yellow));

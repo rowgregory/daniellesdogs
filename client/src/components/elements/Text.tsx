@@ -22,7 +22,7 @@ interface TextProps {
 const Text = styled.div<TextProps>(
   {
     fontSize: '1rem',
-    color: '#aaa',
+    color: '#414042',
     fontFamily: 'Cormorant, serif',
     padding: '',
     margin: '',
