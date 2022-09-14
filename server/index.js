@@ -85,7 +85,7 @@ const server = new ApolloServer({
 });
 
 server.start().then(res => {
-  server.applyMiddleware({ app });
+  server.applyMiddleware({ app, path: '/' });
 
   app.listen({ port }, () =>
     console.log(`Gateway API running at port: ${port}`.yellow)
