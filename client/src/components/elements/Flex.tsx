@@ -2,12 +2,12 @@ import styled from 'styled-components';
 import { createMediaQueries } from '../../utils/createMediaQueries';
 
 interface FlexProps {
-  display: string[];
-  flexDirection: string[];
-  justifyContent: string[];
-  alignItems: string[];
-  flexWrap: string[];
-  flex: string[];
+  display?: string[];
+  flexDirection?: string[];
+  justifyContent?: string[];
+  alignItems?: string[];
+  flexWrap?: string[];
+  flex?: string[];
 }
 
 const Flex = styled.div<FlexProps>(

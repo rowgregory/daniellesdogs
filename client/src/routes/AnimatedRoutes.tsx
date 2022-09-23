@@ -7,7 +7,6 @@ import Waiver from './Waiver';
 import Dashboard from './Dashboard';
 import NewClientForms from './NewClientForms';
 import { DashboardLayoutWithSideBar } from '../components/layouts/DashboardLayoutWithSideBar';
-import SideBar from '../components/admin/SideBar';
 import NewClientFormEdit from './NewClientFormEdit';
 import LoggedOut from './LoggedOut';
 import Gallery from './Gallery';
@@ -16,6 +15,14 @@ import Contact from './Contact';
 import About from './About';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
+import NewClientFormAddress from './NewClientFormAddress';
+import NewClientFormVet from './NewClientFormVet';
+import NewClientFormPets from './NewClientFormPets';
+import Complete from './Complete';
+import GalleryImages from './GalleryImages';
+import Clients from './Clients';
+import Orders from './Orders';
+import Services from './Services';
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -28,9 +35,12 @@ const AnimatedRoutes = () => {
         <Route
           path='/:user_id/:user_type/*'
           element={
-            <DashboardLayoutWithSideBar sideBar={<SideBar />}>
+            <DashboardLayoutWithSideBar>
               <Routes>
                 <Route path='dashboard' element={<Dashboard />} />
+                <Route path='gallery-images' element={<GalleryImages />} />
+                <Route path='clients' element={<Clients />} />
+                <Route path='orders' element={<Orders />} />
                 <Route
                   path='new-client-forms/*'
                   element={
@@ -44,13 +54,25 @@ const AnimatedRoutes = () => {
             </DashboardLayoutWithSideBar>
           }
         />
-        <Route path='/waiver' element={<Waiver />} />
-        <Route path='/new-client-form' element={<NewClientForm />} />
+        <Route
+          path='/new-client-form/*'
+          element={
+            <Routes>
+              <Route index={true} element={<NewClientForm />} />
+              <Route path='address' element={<NewClientFormAddress />} />
+              <Route path='vet' element={<NewClientFormVet />} />
+              <Route path='pets' element={<NewClientFormPets />} />
+              <Route path='waiver' element={<Waiver />} />
+              <Route path='complete' element={<Complete />} />
+            </Routes>
+          }
+        />
         <Route path='/logged-out' element={<LoggedOut />} />
         <Route path='/gallery' element={<Gallery />} />
         <Route path='/shop' element={<Shop />} />
         <Route path='/contact' element={<Contact />} />
         <Route path='/about' element={<About />} />
+        <Route path='/services' element={<Services />} />
       </Routes>
     </AnimatePresence>
   );

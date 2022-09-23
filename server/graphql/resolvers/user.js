@@ -143,5 +143,20 @@ module.exports = {
           },
         });
     },
+    async getUserByEmail(_, { emailAddress }) {
+      try {
+        const userExists = await User.findOne({ emailAddress });
+        if (userExists)
+          return {
+            message: `Looks like you've already set up an account with that email. Please call.`,
+          };
+        else
+          return {
+            message: 'OKAY_TO_GO',
+          };
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
   },
 };

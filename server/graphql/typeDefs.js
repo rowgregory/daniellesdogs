@@ -73,6 +73,9 @@ module.exports = gql`
     afterMeetingNotes: String
     user: User
     address: Address
+    signedWaiver: Boolean
+    signedWaiverSignature: String
+    signedWaiverDate: String
   }
 
   type Address {
@@ -86,6 +89,10 @@ module.exports = gql`
   type AuthTokens {
     accessToken: String
     refreshToken: String
+  }
+
+  type Message {
+    message: String
   }
 
   input AddressInput {
@@ -127,6 +134,9 @@ module.exports = gql`
     pets: [PetInput]
     vet: VetInput
     afterMeetingNotes: String
+    signedWaiver: Boolean
+    signedWaiverSignature: String
+    signedWaiverDate: String
   }
 
   input NewClientFormEditInput {
@@ -160,6 +170,7 @@ module.exports = gql`
 
   type Query {
     getUserById(id: ID!): User
+    getUserByEmail(emailAddress: String): Message
     getUsers: [User]
     getNewClientFormById(id: ID!): NewClientForm
     getNewClientForms: [NewClientForm]

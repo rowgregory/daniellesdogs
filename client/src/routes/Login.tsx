@@ -1,21 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
 import { useForm } from '../utils/hooks/useForm';
 import { gql, useMutation } from '@apollo/client';
 import { Text } from '../components/elements';
 import { AuthContext } from '../context/authContext';
-import { FormInput } from '../components/styles/form';
-
-const FormContainer = styled.div`
-  max-width: ${({ theme }) => theme.breakpoints[1]};
-  margin: 0 auto;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
+import {
+  FormGroup,
+  FormInput,
+  FormLabel,
+  FormContainer,
+} from '../components/styles/form';
+import { NewClientFormTitle } from './NewClientForm';
 
 const LOGIN = gql`
   mutation loginClient($loginInput: LoginInput) {
@@ -88,9 +84,15 @@ const Login = () => {
 
   return (
     <FormContainer>
-      <Form className='w-100'>
-        <Form.Group controlId='emailAddress'>
-          <Form.Label className='mb-1'>Email Address</Form.Label>
+      <NewClientFormTitle>Login</NewClientFormTitle>
+      <Form className='w-25'>
+        {errors.map((error: any, i: number) => (
+          <Alert variant='danger' key={i}>
+            {error.message}
+          </Alert>
+        ))}
+        <FormGroup controlId='emailAddress'>
+          <FormLabel className='mb-1'>Email Address</FormLabel>
           <FormInput
             name='emailAddress'
             value={inputs.emailAddress || ''}
@@ -98,9 +100,9 @@ const Login = () => {
             placeholder='Email Address'
             onChange={handleInputChange}
           />
-        </Form.Group>
-        <Form.Group controlId='password'>
-          <Form.Label className='mb-1'>Password</Form.Label>
+        </FormGroup>
+        <FormGroup controlId='password'>
+          <FormLabel className='mb-1'>Password</FormLabel>
           <FormInput
             name='password'
             value={inputs.password || ''}
@@ -108,13 +110,14 @@ const Login = () => {
             placeholder='Password'
             onChange={handleInputChange}
           />
-        </Form.Group>
-        <Button onClick={onSubmit}>Submit</Button>
+        </FormGroup>
+        <div className='d-flex justify-content-between align-items-center mt-5'>
+          <Button className='' onClick={onSubmit}>
+            Submit
+          </Button>
+          <Link to='/register'>Register</Link>
+        </div>
       </Form>
-      <Link to='/register'>Register</Link>
-      {errors.map((error: any, i: number) => (
-        <Alert key={i}>{error.message}</Alert>
-      ))}
     </FormContainer>
   );
 };

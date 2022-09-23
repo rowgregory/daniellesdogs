@@ -22,8 +22,6 @@ const addClientMutation = {
 
       const hashedPassword = await bcrypt.hash(args.password, 12);
 
-      console.log('ARE WE HERE');
-
       const token = jwt.sign(
         { emailAddress: args.emailAddress },
         'secret_password',

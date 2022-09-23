@@ -54,6 +54,7 @@ const createContext = ({ req, res }) => {
 const permissions = shield(
   {
     Query: {
+      getUserByEmail: allow,
       getNewClientForms: isAdmin,
       getNewClientFormById: isAdmin,
       getPetById: isAdmin,

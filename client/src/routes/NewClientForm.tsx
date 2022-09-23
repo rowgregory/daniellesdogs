@@ -1,366 +1,172 @@
-import { useMutation } from '@apollo/client';
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FormContainer, FormInput } from '../components/styles/form';
+import React, { useEffect, useState } from 'react';
+import {
+  FormContainer,
+  FormGroup,
+  FormInput,
+  FormLabel,
+} from '../components/styles/form';
 import { useForm } from '../utils/hooks/useForm';
 import { Text } from '../components/elements';
-import { Alert, Button, Form, Stack } from 'react-bootstrap';
-import { CREATE_NEW_CLIENT_FORM } from '../mutations/createNewClientForm';
-import { petValues } from '../utils/form-values/values';
+import { Button, Form, Spinner, Stack } from 'react-bootstrap';
+import { useLazyQuery } from '@apollo/client';
+import { GET_USER_BY_EMAIL } from '../queries/getNewClientForms';
+import { useNavigate } from 'react-router-dom';
+import { ErrorAlertIcon } from '../components/svg/ErrorAlertIcon';
+import styled from 'styled-components';
+import { validateNewClientForm } from '../utils/validate';
+import { motion } from 'framer-motion';
+
+export const ErrorText = styled(Text)`
+  font-family: 'Oxygen', sans-serif;
+  font-size: 0.875rem;
+  color: #d42825;
+  font-weight: bold;
+`;
+
+export const NewClientFormTitle = styled(Text)`
+  font-family: 'Oxygen', sans-serif;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+`;
 
 const NewClientForm = () => {
+  const [errorMessage, setErrorMessage] = useState('');
+  const [errors, setErrors] = useState() as any;
   const navigate = useNavigate();
   const values = {
     firstName: '',
     lastName: '',
     emailAddress: '',
     phoneNumber: '',
-    address: {
-      addressLine1: '',
-      city: '',
-      state: '',
-      zipPostalCode: '',
-    },
-    openYard: false,
-    pets: [
-      {
-        ...petValues,
-      },
-    ],
-    vet: {
-      name: '',
-      address: '',
-      phoneNumber: '',
-    },
     afterMeetingNotes: '',
   };
-  const [errors, setErrors] = useState([]) as any;
 
-  const createNewClientFormCallback = () => {
-    createNewClientForm();
-  };
+  useEffect(() => {
+    document.title = 'New Client Form';
+  }, []);
 
-  const { inputs, handleInputChange, setInputs, onSubmit } = useForm(
-    createNewClientFormCallback,
-    values
-  );
+  const { inputs, handleInputChange } = useForm(values);
 
-  const [createNewClientForm, { loading }] = useMutation(
-    CREATE_NEW_CLIENT_FORM,
-    {
-      onError({ graphQLErrors }) {
-        setErrors(graphQLErrors);
-      },
-      onCompleted() {
-        navigate('/waiver');
-      },
-      variables: { newClientFormInput: inputs },
-    }
-  );
+  let [getUserByEmail, { loading, data }] = useLazyQuery(GET_USER_BY_EMAIL, {
+    fetchPolicy: 'cache-and-network',
+    onCompleted: () => {
+      const allFieldsAreFilled = [
+        errors?.firstName,
+        errors?.lastName,
+        errors?.emailAddress,
+        errors?.phoneNumber,
+      ].every((f) => f === '');
 
-  const addPet = () => {
-    const values = [...inputs.pets];
-    values.push({ ...petValues });
+      const emailDoesNotExist = data?.getUserByEmail?.message === 'OKAY_TO_GO';
+      const emailDoesExist = data?.getUserByEmail?.message !== 'OKAY_TO_GO';
 
-    setInputs((inputs: any) => ({
-      ...inputs,
-      pets: values,
-    }));
-  };
-
-  const handleRemovePet = (index: any) => {
-    const values = [...inputs.pets];
-    values.splice(index, 1);
-    setInputs(() => ({
-      ...inputs,
-      pets: values,
-    }));
-  };
+      const okToProceed = emailDoesNotExist && allFieldsAreFilled;
+      if (okToProceed) {
+        setErrorMessage('');
+        navigate('/new-client-form/address', {
+          state: {
+            firstName: inputs?.firstName,
+            lastName: inputs?.lastName,
+            emailAddress: inputs?.emailAddress,
+            phoneNumber: inputs?.phoneNumber,
+          },
+        });
+      } else if (emailDoesExist) {
+        setErrorMessage(data?.getUserByEmail?.message);
+      }
+    },
+  });
 
   return (
-    <FormContainer>
-      {loading && 'Loading ...'}
-      <Text fontSize={['2rem']}>New Client Form</Text>
-      <Form className='w-100'>
-        <Stack>
-          <Form.Group controlId='firstName'>
-            <Form.Label className='mb-1'>First Name</Form.Label>
-            <FormInput
-              name='firstName'
-              value={inputs.firstName || ''}
-              type='text'
-              placeholder='First Name'
-              onChange={handleInputChange}
-            />
-          </Form.Group>
-          <Form.Group controlId='lastName'>
-            <Form.Label className='mb-1'>Last Name</Form.Label>
-            <FormInput
-              name='lastName'
-              value={inputs.lastName || ''}
-              type='text'
-              placeholder='Last Name'
-              onChange={handleInputChange}
-            />
-          </Form.Group>
-          <Form.Group controlId='emailAddress'>
-            <Form.Label className='mb-1'>Email Address</Form.Label>
-            <FormInput
-              name='emailAddress'
-              value={inputs.emailAddress || ''}
-              type='text'
-              placeholder='Email Address'
-              onChange={handleInputChange}
-            />
-          </Form.Group>
-          <Form.Group controlId='phoneNumber'>
-            <Form.Label className='mb-1'>Phone Number</Form.Label>
-            <FormInput
-              name='phoneNumber'
-              value={inputs.phoneNumber || ''}
-              type='text'
-              placeholder='Phone Number'
-              onChange={handleInputChange}
-            />
-          </Form.Group>
-          <Text fontSize={['1.5rem']}>Address</Text>
-          <Form.Group controlId='addressLine1'>
-            <Form.Label className='mb-1'>Address</Form.Label>
-            <FormInput
-              name='addressLine1'
-              value={inputs.address.addressLine1 || ''}
-              type='text'
-              placeholder='Address'
-              onChange={handleInputChange}
-            />
-          </Form.Group>
-          <div className='d-flex justify-space-between w-100'>
-            <Form.Group controlId='city'>
-              <Form.Label className='mb-1'>City</Form.Label>
-              <FormInput
-                name='city'
-                value={inputs.address.city || ''}
-                type='text'
-                placeholder='City'
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-            <Form.Group controlId='state'>
-              <Form.Label className='mb-1'>State</Form.Label>
-              <FormInput
-                name='state'
-                value={inputs.address.state || ''}
-                type='text'
-                placeholder='State'
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-            <Form.Group controlId='zipPostalCode'>
-              <Form.Label className='mb-1'>Zip/Postal Code</Form.Label>
-              <FormInput
-                name='zipPostalCode'
-                value={inputs.address.zipPostalCode || ''}
-                type='text'
-                placeholder='Zip/Postal Code'
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-          </div>
-          <Form.Group controlId='openYard'>
-            <Form.Label className='mb-1'>
-              Is your yard open for play dates?
-            </Form.Label>
-            <Form.Check
-              id='openYard'
-              name='openYard'
-              type='switch'
-              onChange={handleInputChange}
-            ></Form.Check>
-          </Form.Group>
-          <Text fontSize={['1.5rem']}>Vet</Text>
-          <Form.Group controlId='vetName'>
-            <Form.Label className='mb-1'>Name</Form.Label>
-            <FormInput
-              name='vetName'
-              value={inputs.vet.name || ''}
-              type='text'
-              placeholder='Name'
-              onChange={handleInputChange}
-            />
-          </Form.Group>
-          <Form.Group controlId='vetAddress'>
-            <Form.Label className='mb-1'>Address</Form.Label>
-            <FormInput
-              name='vetAddress'
-              value={inputs.vet.address || ''}
-              type='text'
-              placeholder='Address'
-              onChange={handleInputChange}
-            />
-          </Form.Group>
-          <Form.Group controlId='vetPhoneNumber'>
-            <Form.Label className='mb-1'>Phone Number</Form.Label>
-            <FormInput
-              name='vetPhoneNumber'
-              value={inputs.vet.phoneNumber || ''}
-              type='tel'
-              placeholder='Phone Number'
-              onChange={handleInputChange}
-            />
-          </Form.Group>
-          <div className='d-flex'>
-            <Text fontSize={['1.5rem']}>Pet</Text>
-            <Button onClick={() => addPet()}>Add Pet</Button>
-          </div>
-          {inputs.pets?.map((pet: any, i: number) => (
-            <div
-              key={i}
-              className='w-100'
-              style={{ borderBottom: '2px solid #ccc' }}
-            >
-              <div className='d-flex justify-content-between'>
-                <Form.Group controlId='name' className='w-100'>
-                  <Form.Label className='mb-1'>Name</Form.Label>
-                  <FormInput
-                    name='name'
-                    value={pet.name}
-                    type='text'
-                    placeholder='Name'
-                    onChange={(e) => handleInputChange(e, i)}
-                  />
-                </Form.Group>
-                <Form.Group controlId='age' className='w-100'>
-                  <Form.Label className='mb-1'>Age</Form.Label>
-                  <FormInput
-                    name='age'
-                    value={pet.age}
-                    type='number'
-                    placeholder='Age'
-                    onChange={(e) => handleInputChange(e, i)}
-                  />
-                </Form.Group>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0.25 }}
+      transition={{ duration: 0.5 }}
+    >
+      <FormContainer>
+        <NewClientFormTitle>Introduce yourself.</NewClientFormTitle>
+        <Text fontFamily='Oxygen, sans-serif' margin={['0 0 1.5rem 0']}>
+          Let's get to know each other. Quick tip: make sure all fields are
+          accurately filled out;
+        </Text>
+        <Form className='w-100'>
+          <Stack>
+            {errorMessage && (
+              <div className='d-flex align-items-center mb-3'>
+                <ErrorAlertIcon />
+                <Text margin={['0 0 0 1rem']} fontFamily={`Oxygen, sans-serif`}>
+                  {errorMessage}
+                </Text>
               </div>
-              <Form.Group controlId='breedString' className='w-50'>
-                <Form.Label className='mb-1'>Breed</Form.Label>
-                <FormInput
-                  name='breedString'
-                  value={pet.breedString}
-                  type='text'
-                  placeholder='Breed'
-                  onChange={(e) => handleInputChange(e, i)}
-                />
-              </Form.Group>
-              <Form.Group controlId='sex' className='w-50'>
-                <Form.Label className='mb-1'>Sex</Form.Label>
-                <FormInput
-                  name='sex'
-                  value={pet.sex}
-                  type='text'
-                  placeholder='Sex'
-                  onChange={(e) => handleInputChange(e, i)}
-                />
-              </Form.Group>
-              <Form.Group controlId='preferredTimeOfService' className='w-50'>
-                <Form.Label className='mb-1'>
-                  Preferred Time of Service
-                </Form.Label>
-                <FormInput
-                  name='preferredTimeOfService'
-                  value={pet.preferredTimeOfService}
-                  type='text'
-                  placeholder='Preferred Time of Service'
-                  onChange={(e) => handleInputChange(e, i)}
-                />
-              </Form.Group>
-              <Form.Group controlId='harnessLocation' className='w-50'>
-                <Form.Label className='mb-1'>Harness Location</Form.Label>
-                <FormInput
-                  name='harnessLocation'
-                  value={pet.harnessLocation}
-                  type='text'
-                  placeholder='Harness Location'
-                  onChange={(e) => handleInputChange(e, i)}
-                />
-              </Form.Group>
-              <Form.Group controlId='dropOffLocation' className='w-50'>
-                <Form.Label className='mb-1'>Drop Off Location</Form.Label>
-                <FormInput
-                  name='dropOffLocation'
-                  value={pet.dropOffLocation}
-                  type='text'
-                  placeholder='Drop Off Location'
-                  onChange={(e) => handleInputChange(e, i)}
-                />
-              </Form.Group>
-              <Form.Group controlId='freeRoaming'>
-                <Form.Label className='mb-1'>Free Roaming</Form.Label>
-                <Form.Check
-                  id='freeRoaming'
-                  name='freeRoaming'
-                  type='switch'
-                  onChange={(e) => handleInputChange(e, i)}
-                ></Form.Check>
-              </Form.Group>
-              <Form.Group controlId='isSprayed'>
-                <Form.Label className='mb-1'>Srayed/Neutered?</Form.Label>
-                <Form.Check
-                  id='isSprayed'
-                  name='isSprayed'
-                  type='switch'
-                  onChange={(e) => handleInputChange(e, i)}
-                ></Form.Check>
-              </Form.Group>
-              <Form.Group controlId='medications' className='w-50'>
-                <Form.Label className='mb-1'>Medications</Form.Label>
-                <FormInput
-                  name='medications'
-                  value={pet.medications}
-                  type='text'
-                  placeholder='Medications'
-                  onChange={(e) => handleInputChange(e, i)}
-                />
-              </Form.Group>
-              <Form.Group controlId='allergies' className='w-50'>
-                <Form.Label className='mb-1'>Allergies</Form.Label>
-                <FormInput
-                  name='allergies'
-                  value={pet.allergies}
-                  type='text'
-                  placeholder='Allergies'
-                  onChange={(e) => handleInputChange(e, i)}
-                />
-              </Form.Group>
-              <Form.Group controlId='temperament' className='w-50'>
-                <Form.Label className='mb-1'>Temperament</Form.Label>
-                <FormInput
-                  name='temperament'
-                  value={pet.temperament}
-                  type='text'
-                  placeholder='Temperament'
-                  onChange={(e) => handleInputChange(e, i)}
-                />
-              </Form.Group>
-              <Form.Group controlId='goodWithStrangers'>
-                <Form.Label className='mb-1'>Good With Strangers</Form.Label>
-                <Form.Check
-                  id='goodWithStrangers'
-                  name='goodWithStrangers'
-                  type='switch'
-                  onChange={(e) => handleInputChange(e, i)}
-                ></Form.Check>
-              </Form.Group>
-              <Button variant='secondary' onClick={() => handleRemovePet(i)}>
-                Cancel
-              </Button>
-            </div>
-          ))}
-        </Stack>
-      </Form>
-      <Text onClick={onSubmit}>Submit</Text>
-      {errors.map((error: any, i: number) => (
-        <Alert key={i}>{error.message}</Alert>
-      ))}
-    </FormContainer>
+            )}
+            <FormGroup controlId='firstName'>
+              <FormLabel className='mb-0'>First Name</FormLabel>
+              <FormInput
+                name='firstName'
+                value={inputs?.firstName || ''}
+                type='text'
+                onChange={handleInputChange}
+              />
+              <ErrorText>{errors?.firstName}</ErrorText>
+            </FormGroup>
+            <FormGroup controlId='lastName'>
+              <FormLabel className='mb-0'>Last Name</FormLabel>
+              <FormInput
+                name='lastName'
+                value={inputs?.lastName || ''}
+                type='text'
+                onChange={handleInputChange}
+              />
+            </FormGroup>
+            <ErrorText>{errors?.lastName}</ErrorText>
+            <FormGroup controlId='emailAddress'>
+              <FormLabel className='mb-0'>Email Address</FormLabel>
+              <FormInput
+                name='emailAddress'
+                value={inputs?.emailAddress || ''}
+                type='text'
+                onChange={handleInputChange}
+              />
+              <ErrorText>{errors?.emailAddress}</ErrorText>
+            </FormGroup>
+            <FormGroup controlId='phoneNumber'>
+              <FormLabel className='mb-0'>Phone Number</FormLabel>
+              <FormInput
+                name='phoneNumber'
+                value={inputs?.phoneNumber || ''}
+                type='text'
+                onChange={handleInputChange}
+              />
+              <ErrorText>{errors?.phoneNumber}</ErrorText>
+            </FormGroup>
+          </Stack>
+          <Button
+            className='py-1 px-3 d-flex align-items-center justify-content-center text-white mt-5'
+            style={{
+              textTransform: 'capitalize',
+            }}
+            onClick={() => {
+              validateNewClientForm(setErrors, inputs);
+              inputs?.emailAddress &&
+                getUserByEmail({
+                  variables: { emailAddress: inputs?.emailAddress },
+                });
+            }}
+          >
+            <Text
+              fontFamily={`Oxygen, sans-serif`}
+              color='#fff'
+              margin={[`0 ${loading ? '0.5rem' : '0'} 0 0`]}
+            >
+              Continue
+            </Text>
+            {loading && <Spinner animation='border' size='sm' />}
+          </Button>
+        </Form>
+      </FormContainer>
+    </motion.div>
   );
 };
 

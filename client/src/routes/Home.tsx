@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactPlayer from 'react-player/lazy';
 import styled from 'styled-components';
-import { Text } from '../components/elements';
+import { Text, Flex } from '../components/elements';
 import { motion } from 'framer-motion';
 import Dog1 from '../components/assets/dogs_1.png';
 import Picture from '../components/elements/Picture';
@@ -20,6 +20,7 @@ import Communication from '../components/svg/Communication';
 import Map from '../components/Map';
 import Marquee from 'react-fast-marquee';
 import { Logo } from '../components/svg/Logo';
+import { Spinner } from 'react-bootstrap';
 
 gsap.registerPlugin(ScrollTrigger, CSSPlugin);
 
@@ -319,11 +320,21 @@ const imgArr = [
   },
 ];
 
+const IntroSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding-top: 12.5rem;
+  @media screen and (min-width: ${({ theme }) => theme.breakpoints[1]}) {
+    flex-direction: row;
+  }
+`;
+
 const Home = () => {
+  const [showVideoLoader, setShowVideoLoader] = useState(true);
   const firstImgRef = useRef(null) as any;
   const nameRef = useRef(null) as any;
   const quoteRef = useRef(null) as any;
-  const setsUsApartRef = useRef(null) as any;
   const revealRefs = useRef([]) as any;
   const apartRef = useRef([]) as any;
   const servicesRef = useRef(null) as any;
@@ -343,14 +354,13 @@ const Home = () => {
   };
 
   useEffect(() => {
-    document.title = `Danielle's Dogs`;
+    document.title = `Danielle's Dog's`;
   });
 
   useEffect(() => {
     const el = firstImgRef.current;
     const el2 = nameRef.current;
     const el3 = quoteRef.current;
-    const el4 = setsUsApartRef.current;
     const el5 = revealRefs.current;
     const el6 = apartRef.current;
     const el7 = servicesRef.current;
@@ -396,30 +406,17 @@ const Home = () => {
       '-=0.15'
     );
 
-    tl2
-      .to(el4, {
-        transformOrigin: 'bottom left',
-        rotate: 90,
-        duration: 0.3,
-        scrollTrigger: {
-          start: 'bottom+=800 bottom',
-          end: 'bottom top',
-          trigger: el,
-          scrub: 0.5,
-          toggleActions: 'play pause none reset',
-        },
-      })
-      .to(el6, {
-        color: '#ffc7c7',
-        duration: 0.3,
-        scrollTrigger: {
-          start: 'bottom+=600 bottom',
-          end: 'top+=525 top',
-          trigger: el,
-          scrub: 0.5,
-          toggleActions: 'play pause none reset',
-        },
-      });
+    tl2.to(el6, {
+      color: '#ffc7c7',
+      duration: 0.3,
+      scrollTrigger: {
+        start: 'bottom+=600 bottom',
+        end: 'top+=525 top',
+        trigger: el,
+        scrub: 0.5,
+        toggleActions: 'play pause none reset',
+      },
+    });
 
     el5.forEach((el: any) => {
       gsap.fromTo(
@@ -461,9 +458,8 @@ const Home = () => {
       stagger: 0.025,
       scrollTrigger: {
         trigger: el7,
-        start: 'bottom+=300 bottom',
+        start: 'bottom+=500 bottom',
         toggleActions: 'play pause none reset',
-        // markers: true,
       },
     });
 
@@ -489,7 +485,6 @@ const Home = () => {
         trigger: el7a,
         start: 'bottom+=300 bottom',
         toggleActions: 'play pause none reset',
-        // markers: true,
       },
     });
 
@@ -520,38 +515,62 @@ const Home = () => {
       transition={{ duration: 0.5 }}
     >
       <div style={{ position: 'relative', minHeight: '100vh' }}>
-        <CenterArea>
-          <Logo />
-          <BannerLogoText
-            fontFamily={`Italianno, cursive`}
-            color='#f3f3f3'
-            margin={['0 auto']}
-            fontSize={['5rem']}
-          >
-            Danielle's Dogs
-          </BannerLogoText>
-          <div className='d-flex justify-content-evenly'>
-            <SMContainer
-              onClick={() =>
-                window.open(
-                  'https://www.instagram.com/danielles__dogs/?hl=en',
-                  '_blank'
-                )
-              }
+        {!showVideoLoader && (
+          <CenterArea>
+            <Logo />
+            <BannerLogoText
+              fontFamily={`Italianno, cursive`}
+              color='#f3f3f3'
+              margin={['0 auto']}
+              fontSize={['5rem']}
             >
-              <i className='fab fa-instagram fa-3x'></i>
-            </SMContainer>
-            <SMContainer
-              onClick={() =>
-                window.open('https://www.facebook.com/DaniellesDogs', '_blank')
-              }
-            >
-              <i className='fab fa-facebook-f fa-3x'></i>
-            </SMContainer>
-          </div>
-        </CenterArea>
+              Danielle's Dogs
+            </BannerLogoText>
+            <div className='d-flex justify-content-evenly'>
+              <SMContainer
+                onClick={() =>
+                  window.open(
+                    'https://www.instagram.com/danielles__dogs/?hl=en',
+                    '_blank'
+                  )
+                }
+              >
+                <i className='fab fa-instagram fa-3x'></i>
+              </SMContainer>
+              <SMContainer
+                onClick={() =>
+                  window.open(
+                    'https://www.facebook.com/DaniellesDogs',
+                    '_blank'
+                  )
+                }
+              >
+                <i className='fab fa-facebook-f fa-3x'></i>
+              </SMContainer>
+            </div>
+          </CenterArea>
+        )}
         <div>
+          {showVideoLoader && (
+            <div
+              style={{
+                width: '100%',
+                height: '100%',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                display: 'flex',
+                justifyContent: 'center',
+                flexDirection: 'column',
+              }}
+              className='d-flex justify-content-center align-items-center'
+            >
+              <Spinner animation='border' />
+              <Text>Loading Danielle's Dogs...</Text>
+            </div>
+          )}
           <ReactPlayer
+            onReady={() => setShowVideoLoader(false)}
             style={{ position: 'absolute', top: 0, left: 0 }}
             url='https://res.cloudinary.com/little-paws-dachshund-rescue/video/upload/v1660078524/production_ID_5126333_tzxwzt.mp4'
             playsinline
@@ -583,26 +602,24 @@ const Home = () => {
         }}
       >
         <div className='d-flex' style={{ position: 'relative' }}>
-          <div
-            style={{
-              position: 'relative',
-              paddingTop: '12.5rem',
-              display: 'flex',
-            }}
-          >
+          <IntroSection>
             <Picture
               ref={firstImgRef}
               src={Dog1}
               alt='DD'
               objectfit={['cover']}
-              width={['50%', '50%', '50%', '60%']}
+              width={['100%', '50%', '50%', '50%', '60%']}
               margin={['0 2rem 0 0']}
             />
-            <div className='d-flex flex-column justify-content-center'>
+            <Flex
+              alignItems={['center', 'flex-start']}
+              className='d-flex flex-column justify-content-center'
+            >
               <Text
                 ref={nameRef}
                 fontFamily={`Italianno, cursive`}
-                fontSize={['3rem', '3rem', '4rem', '5rem', '5.5rem']}
+                fontSize={['4rem', '4rem', '4rem', '5rem', '5.5rem']}
+                margin={['1.5rem 0 0 0', '0']}
               >
                 Danielle's Dogs
               </Text>
@@ -611,32 +628,36 @@ const Home = () => {
                 lineHeight={['30px']}
                 fontWeight={['600']}
                 fontSize={['0.875rem', '1.15rem', '1.45rem', '1.55rem']}
-                width={['11rem', '13rem', '20rem']}
+                width={['', '11rem', '13rem', '20rem']}
               >
                 We're here to care for your pets and make your life easier.
               </Text>
-            </div>
-          </div>
+            </Flex>
+          </IntroSection>
         </div>
         <div
           style={{
             position: 'relative',
             width: '100%',
             display: 'flex',
-            flexDirection: 'column',
-            padding: '0 0 16rem 0',
+            margin: '15rem 0',
           }}
         >
           <Text
             color={['#aaa']}
-            ref={setsUsApartRef}
+            // ref={setsUsApartRef}
             fontSize={['3rem', '3rem', '4rem', '5rem', '5.5rem']}
-            margin={['20rem 0 0 16%']}
+            // margin={['20rem 0 0 16%']}
             fontFamily={`Italianno, cursive`}
+            style={{
+              transform: 'rotate(-90deg) translate(194px, 56px)',
+              transformOrigin: 'right',
+            }}
+            width={['fit-content']}
           >
             What sets us <span ref={apartRef}>apart?</span>
           </Text>
-          <div className='d-flex-flex-column' style={{ marginLeft: '35%' }}>
+          <div className='d-flex-flex-column'>
             {setsUsApartData.map((obj: any, i: number) => (
               <div
                 ref={addToRefs}

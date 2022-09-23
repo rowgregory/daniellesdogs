@@ -44,14 +44,6 @@ const UserSchema = Schema(
       type: SchemaTypes.ObjectId,
       ref: 'Pet',
     },
-    services: {
-      type: SchemaTypes.ObjectId,
-      ref: 'Service',
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
   },
   {
     timestamps: true,

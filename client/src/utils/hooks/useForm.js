@@ -68,7 +68,7 @@ export const useForm = (callback, values, data) => {
       setInputs((inputs) => ({
         ...inputs,
         address: {
-          ...inputs.address,
+          ...inputs?.address,
           [eventName]: eventValue,
         },
       }));
@@ -92,7 +92,7 @@ export const useForm = (callback, values, data) => {
       setInputs((inputs) => ({
         ...inputs,
         vet: {
-          ...inputs.vet,
+          ...inputs?.vet,
           [evName]: eventValue,
         },
       }));
