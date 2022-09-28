@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Text } from '../components/elements';
 import {
@@ -12,7 +12,7 @@ import { useMutation } from '@apollo/client';
 import { useForm } from '../utils/hooks/useForm';
 import { validateNewClientFormWaiver } from '../utils/validate';
 import { Alert, Button, Form, Spinner } from 'react-bootstrap';
-import { ErrorText, NewClientFormTitle } from './NewClientForm';
+import { ErrorText, PageTitle } from './NewClientForm';
 
 const Waiver = () => {
   const navigate = useNavigate();
@@ -33,7 +33,11 @@ const Waiver = () => {
   };
 
   const createNewClientFormCallback = () => {
-    validateNewClientFormWaiver(setErrors, inputs);
+    const validForm = validateNewClientFormWaiver(setErrors, inputs);
+
+    if (validForm) {
+      createNewClientForm();
+    }
   };
 
   const { inputs, handleInputChange, onSubmit } = useForm(
@@ -77,20 +81,9 @@ const Waiver = () => {
     }
   );
 
-  useEffect(() => {
-    const allFieldsAreFilled = [
-      errors?.signedWaiverSignature,
-      errors?.signedWaiverDate,
-    ].every((field) => field === '');
-
-    if (allFieldsAreFilled) {
-      createNewClientForm();
-    }
-  }, [errors, createNewClientForm]);
-
   return (
     <FormContainer>
-      <NewClientFormTitle>Waiver</NewClientFormTitle>
+      <PageTitle>Waiver</PageTitle>
       <Form>
         {graphQLErrors?.map((error: any) => (
           <Alert variant='danger'>{error}</Alert>

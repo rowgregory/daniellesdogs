@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
@@ -9,10 +9,13 @@ import {
 } from '../components/styles/form';
 import { useForm } from '../utils/hooks/useForm';
 import { validateNewClientFormVet } from '../utils/validate';
-import { ErrorText, NewClientFormTitle } from './NewClientForm';
+import { ErrorText, PageTitle } from './NewClientForm';
 
 const NewClientFormVet = () => {
+  const [errors, setErrors] = useState() as any;
   const { state } = useLocation() as any;
+  const navigate = useNavigate();
+
   const values = {
     vet: {
       name: '',
@@ -20,18 +23,13 @@ const NewClientFormVet = () => {
       phoneNumber: '',
     },
   };
+
   const { inputs, handleInputChange } = useForm(values);
-  const [errors, setErrors] = useState() as any;
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    const allFieldsAreFilled = [
-      errors?.name,
-      errors?.address,
-      errors?.phoneNumber,
-    ].every((f) => f === '');
+  const handleSubmit = () => {
+    const validForm = validateNewClientFormVet(setErrors, inputs);
 
-    if (allFieldsAreFilled) {
+    if (validForm) {
       navigate('/new-client-form/pets', {
         state: {
           firstName: state?.firstName,
@@ -52,15 +50,11 @@ const NewClientFormVet = () => {
         },
       });
     }
-  }, [errors, inputs, state, navigate]);
-
-  const handleSubmit = () => {
-    validateNewClientFormVet(setErrors, inputs);
   };
 
   return (
     <FormContainer>
-      <NewClientFormTitle>Vet</NewClientFormTitle>
+      <PageTitle>Vet</PageTitle>
       <Form>
         <FormGroup controlId='vetName'>
           <FormLabel className='mb-0'>Name</FormLabel>

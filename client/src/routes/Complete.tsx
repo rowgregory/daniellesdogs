@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link, Text } from '../components/elements';
 import { FormContainer } from '../components/styles/form';
-import { NewClientFormTitle } from './NewClientForm';
+import { PageTitle } from './NewClientForm';
 
 const ReturnHomeLink = styled(Link)`
   background: ${({ theme }) => theme.colors.primary};
@@ -17,7 +17,7 @@ const ReturnHomeLink = styled(Link)`
 const Complete = () => {
   return (
     <FormContainer>
-      <NewClientFormTitle>Complete!</NewClientFormTitle>
+      <PageTitle>Complete!</PageTitle>
       <Text fontFamily={`Oxygen, sans-serif`} margin={['0 0 2rem 0']}>
         Thank you for submitting our new client form. You will be contacted once
         your submition has been reviewed.

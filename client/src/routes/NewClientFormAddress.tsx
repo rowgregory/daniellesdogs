@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
@@ -11,12 +11,13 @@ import {
 import { useForm } from '../utils/hooks/useForm';
 import { STATES } from '../utils/states';
 import { validateNewClientFormAddress } from '../utils/validate';
-import { ErrorText, NewClientFormTitle } from './NewClientForm';
+import { ErrorText, PageTitle } from './NewClientForm';
 
 const NewClientFormAddress = () => {
   const [errors, setErrors] = useState() as any;
-  const navigate = useNavigate();
   const { state } = useLocation() as any;
+  const navigate = useNavigate();
+
   const values = {
     address: {
       addressLine1: '',
@@ -28,15 +29,10 @@ const NewClientFormAddress = () => {
 
   const { inputs, handleInputChange } = useForm(values);
 
-  useEffect(() => {
-    const allFieldsAreFilled = [
-      errors?.addressLine1,
-      errors?.city,
-      errors?.state,
-      errors?.zipPostalCode,
-    ].every((f) => f === '');
+  const handleSubmit = () => {
+    const validForm = validateNewClientFormAddress(setErrors, inputs);
 
-    if (allFieldsAreFilled) {
+    if (validForm) {
       navigate('/new-client-form/vet', {
         state: {
           firstName: state?.firstName,
@@ -52,15 +48,11 @@ const NewClientFormAddress = () => {
         },
       });
     }
-  }, [errors, inputs, state, navigate]);
-
-  const handleSubmit = () => {
-    validateNewClientFormAddress(setErrors, inputs);
   };
 
   return (
     <FormContainer>
-      <NewClientFormTitle>Address</NewClientFormTitle>
+      <PageTitle>Address</PageTitle>
       <Form>
         <FormGroup controlId='addressLine1'>
           <FormLabel className='mb-0'>Address</FormLabel>

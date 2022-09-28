@@ -18,7 +18,6 @@ module.exports = {
         },
       }
     ) {
-      console.log('FIRST NAME: ', firstName);
       try {
         const userExists = await User.findOne({ emailAddress });
         if (userExists) throw new Error('Invalid email or password');
@@ -83,7 +82,6 @@ module.exports = {
       }
     },
     async getRefreshToken(_, args) {
-      console.log('args: ', args);
       return {
         accessToken: jwt.sign(
           { user_type: args.userType, first_name: args.firstName },

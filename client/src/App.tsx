@@ -95,7 +95,7 @@ const App = () => {
     <AuthProvider>
       <ApolloProvider client={client}>
         <BrowserRouter>
-          <ThemeProvider theme={themes[theme]}>
+          <ThemeProvider theme={themes['light']}>
             <Suspense fallback={<></>}>
               <Routes />
             </Suspense>

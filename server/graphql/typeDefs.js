@@ -7,23 +7,27 @@ module.exports = gql`
     MONTHLY
     YEARLY
   }
+
   enum Status {
     PENDING
     INACTIVE
     ACTIVE
     CANCELLED
   }
+
   enum UserType {
     ADMIN
     CLIENT
     CONSUMER
   }
+
   type Service {
     serviceType: String
     status: Status
     frequency: Frequency!
     amount: String
   }
+
   type User {
     id: ID
     firstName: String
@@ -41,6 +45,7 @@ module.exports = gql`
     newClientForm: NewClientForm
     userType: UserType
   }
+
   type Vet {
     id: ID
     name: String
@@ -92,6 +97,25 @@ module.exports = gql`
   }
 
   type Message {
+    message: String
+  }
+
+  type GalleryImage {
+    id: ID
+    publicId: String
+    secureUrl: String
+    height: String
+    width: String
+    format: String
+    bytes: String
+  }
+
+  type ContactForm {
+    id: ID
+    firstName: String
+    lastName: String
+    emailAddress: String
+    subject: String
     message: String
   }
 
@@ -168,6 +192,14 @@ module.exports = gql`
     frequency: Frequency
   }
 
+  input ContactFormInput {
+    firstName: String
+    lastName: String
+    emailAddress: String
+    subject: String
+    message: String
+  }
+
   type Query {
     getUserById(id: ID!): User
     getUserByEmail(emailAddress: String): Message
@@ -177,6 +209,7 @@ module.exports = gql`
     getServiceById(id: ID!): Service
     getServices: [Service]
     getPetById(id: ID!): Pet
+    galleryImageList: [GalleryImage]
   }
 
   type Mutation {
@@ -202,5 +235,7 @@ module.exports = gql`
     createPet(id: ID, petCreateInput: PetInput): Pet
     deletePet(id: ID!): Pet
     getRefreshToken(userType: String, firstName: String): AuthTokens
+    deleteGalleryImage(id: ID!): Message
+    createContactForm(contactFormInput: ContactFormInput): ContactForm
   }
 `;

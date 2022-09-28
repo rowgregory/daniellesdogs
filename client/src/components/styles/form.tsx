@@ -23,6 +23,17 @@ export const FormInput = styled.input`
     border-color: 0 !important;
   }
 `;
+export const FormTextArea = styled(Form.Control)`
+  width: 235px;
+  padding: 0.4rem 1.2rem;
+  border: 1px solid ${({ theme }) => theme.border};
+  :active,
+  :focus {
+    box-shadow: none !important;
+    outline: none !important;
+    border-color: 0 !important;
+  }
+`;
 
 export const FormSelect = styled.select`
   width: 235px;

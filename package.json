@@ -6,7 +6,9 @@
   "type": "commonjs",
   "scripts": {
     "start": "node server/index.js",
-    "dev": "nodemon server/index.js",
+    "server": "nodemon server/index",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
     "build": "NPM_CONFIG_PRODUCTION=true npm install --prefix client && npm run build --prefix client"
   },
@@ -21,6 +23,7 @@
     "apollo-server-express": "^3.10.0",
     "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
+    "cloudinary": "^1.25.1",
     "colors": "^1.4.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -33,9 +36,12 @@
     "graphql-middleware": "^6.1.32",
     "graphql-shield": "^7.5.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.4.7"
+    "mongoose": "^6.4.7",
+    "multer": "^1.4.2",
+    "streamifier": "^0.1.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.19"
+    "nodemon": "^2.0.19",
+    "concurrently": "^5.3.0"
   }
 }

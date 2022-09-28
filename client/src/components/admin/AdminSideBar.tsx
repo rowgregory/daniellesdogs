@@ -64,7 +64,7 @@ const AdminSideBar: FC<AdminSideBarProps> = ({
               onClick={() => setShowAdminPanel(false)}
               color={['#fff']}
               margin={['0 0 1.5rem 0']}
-              to={`/${user?.userId}/${user?.userType}/dashboard`}
+              to={`/${user?.id}/${user?.userType}/dashboard`}
               fontSize={['1.5rem']}
             >
               Dashboard
@@ -73,7 +73,7 @@ const AdminSideBar: FC<AdminSideBarProps> = ({
               onClick={() => setShowAdminPanel(false)}
               color={['#fff']}
               margin={['0 0 1.5rem 0']}
-              to={`/${user?.userId}/${user?.userType}/gallery-images`}
+              to={`/${user?.id}/${user?.userType}/gallery-images`}
               fontSize={['1.5rem']}
             >
               Gallery Images
@@ -82,7 +82,7 @@ const AdminSideBar: FC<AdminSideBarProps> = ({
               onClick={() => setShowAdminPanel(false)}
               color={['#fff']}
               margin={['0 0 1.5rem 0']}
-              to={`/${user?.userId}/${user?.userType}/new-client-forms`}
+              to={`/${user?.id}/${user?.userType}/new-client-forms`}
               fontSize={['1.5rem']}
             >
               New Client Forms
@@ -91,7 +91,7 @@ const AdminSideBar: FC<AdminSideBarProps> = ({
               onClick={() => setShowAdminPanel(false)}
               color={['#fff']}
               margin={['0 0 1.5rem 0']}
-              to={`/${user?.userId}/${user?.userType}/clients`}
+              to={`/${user?.id}/${user?.userType}/clients`}
               fontSize={['1.5rem']}
             >
               Clients
@@ -100,7 +100,7 @@ const AdminSideBar: FC<AdminSideBarProps> = ({
               onClick={() => setShowAdminPanel(false)}
               color={['#fff']}
               margin={['0 0 4rem 0']}
-              to={`/${user?.userId}/${user?.userType}/orders`}
+              to={`/${user?.id}/${user?.userType}/orders`}
               fontSize={['1.5rem']}
             >
               Orders

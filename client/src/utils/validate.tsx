@@ -10,7 +10,9 @@ export const validateNewClientForm = (
   setErrors: (errors: any) => void,
   inputs: any
 ) => {
+  let formIsValid = true;
   if (!inputs?.firstName) {
+    formIsValid = false;
     setErrors((errors: any) => ({
       ...errors,
       firstName: 'Enter first name to continue.',
@@ -19,6 +21,7 @@ export const validateNewClientForm = (
     setErrors((errors: any) => ({ ...errors, firstName: '' }));
   }
   if (!inputs?.lastName) {
+    formIsValid = false;
     setErrors((errors: any) => ({
       ...errors,
       lastName: 'Enter last name to continue.',
@@ -27,11 +30,13 @@ export const validateNewClientForm = (
     setErrors((errors: any) => ({ ...errors, lastName: '' }));
   }
   if (!inputs?.emailAddress) {
+    formIsValid = false;
     setErrors((errors: any) => ({
       ...errors,
       emailAddress: 'Enter an email to continue.',
     }));
   } else if (!validateEmailRegex.test(inputs?.emailAddress)) {
+    formIsValid = false;
     setErrors((errors: any) => ({
       ...errors,
       emailAddress: 'Enter a valid email to continue.',
@@ -40,11 +45,13 @@ export const validateNewClientForm = (
     setErrors((errors: any) => ({ ...errors, emailAddress: '' }));
   }
   if (!inputs?.phoneNumber) {
+    formIsValid = false;
     setErrors((errors: any) => ({
       ...errors,
       phoneNumber: 'Enter a phone number to continue.',
     }));
   } else if (!validatePhoneNumberRegex.test(inputs?.phoneNumber)) {
+    formIsValid = false;
     setErrors((errors: any) => ({
       ...errors,
       phoneNumber: 'Enter a valid phone number to continue.',
@@ -52,13 +59,17 @@ export const validateNewClientForm = (
   } else {
     setErrors((errors: any) => ({ ...errors, phoneNumber: '' }));
   }
+
+  return formIsValid;
 };
 
 export const validateNewClientFormAddress = (
   setErrors: (errors: any) => void,
   inputs: any
 ) => {
+  let formIsValid = true;
   if (!inputs?.address?.addressLine1) {
+    formIsValid = false;
     setErrors((errors: any) => ({
       ...errors,
       addressLine1: 'Enter address to continue.',
@@ -67,6 +78,7 @@ export const validateNewClientFormAddress = (
     setErrors((errors: any) => ({ ...errors, addressLine1: '' }));
   }
   if (!inputs?.address?.city) {
+    formIsValid = false;
     setErrors((errors: any) => ({
       ...errors,
       city: 'Enter city to continue.',
@@ -75,6 +87,7 @@ export const validateNewClientFormAddress = (
     setErrors((errors: any) => ({ ...errors, city: '' }));
   }
   if (!inputs?.address?.state) {
+    formIsValid = false;
     setErrors((errors: any) => ({
       ...errors,
       state: 'Enter state to continue.',
@@ -83,11 +96,13 @@ export const validateNewClientFormAddress = (
     setErrors((errors: any) => ({ ...errors, state: '' }));
   }
   if (!inputs?.address?.zipPostalCode) {
+    formIsValid = false;
     setErrors((errors: any) => ({
       ...errors,
       zipPostalCode: 'Enter zip postal code to continue.',
     }));
   } else if (!validateZipPostalCode.test(inputs?.address?.zipPostalCode)) {
+    formIsValid = false;
     setErrors((errors: any) => ({
       ...errors,
       zipPostalCode: 'Enter valid zip postal code to continue.',
@@ -95,13 +110,17 @@ export const validateNewClientFormAddress = (
   } else {
     setErrors((errors: any) => ({ ...errors, zipPostalCode: '' }));
   }
+
+  return formIsValid;
 };
 
 export const validateNewClientFormVet = (
   setErrors: (errors: any) => void,
   inputs: any
 ) => {
+  let formIsValid = true;
   if (!inputs?.vet?.name) {
+    formIsValid = false;
     setErrors((errors: any) => ({
       ...errors,
       name: 'Enter name to continue.',
@@ -110,6 +129,7 @@ export const validateNewClientFormVet = (
     setErrors((errors: any) => ({ ...errors, name: '' }));
   }
   if (!inputs?.vet?.address) {
+    formIsValid = false;
     setErrors((errors: any) => ({
       ...errors,
       address: 'Enter address to continue.',
@@ -118,11 +138,13 @@ export const validateNewClientFormVet = (
     setErrors((errors: any) => ({ ...errors, address: '' }));
   }
   if (!inputs?.vet?.phoneNumber) {
+    formIsValid = false;
     setErrors((errors: any) => ({
       ...errors,
       phoneNumber: 'Enter a phone number to continue.',
     }));
   } else if (!validatePhoneNumberRegex.test(inputs?.vet?.phoneNumber)) {
+    formIsValid = false;
     setErrors((errors: any) => ({
       ...errors,
       phoneNumber: 'Enter a valid phone number to continue.',
@@ -130,10 +152,14 @@ export const validateNewClientFormVet = (
   } else {
     setErrors((errors: any) => ({ ...errors, phoneNumber: '' }));
   }
+
+  return formIsValid;
 };
 
 export const validateNewClientFormPets = (setErrors: any, inputs: any) => {
+  let formIsValid = true;
   if (!inputs?.pets[0]?.name) {
+    formIsValid = false;
     setErrors((errors: any) => ({
       ...errors,
       name: 'Enter name to continue.',
@@ -142,6 +168,7 @@ export const validateNewClientFormPets = (setErrors: any, inputs: any) => {
     setErrors((errors: any) => ({ ...errors, name: '' }));
   }
   if (!inputs?.pets[0]?.age) {
+    formIsValid = false;
     setErrors((errors: any) => ({
       ...errors,
       age: 'Enter age to continue.',
@@ -150,6 +177,7 @@ export const validateNewClientFormPets = (setErrors: any, inputs: any) => {
     setErrors((errors: any) => ({ ...errors, age: '' }));
   }
   if (!inputs?.pets[0]?.breedString) {
+    formIsValid = false;
     setErrors((errors: any) => ({
       ...errors,
       breedString: 'Enter a breed to continue.',
@@ -205,10 +233,14 @@ export const validateNewClientFormPets = (setErrors: any, inputs: any) => {
   } else {
     setErrors((errors: any) => ({ ...errors, allergies: '' }));
   }
+
+  return formIsValid;
 };
 
 export const validateNewClientFormWaiver = (setErrors: any, inputs: any) => {
+  let formIsValid = true;
   if (!inputs?.signedWaiverSignature) {
+    formIsValid = false;
     setErrors((errors: any) => ({
       ...errors,
       signedWaiverSignature: 'Sign waiver to complete.',
@@ -217,6 +249,7 @@ export const validateNewClientFormWaiver = (setErrors: any, inputs: any) => {
     setErrors((errors: any) => ({ ...errors, signedWaiverSignature: '' }));
   }
   if (!inputs?.signedWaiverDate) {
+    formIsValid = false;
     setErrors((errors: any) => ({
       ...errors,
       signedWaiverDate: 'Enter date to complete.',
@@ -224,4 +257,66 @@ export const validateNewClientFormWaiver = (setErrors: any, inputs: any) => {
   } else {
     setErrors((errors: any) => ({ ...errors, signedWaiverDate: '' }));
   }
+
+  return formIsValid;
+};
+
+export const validateContactForm = (
+  setErrors: (errors: any) => void,
+  inputs: any
+) => {
+  let formIsValid = true;
+  if (!inputs?.firstName) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      firstName: 'Enter first name to continue.',
+    }));
+  } else {
+    setErrors((errors: any) => ({ ...errors, firstName: '' }));
+  }
+  if (!inputs?.lastName) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      lastName: 'Enter last name to continue.',
+    }));
+  } else {
+    setErrors((errors: any) => ({ ...errors, lastName: '' }));
+  }
+  if (!inputs?.emailAddress) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      emailAddress: 'Enter an email to continue.',
+    }));
+  } else if (!validateEmailRegex.test(inputs?.emailAddress)) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      emailAddress: 'Enter a valid email to continue.',
+    }));
+  } else {
+    setErrors((errors: any) => ({ ...errors, emailAddress: '' }));
+  }
+  if (!inputs?.subject) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      subject: 'Enter subject to continue.',
+    }));
+  } else {
+    setErrors((errors: any) => ({ ...errors, subject: '' }));
+  }
+  if (!inputs?.message) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      message: 'Enter message to continue.',
+    }));
+  } else {
+    setErrors((errors: any) => ({ ...errors, message: '' }));
+  }
+
+  return formIsValid;
 };

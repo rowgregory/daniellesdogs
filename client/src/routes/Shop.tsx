@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Text } from '../components/elements';
@@ -21,16 +20,11 @@ const Shop = () => {
     document.title = 'Shop';
   });
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0.25 }}
-      transition={{ duration: 0.5 }}
-    >
+    <>
       <Container>
         <Text>Shop</Text>
       </Container>
-    </motion.div>
+    </>
   );
 };
 

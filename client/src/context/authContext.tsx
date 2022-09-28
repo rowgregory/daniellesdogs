@@ -22,7 +22,7 @@ if (localStorage.getItem('token')) {
     token.removeToken();
   } else {
     initialState.user = {
-      userId: decodedToken.user_id,
+      id: decodedToken.user_id,
       firstName: decodedToken.first_name,
       lastName: decodedToken.last_name,
       emailAddress: decodedToken.email_address,

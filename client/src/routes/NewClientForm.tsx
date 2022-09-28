@@ -14,7 +14,6 @@ import { useNavigate } from 'react-router-dom';
 import { ErrorAlertIcon } from '../components/svg/ErrorAlertIcon';
 import styled from 'styled-components';
 import { validateNewClientForm } from '../utils/validate';
-import { motion } from 'framer-motion';
 
 export const ErrorText = styled(Text)`
   font-family: 'Oxygen', sans-serif;
@@ -23,7 +22,7 @@ export const ErrorText = styled(Text)`
   font-weight: bold;
 `;
 
-export const NewClientFormTitle = styled(Text)`
+export const PageTitle = styled(Text)`
   font-family: 'Oxygen', sans-serif;
   font-size: 1.5rem;
   margin-bottom: 1rem;
@@ -51,17 +50,10 @@ const NewClientForm = () => {
   let [getUserByEmail, { loading, data }] = useLazyQuery(GET_USER_BY_EMAIL, {
     fetchPolicy: 'cache-and-network',
     onCompleted: () => {
-      const allFieldsAreFilled = [
-        errors?.firstName,
-        errors?.lastName,
-        errors?.emailAddress,
-        errors?.phoneNumber,
-      ].every((f) => f === '');
-
       const emailDoesNotExist = data?.getUserByEmail?.message === 'OKAY_TO_GO';
       const emailDoesExist = data?.getUserByEmail?.message !== 'OKAY_TO_GO';
 
-      const okToProceed = emailDoesNotExist && allFieldsAreFilled;
+      const okToProceed = emailDoesNotExist;
       if (okToProceed) {
         setErrorMessage('');
         navigate('/new-client-form/address', {
@@ -79,14 +71,9 @@ const NewClientForm = () => {
   });
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0.25 }}
-      transition={{ duration: 0.5 }}
-    >
+    <>
       <FormContainer>
-        <NewClientFormTitle>Introduce yourself.</NewClientFormTitle>
+        <PageTitle>Introduce yourself.</PageTitle>
         <Text fontFamily='Oxygen, sans-serif' margin={['0 0 1.5rem 0']}>
           Let's get to know each other. Quick tip: make sure all fields are
           accurately filled out;
@@ -148,11 +135,12 @@ const NewClientForm = () => {
               textTransform: 'capitalize',
             }}
             onClick={() => {
-              validateNewClientForm(setErrors, inputs);
-              inputs?.emailAddress &&
+              const validForm = validateNewClientForm(setErrors, inputs);
+              if (validForm) {
                 getUserByEmail({
                   variables: { emailAddress: inputs?.emailAddress },
                 });
+              }
             }}
           >
             <Text
@@ -166,7 +154,7 @@ const NewClientForm = () => {
           </Button>
         </Form>
       </FormContainer>
-    </motion.div>
+    </>
   );
 };
 

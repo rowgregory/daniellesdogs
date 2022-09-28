@@ -12,7 +12,7 @@ import { useForm } from '../utils/hooks/useForm';
 import { petValues } from '../utils/form-values/values';
 
 import { validateNewClientFormPets } from '../utils/validate';
-import { ErrorText, NewClientFormTitle } from './NewClientForm';
+import { ErrorText, PageTitle } from './NewClientForm';
 
 const NewClientFormPets = () => {
   const navigate = useNavigate();
@@ -32,37 +32,6 @@ const NewClientFormPets = () => {
   useEffect(() => {
     setInputs(values.current);
   }, [setInputs, values]);
-
-  useEffect(() => {
-    const allFieldsAreFilled = [
-      [errors][0]?.name,
-      [errors][0]?.age,
-      [errors][0]?.breedString,
-    ].every((field) => field === '');
-
-    if (allFieldsAreFilled) {
-      navigate('/new-client-form/waiver', {
-        state: {
-          firstName: state?.firstName,
-          lastName: state?.lastName,
-          emailAddress: state?.emailAddress,
-          phoneNumber: state?.phoneNumber,
-          address: {
-            addressLine1: state?.address?.addressLine1,
-            city: state?.address?.city,
-            state: state?.address?.state,
-            zipPostalCode: state?.address?.zipPostalCode,
-          },
-          vet: {
-            name: state?.vet?.name,
-            address: state?.vet?.address,
-            phoneNumber: state?.vet?.phoneNumber,
-          },
-          pets: inputs?.pets,
-        },
-      });
-    }
-  }, [errors, state, inputs, navigate]);
 
   const addPet = () => {
     const values = [...inputs.pets];
@@ -84,12 +53,35 @@ const NewClientFormPets = () => {
   };
 
   const handleSubmit = () => {
-    validateNewClientFormPets(setErrors, inputs);
+    const validForm = validateNewClientFormPets(setErrors, inputs);
+
+    if (validForm) {
+      navigate('/new-client-form/waiver', {
+        state: {
+          firstName: state?.firstName,
+          lastName: state?.lastName,
+          emailAddress: state?.emailAddress,
+          phoneNumber: state?.phoneNumber,
+          address: {
+            addressLine1: state?.address?.addressLine1,
+            city: state?.address?.city,
+            state: state?.address?.state,
+            zipPostalCode: state?.address?.zipPostalCode,
+          },
+          vet: {
+            name: state?.vet?.name,
+            address: state?.vet?.address,
+            phoneNumber: state?.vet?.phoneNumber,
+          },
+          pets: inputs?.pets,
+        },
+      });
+    }
   };
 
   return (
     <FormContainer>
-      <NewClientFormTitle>Pets</NewClientFormTitle>
+      <PageTitle>Pets</PageTitle>
       <Form>
         <Flex justifyContent={['flex-start']}>
           {inputs?.pets?.map((pet: any, i: number) => (
@@ -187,6 +179,7 @@ const NewClientFormPets = () => {
                   type='text'
                   onChange={(e) => handleInputChange(e, i)}
                 />
+                <ErrorText>{i === 0 && [errors][0]?.allergies}</ErrorText>
               </FormGroup>
               <FormGroup controlId='temperament'>
                 <FormLabel className='mb-1'>Temperament</FormLabel>

@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import ReactPlayer from 'react-player/lazy';
 import styled from 'styled-components';
 import { Text, Flex } from '../components/elements';
-import { motion } from 'framer-motion';
 import Dog1 from '../components/assets/dogs_1.png';
 import Picture from '../components/elements/Picture';
 import gsap, { CSSPlugin } from 'gsap';
@@ -508,12 +507,7 @@ const Home = () => {
   }, []);
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0.25 }}
-      transition={{ duration: 0.5 }}
-    >
+    <>
       <div style={{ position: 'relative', minHeight: '100vh' }}>
         {!showVideoLoader && (
           <CenterArea>
@@ -848,7 +842,7 @@ const Home = () => {
           ))}
         </Marquee>
       </div>
-    </motion.div>
+    </>
   );
 };
 

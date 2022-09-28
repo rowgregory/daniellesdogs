@@ -4,8 +4,7 @@ const typeDefs = require('./graphql/typeDefs.js');
 const resolvers = require('./graphql/resolvers');
 const { makeExecutableSchema } = require('@graphql-tools/schema');
 const { applyMiddleware } = require('graphql-middleware');
-// const { ApolloServer } = require('apollo-server');
-const { shield, rule, allow, deny } = require('graphql-shield');
+const { shield, rule, allow } = require('graphql-shield');
 const jwt = require('jsonwebtoken');
 const { ApolloError, ApolloServer } = require('apollo-server-express');
 const colors = require('colors');
@@ -16,16 +15,26 @@ const {
   ApolloServerPluginDrainHttpServer,
   ApolloServerPluginLandingPageLocalDefault,
 } = require('apollo-server-core');
-// Apollo Server's default caching features use an unbounded cache,
-// which is not safe for production use. If you want to configure
-// the in-memory cache, Apollo provides the InMemoryLRUCache class
-// from the @apollo/utils.keyvaluecache package
 const { InMemoryLRUCache } = require('@apollo/utils.keyvaluecache');
 const cors = require('cors');
+const cloudinary = require('cloudinary');
+const multer = require('multer');
+const streamifier = require('streamifier');
+const GalleryImage = require('./models/GalleryImage.js');
+const writeToFile = require('./utils/writeToFile');
 
 const app = express();
 app.use(express.json());
 app.use(cors());
+
+connectDB();
+
+cloudinary.v2.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true,
+});
 
 const httpServer = http.createServer(app);
 
@@ -58,6 +67,7 @@ const permissions = shield(
       getNewClientForms: isAdmin,
       getNewClientFormById: isAdmin,
       getPetById: isAdmin,
+      galleryImageList: isAdmin,
     },
     Mutation: {
       login: allow,
@@ -69,12 +79,80 @@ const permissions = shield(
       createPet: isAdmin,
       deletePet: isAdmin,
       getRefreshToken: allow,
+      deleteGalleryImage: isAdmin,
+      createContactForm: allow,
     },
   },
   {
     debug: true,
   }
 );
+
+const fileUpload = multer();
+
+app
+  .route('/upload')
+  .post(fileUpload.single('image'), function (req, res, next) {
+    try {
+      let streamUpload = req => {
+        return new Promise((resolve, reject) => {
+          let stream = cloudinary.v2.uploader.upload_stream((error, result) => {
+            if (result) {
+              resolve(result);
+            } else {
+              reject(error);
+            }
+          });
+
+          streamifier.createReadStream(req.file.buffer).pipe(stream);
+        });
+      };
+
+      async function upload(req) {
+        try {
+          let result = await streamUpload(req);
+
+          const createdGalleryImage = new GalleryImage({
+            publicId: result.public_id,
+            secureUrl: result.secure_url,
+            height: result.height,
+            width: result.width,
+            format: result.format,
+            bytes: result.bytes,
+          });
+
+          await createdGalleryImage.save();
+
+          writeToFile(
+            '/server/logs/success.txt',
+            '.🟢',
+            '.IMAGE_UPLOAD',
+            `.publicId: ${result.public_id}`
+          );
+
+          res.send('IMAGE_UPLOAD_SUCCESS');
+        } catch (err) {
+          writeToFile('/server/logs/error.txt', '.🔴', '.IMAGE_UPLOAD.', err);
+          res.send(err.message);
+        }
+      }
+
+      upload(req);
+    } catch (error) {
+      console.log('ERROR: ', error);
+    }
+  });
+
+app.route('/upload/:id').post((req, res, next) => {
+  const publicId = req.params.id;
+  try {
+    cloudinary.uploader.destroy(publicId, result => {
+      res.send(result);
+    });
+  } catch (error) {
+    console.log('ERROR: ', error);
+  }
+});
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
@@ -85,8 +163,6 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const schemaWithPermissions = applyMiddleware(schema, permissions);
-
-connectDB();
 
 const server = new ApolloServer({
   schema: schemaWithPermissions,
@@ -111,5 +187,3 @@ server.start().then(res => {
     console.log(`Gateway API running at port: ${port}`.yellow)
   );
 });
-
-// server.listen(port, console.log(`Server running on port ${port}`.yellow));
