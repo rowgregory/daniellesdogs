@@ -67,7 +67,7 @@ const permissions = shield(
       getNewClientForms: isAdmin,
       getNewClientFormById: isAdmin,
       getPetById: isAdmin,
-      galleryImageList: isAdmin,
+      galleryImageList: allow,
     },
     Mutation: {
       login: allow,
