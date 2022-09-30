@@ -119,6 +119,17 @@ module.exports = gql`
     message: String
   }
 
+  type Bio {
+    id: ID
+    firstName: String
+    lastName: String
+    emailAddress: String
+    title: String
+    description: String
+    image: String
+    publicId: String
+  }
+
   input AddressInput {
     addressLine1: String
     city: String
@@ -200,6 +211,16 @@ module.exports = gql`
     message: String
   }
 
+  input BioInput {
+    firstName: String
+    lastName: String
+    emailAddress: String
+    title: String
+    description: String
+    image: String
+    publicId: String
+  }
+
   type Query {
     getUserById(id: ID!): User
     getUserByEmail(emailAddress: String): Message
@@ -210,6 +231,9 @@ module.exports = gql`
     getServices: [Service]
     getPetById(id: ID!): Pet
     galleryImageList: [GalleryImage]
+    bioList: [Bio]
+    bioById(id: ID!): Bio
+    contactFormList: [ContactForm]
   }
 
   type Mutation {
@@ -237,5 +261,9 @@ module.exports = gql`
     getRefreshToken(userType: String, firstName: String): AuthTokens
     deleteGalleryImage(id: ID!): Message
     createContactForm(contactFormInput: ContactFormInput): ContactForm
+    createBio(bioInput: BioInput): Bio
+    updateBio(id: ID!, bioInput: BioInput): Bio
+    deleteBio(id: ID!): Bio
+    deleteContactForm(id: ID!): ContactForm
   }
 `;

@@ -3,8 +3,12 @@ import axios from 'axios';
 import { useState } from 'react';
 import { Button, Modal, Spinner } from 'react-bootstrap';
 import styled from 'styled-components';
+import { DELETE_BIO } from '../mutations/deleteBio';
+import { DELETE_CONTACT_FORM } from '../mutations/deleteContactForm';
 import { DELETE_GALLERY_IMAGE } from '../mutations/deleteGalleryImage';
 import { GALLERY_IMAGE_LIST } from '../queries/galleryImageList';
+import { GET_BIOS } from '../queries/getBios';
+import { GET_CONTACT_FORMS } from '../queries/getContactForms';
 
 const Content = styled.div`
   background: #fff;
@@ -47,17 +51,39 @@ const DeleteModal = ({ actionFunc, show, handleClose, id, publicId }: any) => {
   const [galleryImageDelete, { loading }] = useMutation(DELETE_GALLERY_IMAGE, {
     refetchQueries: [{ query: GALLERY_IMAGE_LIST }],
   });
+  const [bioDelete, { loading: loadingBios }] = useMutation(DELETE_BIO, {
+    refetchQueries: [{ query: GET_BIOS }],
+  });
+  const [contactFormDelete, { loading: loadingContactForm }] = useMutation(
+    DELETE_CONTACT_FORM,
+    {
+      refetchQueries: [{ query: GET_CONTACT_FORMS }],
+    }
+  );
 
   const getAction = async () => {
+    setDeleting(true);
     switch (actionFunc) {
       case 'Gallery Image':
         if (publicId) {
-          setDeleting(true);
           await axios.post(`/upload/${publicId}`);
-          galleryImageDelete({ variables: { id } });
-          setDeleting(false);
         }
+        galleryImageDelete({ variables: { id } });
         handleClose();
+        setDeleting(false);
+        break;
+      case 'Bio':
+        if (publicId) {
+          await axios.post(`/upload/${publicId}`);
+        }
+        bioDelete({ variables: { id } });
+        handleClose();
+        setDeleting(false);
+        break;
+      case 'Contact Form':
+        contactFormDelete({ variables: { id } });
+        handleClose();
+        setDeleting(false);
         break;
       default:
         return;
@@ -87,7 +113,9 @@ const DeleteModal = ({ actionFunc, show, handleClose, id, publicId }: any) => {
           </Button>
           <Button className='px-4' variant='danger' onClick={getAction}>
             Yes{' '}
-            {(loading || deleting) && <Spinner animation='border' size='sm' />}
+            {(loading || deleting || loadingBios || loadingContactForm) && (
+              <Spinner animation='border' size='sm' />
+            )}
           </Button>
         </Footer>
       </Content>

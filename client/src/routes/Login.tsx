@@ -12,6 +12,7 @@ import {
 } from '../components/styles/form';
 import { PageTitle } from './NewClientForm';
 import { LOGIN } from '../mutations/login';
+import { Text } from '../components/elements';
 
 const Login = () => {
   const context = useContext(AuthContext);
@@ -61,8 +62,6 @@ const Login = () => {
     variables: { loginInput: inputs },
   });
 
-  if (loading) return <Spinner animation='border' />;
-
   return (
     <FormContainer>
       <PageTitle>Login</PageTitle>
@@ -93,8 +92,19 @@ const Login = () => {
           />
         </FormGroup>
         <div className='d-flex justify-content-between align-items-center mt-5'>
-          <Button className='' onClick={onSubmit}>
-            Submit
+          <Button
+            style={{ textTransform: 'capitalize' }}
+            onClick={onSubmit}
+            className='d-flex align-items-center justify-content-center text-white'
+          >
+            <Text
+              fontFamily={`Oxygen, sans-serif`}
+              color='#fff'
+              margin={[`0 ${loading ? '0.5rem' : '0'} 0 0`]}
+            >
+              Log{loading && 'ging'} In{loading && '...'}
+            </Text>
+            {loading && <Spinner animation='border' size='sm' />}
           </Button>
           <Link to='/register'>Register</Link>
         </div>

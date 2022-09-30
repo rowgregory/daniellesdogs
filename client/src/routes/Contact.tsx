@@ -12,10 +12,13 @@ import {
 import { ErrorText, PageTitle } from './NewClientForm';
 import { validateContactForm } from '../utils/validate';
 import { CREATE_CONTACT_FORM } from '../mutations/createContactForm';
+import { useNavigate } from 'react-router-dom';
+import { Text } from '../components/elements';
 
 const ContactForm = () => {
   const [errors, setErrors] = useState({}) as any;
   const [graphQLErrors, setGraphQLErrors] = useState([]) as any;
+  const navigate = useNavigate();
 
   const values = {
     firstName: '',
@@ -38,14 +41,23 @@ const ContactForm = () => {
     values
   );
 
-  const [contactFormCreate, { loading }] = useMutation(CREATE_CONTACT_FORM, {
-    onError({ graphQLErrors }) {
-      setGraphQLErrors(graphQLErrors);
-    },
-    variables: { contactFormInput: inputs },
-  });
-
-  if (loading) return <Spinner animation='border' />;
+  const [contactFormCreate, { loading, data }] = useMutation(
+    CREATE_CONTACT_FORM,
+    {
+      onError({ graphQLErrors }) {
+        setGraphQLErrors(graphQLErrors);
+      },
+      onCompleted() {
+        navigate(`/contact/thank-you`, {
+          state: {
+            firstName: data?.createContactForm?.firstName,
+            id: data?.createContactForm?.id,
+          },
+        });
+      },
+      variables: { contactFormInput: inputs },
+    }
+  );
 
   return (
     <FormContainer>
@@ -102,8 +114,19 @@ const ContactForm = () => {
           />
           <ErrorText>{errors?.message}</ErrorText>
         </FormGroup>
-        <Button className='mt-5' onClick={onSubmit}>
-          Submit
+        <Button
+          style={{ textTransform: 'capitalize' }}
+          onClick={onSubmit}
+          className='d-flex align-items-center justify-content-center text-white mt-5'
+        >
+          <Text
+            fontFamily={`Oxygen, sans-serif`}
+            color='#fff'
+            margin={[`0 ${loading ? '0.5rem' : '0'} 0 0`]}
+          >
+            Submit{loading && 'ting...'}
+          </Text>
+          {loading && <Spinner animation='border' size='sm' />}
         </Button>
       </Form>
       {graphQLErrors?.map((error: any, i: number) => (

@@ -320,3 +320,69 @@ export const validateContactForm = (
 
   return formIsValid;
 };
+
+export const validateBio = (setErrors: (errors: any) => void, inputs: any) => {
+  let formIsValid = true;
+  if (!inputs?.firstName) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      firstName: 'Enter first name to continue.',
+    }));
+  } else {
+    setErrors((errors: any) => ({ ...errors, firstName: '' }));
+  }
+  if (!inputs?.lastName) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      lastName: 'Enter last name to continue.',
+    }));
+  } else {
+    setErrors((errors: any) => ({ ...errors, lastName: '' }));
+  }
+  if (!inputs?.emailAddress) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      emailAddress: 'Enter an email to continue.',
+    }));
+  } else if (!validateEmailRegex.test(inputs?.emailAddress)) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      emailAddress: 'Enter a valid email to continue.',
+    }));
+  } else {
+    setErrors((errors: any) => ({ ...errors, emailAddress: '' }));
+  }
+  if (!inputs?.title) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      title: 'Enter title to continue.',
+    }));
+  } else {
+    setErrors((errors: any) => ({ ...errors, title: '' }));
+  }
+  if (!inputs?.description) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      description: 'Enter description to continue.',
+    }));
+  } else {
+    setErrors((errors: any) => ({ ...errors, description: '' }));
+  }
+  if (!inputs?.image) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      image: 'Upload image to continue.',
+    }));
+  } else {
+    setErrors((errors: any) => ({ ...errors, image: '' }));
+  }
+
+  return formIsValid;
+};

@@ -19,15 +19,21 @@ import NewClientFormVet from './NewClientFormVet';
 import NewClientFormPets from './NewClientFormPets';
 import Complete from './Complete';
 import GalleryImageList from './GalleryImageList';
-import Clients from './Clients';
+import Products from './Products';
 import Orders from './Orders';
 import Services from './Services';
 import { AuthContext } from '../context/authContext';
+import ContactThankYou from './ContactThankYou';
+import BioList from './BioList';
+import BioCreate from './BioCreate';
+import BioEdit from './BioEdit';
+import ContactFormList from './ContactFormList';
 
 const PrivateRoutes = ({ children }: any) => {
   const { user } = useContext(AuthContext);
   return user?.userType === 'ADMIN' ? children : <Navigate to='/' />;
 };
+
 const RedirectLogin = ({ children }: any) => {
   const { user } = useContext(AuthContext);
   return user?.userType === 'ADMIN' ? (
@@ -61,8 +67,12 @@ const AnimatedRoutes = () => {
                 <Routes>
                   <Route path='dashboard' element={<Dashboard />} />
                   <Route path='gallery-images' element={<GalleryImageList />} />
-                  <Route path='clients' element={<Clients />} />
+                  <Route path='products' element={<Products />} />
                   <Route path='orders' element={<Orders />} />
+                  <Route path='bios' element={<BioList />} />
+                  <Route path='bios/create' element={<BioCreate />} />
+                  <Route path='bios/:id/edit' element={<BioEdit />} />
+                  <Route path='contact-forms' element={<ContactFormList />} />
                   <Route
                     path='new-client-forms/*'
                     element={
@@ -94,6 +104,7 @@ const AnimatedRoutes = () => {
         <Route path='/gallery' element={<Gallery />} />
         <Route path='/shop' element={<Shop />} />
         <Route path='/contact' element={<Contact />} />
+        <Route path='/contact/thank-you' element={<ContactThankYou />} />
         <Route path='/about' element={<About />} />
         <Route path='/services' element={<Services />} />
         <Route path='*' element={<Navigate to='/' replace />} />

@@ -2,11 +2,11 @@ const ContactForm = require('../../models/ContactForm.js');
 const writeToFile = require('../../utils/writeToFile.js');
 
 module.exports = {
-  // Query: {
-  //   async contactFormList() {
-  //     return await ContactForm.find({});
-  //   },
-  // },
+  Query: {
+    async contactFormList() {
+      return await ContactForm.find({});
+    },
+  },
   Mutation: {
     async createContactForm(
       _,
@@ -47,8 +47,8 @@ module.exports = {
         );
       }
     },
-    // async deleteContactForm(_, { id }) {
-    //   return await ContactForm.deleteOne({ _id: id });
-    // },
+    async deleteContactForm(_, { id }) {
+      return await ContactForm.deleteOne({ _id: id });
+    },
   },
 };

@@ -69,15 +69,7 @@ const AdminSideBar: FC<AdminSideBarProps> = ({
             >
               Dashboard
             </Link>
-            <Link
-              onClick={() => setShowAdminPanel(false)}
-              color={['#fff']}
-              margin={['0 0 1.5rem 0']}
-              to={`/${user?.id}/${user?.userType}/gallery-images`}
-              fontSize={['1.5rem']}
-            >
-              Gallery Images
-            </Link>
+
             <Link
               onClick={() => setShowAdminPanel(false)}
               color={['#fff']}
@@ -91,19 +83,48 @@ const AdminSideBar: FC<AdminSideBarProps> = ({
               onClick={() => setShowAdminPanel(false)}
               color={['#fff']}
               margin={['0 0 1.5rem 0']}
-              to={`/${user?.id}/${user?.userType}/clients`}
-              fontSize={['1.5rem']}
-            >
-              Clients
-            </Link>
-            <Link
-              onClick={() => setShowAdminPanel(false)}
-              color={['#fff']}
-              margin={['0 0 4rem 0']}
               to={`/${user?.id}/${user?.userType}/orders`}
               fontSize={['1.5rem']}
             >
               Orders
+            </Link>
+            <Link
+              onClick={() => setShowAdminPanel(false)}
+              color={['#fff']}
+              margin={['0 0 1.5rem 0']}
+              to={`/${user?.id}/${user?.userType}/contact-forms`}
+              fontSize={['1.5rem']}
+            >
+              Contact Forms
+            </Link>
+            <Link
+              onClick={() => setShowAdminPanel(false)}
+              color={['#fff']}
+              margin={['0 0 1.5rem 0']}
+              to={`/${user?.id}/${user?.userType}/gallery-images`}
+              fontSize={['1.5rem']}
+            >
+              Gallery Images
+            </Link>
+
+            <Link
+              onClick={() => setShowAdminPanel(false)}
+              color={['#fff']}
+              margin={['0 0 1.5rem 0']}
+              to={`/${user?.id}/${user?.userType}/products`}
+              fontSize={['1.5rem']}
+            >
+              Products
+            </Link>
+
+            <Link
+              onClick={() => setShowAdminPanel(false)}
+              color={['#fff']}
+              margin={['0 0 4rem 0']}
+              to={`/${user?.id}/${user?.userType}/bios`}
+              fontSize={['1.5rem']}
+            >
+              Bios
             </Link>
             <Text
               cursor='pointer'

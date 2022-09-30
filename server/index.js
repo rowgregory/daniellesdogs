@@ -68,6 +68,9 @@ const permissions = shield(
       getNewClientFormById: isAdmin,
       getPetById: isAdmin,
       galleryImageList: allow,
+      bioList: allow,
+      bioById: isAdmin,
+      contactFormList: isAdmin,
     },
     Mutation: {
       login: allow,
@@ -81,6 +84,10 @@ const permissions = shield(
       getRefreshToken: allow,
       deleteGalleryImage: isAdmin,
       createContactForm: allow,
+      createBio: isAdmin,
+      updateBio: isAdmin,
+      deleteBio: isAdmin,
+      deleteContactForm: isAdmin,
     },
   },
   {
@@ -131,6 +138,47 @@ app
           );
 
           res.send('IMAGE_UPLOAD_SUCCESS');
+        } catch (err) {
+          writeToFile('/server/logs/error.txt', '.🔴', '.IMAGE_UPLOAD.', err);
+          res.send(err.message);
+        }
+      }
+
+      upload(req);
+    } catch (error) {
+      console.log('ERROR: ', error);
+    }
+  });
+app
+  .route('/upload/v2')
+  .post(fileUpload.single('image'), function (req, res, next) {
+    try {
+      let streamUpload = req => {
+        return new Promise((resolve, reject) => {
+          let stream = cloudinary.v2.uploader.upload_stream((error, result) => {
+            if (result) {
+              resolve(result);
+            } else {
+              reject(error);
+            }
+          });
+
+          streamifier.createReadStream(req.file.buffer).pipe(stream);
+        });
+      };
+
+      async function upload(req) {
+        try {
+          let result = await streamUpload(req);
+
+          writeToFile(
+            '/server/logs/success.txt',
+            '.🟢',
+            '.IMAGE_UPLOAD',
+            `.publicId: ${result.public_id}`
+          );
+
+          res.send(result);
         } catch (err) {
           writeToFile('/server/logs/error.txt', '.🔴', '.IMAGE_UPLOAD.', err);
           res.send(err.message);

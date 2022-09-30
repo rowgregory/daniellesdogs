@@ -4,7 +4,7 @@ export const useForm = (callback, values, data) => {
   const [inputs, setInputs] = useState(values);
 
   useEffect(() => {
-    if (data) {
+    if (data?.getNewClientFormById) {
       const {
         getNewClientFormById: { user, address, vet },
       } = data;
@@ -26,6 +26,27 @@ export const useForm = (callback, values, data) => {
           phoneNumber: vet.phoneNumber,
           address: vet.address,
         },
+      }));
+    } else if (data?.bioById) {
+      const {
+        bioById: {
+          firstName,
+          lastName,
+          emailAddress,
+          title,
+          description,
+          image,
+        },
+      } = data;
+
+      setInputs((inputs) => ({
+        ...inputs,
+        firstName,
+        lastName,
+        emailAddress,
+        title,
+        description,
+        image,
       }));
     }
   }, [data]);
