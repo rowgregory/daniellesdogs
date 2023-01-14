@@ -197,7 +197,7 @@ const server = new ApolloServer({
 });
 
 const corsOptions = {
-  origin: ['https://shielded-coast-28301.herokuapp.com'],
+  origin: ['https://danielles-dogs.herokuapp.com'],
 };
 
 server.start().then(res => {
