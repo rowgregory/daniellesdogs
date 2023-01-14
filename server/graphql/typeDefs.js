@@ -130,6 +130,28 @@ module.exports = gql`
     publicId: String
   }
 
+  type Size {
+    size: String
+    qty: String
+  }
+
+  type Product {
+    id: ID
+    name: String
+    image: String
+    description: String
+    price: String
+    countInStock: String
+    publicId: String
+    sizes: [Size]
+    category: String
+  }
+
+  type Passcode {
+    id: ID
+    passcode: String
+  }
+
   input AddressInput {
     addressLine1: String
     city: String
@@ -221,9 +243,25 @@ module.exports = gql`
     publicId: String
   }
 
+  input SizeInput {
+    size: String
+    qty: String
+  }
+
+  input ProductInput {
+    name: String
+    image: String
+    description: String
+    price: String
+    countInStock: String
+    publicId: String
+    sizes: [SizeInput]
+    category: String
+  }
+
   type Query {
     getUserById(id: ID!): User
-    getUserByEmail(emailAddress: String): Message
+    getUserByEmail(emailAddress: String): Boolean
     getUsers: [User]
     getNewClientFormById(id: ID!): NewClientForm
     getNewClientForms: [NewClientForm]
@@ -234,6 +272,10 @@ module.exports = gql`
     bioList: [Bio]
     bioById(id: ID!): Bio
     contactFormList: [ContactForm]
+    contactFormById(id: ID!): ContactForm
+    productList: [Product]
+    productById(id: ID!): Product
+    retreivePasscode: String
   }
 
   type Mutation {
@@ -265,5 +307,8 @@ module.exports = gql`
     updateBio(id: ID!, bioInput: BioInput): Bio
     deleteBio(id: ID!): Bio
     deleteContactForm(id: ID!): ContactForm
+    createProduct(productInput: ProductInput): Product
+    updateProduct(id: ID!, productInput: ProductInput): Product
+    deleteProduct(id: ID!): Product
   }
 `;

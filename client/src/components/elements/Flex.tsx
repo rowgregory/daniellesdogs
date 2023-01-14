@@ -8,6 +8,8 @@ interface FlexProps {
   alignItems?: string[];
   flexWrap?: string[];
   flex?: string[];
+  margin?: string[];
+  width?: string[];
 }
 
 const Flex = styled.div<FlexProps>(
@@ -18,8 +20,19 @@ const Flex = styled.div<FlexProps>(
     alignItems: '',
     flexWrap: undefined,
     flex: '',
+    margin: '',
+    width: '',
   },
-  ({ display, flexDirection, justifyContent, alignItems, flex, flexWrap }) => ({
+  ({
+    display,
+    flexDirection,
+    justifyContent,
+    alignItems,
+    flex,
+    flexWrap,
+    margin,
+    width,
+  }) => ({
     ...createMediaQueries([
       {
         property: 'display',
@@ -44,6 +57,14 @@ const Flex = styled.div<FlexProps>(
       {
         property: 'flex',
         values: flex,
+      },
+      {
+        property: 'margin',
+        values: margin,
+      },
+      {
+        property: 'width',
+        values: width,
       },
     ]),
   })

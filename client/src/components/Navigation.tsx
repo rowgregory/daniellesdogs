@@ -75,6 +75,10 @@ export const headerLinkData = (user: any) => {
       textKey: 'Contact',
       linkPath: '/contact',
     },
+    {
+      textKey: 'Login',
+      linkPath: '/login',
+    },
   ];
 };
 

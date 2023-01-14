@@ -4,7 +4,25 @@ const writeToFile = require('../../utils/writeToFile.js');
 module.exports = {
   Query: {
     async bioList() {
-      return await Bio.find({});
+      try {
+        const bioList = await Bio.find({});
+
+        writeToFile(
+          '/server/logs/success.txt',
+          '.🟢',
+          '.BIO_LIST',
+          `.totalBios: ${bioList.length}`
+        );
+
+        return bioList;
+      } catch (err) {
+        writeToFile(
+          '/server/logs/error.txt',
+          '.🔴',
+          '.BIO_LIST',
+          `.error: ${err.message}`
+        );
+      }
     },
 
     async bioById(_, { id }) {
@@ -59,7 +77,7 @@ module.exports = {
         writeToFile(
           '/server/logs/success.txt',
           '.🟢',
-          '.CREATED_BIO',
+          '.BIO_CREATE',
           `.id: ${createdBio.id}`
         );
 
@@ -68,7 +86,7 @@ module.exports = {
         writeToFile(
           '/server/logs/error.txt',
           '.🔴',
-          '.CREATED_BIO',
+          '.BIO_CREATE',
           `.error: ${err.message}`
         );
       }
@@ -106,7 +124,7 @@ module.exports = {
           writeToFile(
             '/server/logs/success.txt',
             '.🟢',
-            '.UPDATE_BIO',
+            '.BIO_UPDATE',
             `.id: ${updatedBio._id}`
           );
 
@@ -116,7 +134,7 @@ module.exports = {
         writeToFile(
           '/server/logs/error.txt',
           '.🔴',
-          '.UPDATE_BIO',
+          '.BIO_UPDATE',
           `.error: ${err.message}`
         );
       }
@@ -128,14 +146,14 @@ module.exports = {
         writeToFile(
           '/server/logs/success.txt',
           '.🟢',
-          '.DELETE_BIO',
+          '.BIO_DELETE',
           `.deletedCount: ${deletedBio.deletedCount}`
         );
       } catch (err) {
         writeToFile(
           '/server/logs/error.txt',
           '.🔴',
-          '.DELETE_BIO',
+          '.BIO_DELETE',
           `.error: ${err.message}`
         );
       }

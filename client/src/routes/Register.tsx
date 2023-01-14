@@ -1,68 +1,42 @@
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Alert, Button, Form } from 'react-bootstrap';
-import styled from 'styled-components';
-import { gql, useMutation } from '@apollo/client';
+import { Form } from 'react-bootstrap';
+import { useMutation } from '@apollo/client';
 import { useForm } from '../utils/hooks/useForm';
 import { AuthContext } from '../context/authContext';
-import { Text } from '../components/elements';
-
-const FormContainer = styled.div`
-  max-width: ${({ theme }) => theme.breakpoints[1]};
-  margin: 0 auto;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
-
-const FormInput = styled.input`
-  margin-bottom: 1rem;
-  width: 100%;
-  padding: 0.4rem 1.2rem;
-  border-radius: 0.5rem;
-  border: 1px solid ${({ theme }) => theme.border} !important;
-  :active,
-  :focus {
-    box-shadow: none !important;
-    outline: none !important;
-    border-color: 0 !important;
-  }
-`;
-
-const REGISTER = gql`
-  mutation register($registerInput: RegisterInput) {
-    register(registerInput: $registerInput) {
-      id
-      emailAddress
-      token
-      tokenExpiration
-      firstName
-      userType
-    }
-  }
-`;
+import { REGISTER } from '../mutations/register';
+import { registerValues } from '../utils/form-values/values';
+import {
+  FormContainer,
+  FormGroup,
+  FormInput,
+  FormLabel,
+  PageTitle,
+  ErrorText,
+} from '../components/styles/form';
+import { ButtonWrapper } from '../components/styles/LoginRegister';
+import LoginRegisterBtn from '../components/LoginRegisterBtn';
+import { validateRegister } from '../utils/validate';
+import GraphQLAlert from '../components/elements/GraphQLAlert';
 
 const Register = () => {
   const context = useContext(AuthContext);
   const navigate = useNavigate();
-  const values = {
-    firstName: '',
-    lastName: '',
-    emailAddress: '',
-    password: '',
-    confirmPassword: '',
-  };
   const [errors, setErrors] = useState([]) as any;
+  const [graphqlErrors, setGraphQLErrors] = useState([]) as any;
+
   const registerCallback = () => {
-    register();
+    const validForm = validateRegister(setErrors, inputs);
+    if (validForm) register();
   };
+
   const { inputs, handleInputChange, onSubmit } = useForm(
     registerCallback,
-    values
+    registerValues
   );
 
   const [register, { loading }] = useMutation(REGISTER, {
+    variables: { registerInput: inputs },
     update(cache, { data: { register: user } }) {
       cache.writeQuery({
         query: REGISTER,
@@ -79,77 +53,80 @@ const Register = () => {
         },
       });
       context.login(user);
-      if (user.userType === 'ADMIN') {
-        navigate(`/${user.id}/${user.userType}/dashboard`);
-      }
+      navigate(`/${user.id}/${user.userType}/dashboard`);
     },
     onError({ graphQLErrors }) {
-      setErrors(graphQLErrors);
+      setGraphQLErrors(graphQLErrors);
     },
-    variables: { registerInput: inputs },
   });
-
-  if (loading) return <Text>Loading...</Text>;
 
   return (
     <FormContainer>
-      <Form className='w-100'>
-        <Form.Group controlId='firstName'>
-          <Form.Label className='mb-1'>First Name</Form.Label>
+      <PageTitle>Register</PageTitle>
+      <GraphQLAlert
+        graphqlErrors={graphqlErrors}
+        setGraphQLErrors={setGraphQLErrors}
+      />
+      <Form>
+        <FormGroup controlId='firstName'>
+          <FormLabel className='mb-1'>First Name</FormLabel>
           <FormInput
             name='firstName'
             value={inputs?.firstName || ''}
             type='text'
-            placeholder='First Name'
             onChange={handleInputChange}
           />
-        </Form.Group>
-        <Form.Group controlId='lastName'>
-          <Form.Label className='mb-1'>Last Name</Form.Label>
+          <ErrorText>{errors?.firstName}</ErrorText>
+        </FormGroup>
+        <FormGroup controlId='lastName'>
+          <FormLabel className='mb-1'>Last Name</FormLabel>
           <FormInput
             name='lastName'
             value={inputs?.lastName || ''}
             type='text'
-            placeholder='Last Name'
             onChange={handleInputChange}
           />
-        </Form.Group>
-        <Form.Group controlId='emailAddress'>
-          <Form.Label className='mb-1'>Email Address</Form.Label>
+          <ErrorText>{errors?.lastName}</ErrorText>
+        </FormGroup>
+        <FormGroup controlId='emailAddress'>
+          <FormLabel className='mb-1'>Email Address</FormLabel>
           <FormInput
             name='emailAddress'
             value={inputs?.emailAddress || ''}
             type='text'
-            placeholder='Email Address'
             onChange={handleInputChange}
           />
-        </Form.Group>
-        <Form.Group controlId='password'>
-          <Form.Label className='mb-1'>Pasword</Form.Label>
+          <ErrorText>{errors?.emailAddress}</ErrorText>
+        </FormGroup>
+        <FormGroup controlId='password'>
+          <FormLabel className='mb-1'>Password</FormLabel>
           <FormInput
             name='password'
             value={inputs?.password || ''}
-            type='text'
-            placeholder='Paswword'
+            type='password'
             onChange={handleInputChange}
           />
-        </Form.Group>
-        <Form.Group controlId='confirmPassword'>
-          <Form.Label className='mb-1'>Confirm Pasword</Form.Label>
+          <ErrorText>{errors?.password}</ErrorText>
+        </FormGroup>
+        <FormGroup controlId='confirmPassword'>
+          <FormLabel className='mb-1'>Confirm Password</FormLabel>
           <FormInput
             name='confirmPassword'
             value={inputs?.confirmPassword || ''}
-            type='text'
-            placeholder='Confirm Paswword'
+            type='password'
             onChange={handleInputChange}
           />
-        </Form.Group>
-        <Button onClick={onSubmit}>Submit</Button>
+          <ErrorText>{errors?.confirmPassword}</ErrorText>
+        </FormGroup>
+        <ButtonWrapper>
+          <LoginRegisterBtn
+            onSubmit={onSubmit}
+            loading={loading}
+            type='register'
+          />
+          {!loading && <Link to='/login'>Login</Link>}
+        </ButtonWrapper>
       </Form>
-      <Link to='/login'>Login</Link>
-      {errors.map((error: any, i: number) => (
-        <Alert key={i}>{error.message}</Alert>
-      ))}
     </FormContainer>
   );
 };

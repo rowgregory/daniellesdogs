@@ -1,39 +1,42 @@
 import React, { useContext, useState } from 'react';
-import { Form, Button, Alert, Spinner } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
-import { useForm } from '../utils/hooks/useForm';
+import { Form } from 'react-bootstrap';
 import { useMutation } from '@apollo/client';
+import { useForm } from '../utils/hooks/useForm';
 import { AuthContext } from '../context/authContext';
+import { LOGIN } from '../mutations/login';
+import { loginValues } from '../utils/form-values/values';
 import {
   FormGroup,
   FormInput,
   FormLabel,
   FormContainer,
+  PageTitle,
+  ErrorText,
 } from '../components/styles/form';
-import { PageTitle } from './NewClientForm';
-import { LOGIN } from '../mutations/login';
-import { Text } from '../components/elements';
+import { ButtonWrapper } from '../components/styles/LoginRegister';
+import LoginRegisterBtn from '../components/LoginRegisterBtn';
+import { validateLogin } from '../utils/validate';
+import GraphQLAlert from '../components/elements/GraphQLAlert';
 
 const Login = () => {
   const context = useContext(AuthContext);
   const navigate = useNavigate();
   const [errors, setErrors] = useState([]) as any;
-
-  const values = {
-    emailAddress: '',
-    password: '',
-  };
+  const [graphqlErrors, setGraphQLErrors] = useState([]) as any;
 
   const loginCallback = () => {
-    login();
+    const validForm = validateLogin(setErrors, inputs);
+    if (validForm) login();
   };
 
   const { inputs, handleInputChange, onSubmit } = useForm(
     loginCallback,
-    values
+    loginValues
   );
 
   const [login, { loading }] = useMutation(LOGIN, {
+    variables: { loginInput: inputs },
     update(cache, { data: { login: user } }) {
       cache.writeQuery({
         query: LOGIN,
@@ -50,36 +53,30 @@ const Login = () => {
         },
       });
       context.login(user);
-      if (user.userType === 'ADMIN') {
-        navigate(`/${user.id}/${user.userType}/dashboard`);
-      } else {
-        navigate('/');
-      }
+      navigate(`/${user.id}/${user.userType}/dashboard`);
     },
     onError({ graphQLErrors }) {
-      setErrors(graphQLErrors);
+      setGraphQLErrors(graphQLErrors);
     },
-    variables: { loginInput: inputs },
   });
 
   return (
     <FormContainer>
-      <PageTitle>Login</PageTitle>
-      <Form className='w-25'>
-        {errors?.map((error: any, i: number) => (
-          <Alert variant='danger' key={i}>
-            {error.message}
-          </Alert>
-        ))}
+      <PageTitle>Log In</PageTitle>
+      <GraphQLAlert
+        graphqlErrors={graphqlErrors}
+        setGraphQLErrors={setGraphQLErrors}
+      />
+      <Form>
         <FormGroup controlId='emailAddress'>
           <FormLabel className='mb-1'>Email Address</FormLabel>
           <FormInput
             name='emailAddress'
             value={inputs?.emailAddress || ''}
             type='text'
-            placeholder='Email Address'
             onChange={handleInputChange}
           />
+          <ErrorText>{errors?.emailAddress}</ErrorText>
         </FormGroup>
         <FormGroup controlId='password'>
           <FormLabel className='mb-1'>Password</FormLabel>
@@ -87,27 +84,18 @@ const Login = () => {
             name='password'
             value={inputs?.password || ''}
             type='password'
-            placeholder='Password'
             onChange={handleInputChange}
           />
+          <ErrorText>{errors?.password}</ErrorText>
         </FormGroup>
-        <div className='d-flex justify-content-between align-items-center mt-5'>
-          <Button
-            style={{ textTransform: 'capitalize' }}
-            onClick={onSubmit}
-            className='d-flex align-items-center justify-content-center text-white'
-          >
-            <Text
-              fontFamily={`Oxygen, sans-serif`}
-              color='#fff'
-              margin={[`0 ${loading ? '0.5rem' : '0'} 0 0`]}
-            >
-              Log{loading && 'ging'} In{loading && '...'}
-            </Text>
-            {loading && <Spinner animation='border' size='sm' />}
-          </Button>
-          <Link to='/register'>Register</Link>
-        </div>
+        <ButtonWrapper>
+          <LoginRegisterBtn
+            onSubmit={onSubmit}
+            loading={loading}
+            type='login'
+          />
+          {!loading && <Link to='/secure'>Register</Link>}
+        </ButtonWrapper>
       </Form>
     </FormContainer>
   );

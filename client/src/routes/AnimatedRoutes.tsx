@@ -19,7 +19,6 @@ import NewClientFormVet from './NewClientFormVet';
 import NewClientFormPets from './NewClientFormPets';
 import Complete from './Complete';
 import GalleryImageList from './GalleryImageList';
-import Products from './Products';
 import Orders from './Orders';
 import Services from './Services';
 import { AuthContext } from '../context/authContext';
@@ -28,6 +27,12 @@ import BioList from './BioList';
 import BioCreate from './BioCreate';
 import BioEdit from './BioEdit';
 import ContactFormList from './ContactFormList';
+import ProductList from './ProductList';
+import ProductCreate from './ProductCreate';
+import ProductEdit from './ProductEdit';
+import Secure from './Secure';
+import Footer from '../components/Footer';
+import ProductDetails from './ProductDetails';
 
 const PrivateRoutes = ({ children }: any) => {
   const { user } = useContext(AuthContext);
@@ -38,6 +43,26 @@ const RedirectLogin = ({ children }: any) => {
   const { user } = useContext(AuthContext);
   return user?.userType === 'ADMIN' ? (
     <Navigate to={`/${user?.id}/${user?.userType}/dashboard`} />
+  ) : (
+    children
+  );
+};
+
+const RedirectSecure = ({ children }: any) => {
+  const { state } = useLocation() as any;
+  const secretToken = process.env.REACT_APP_REGISTER_KEY;
+  return state?.secureToken === secretToken ? (
+    <Navigate to='/register' replace state={state?.secureToken} />
+  ) : (
+    children
+  );
+};
+
+const RedirectRegister = ({ children }: any) => {
+  const { state } = useLocation() as any;
+  const secretToken = process.env.REACT_APP_REGISTER_KEY;
+  return state?.secure_password !== secretToken ? (
+    <Navigate to='/secure' />
   ) : (
     children
   );
@@ -58,7 +83,22 @@ const AnimatedRoutes = () => {
             </RedirectLogin>
           }
         />
-        <Route path='/register' element={<Register />} />
+        <Route
+          path='/secure'
+          element={
+            <RedirectSecure>
+              <Secure />
+            </RedirectSecure>
+          }
+        />
+        <Route
+          path='/register'
+          element={
+            <RedirectRegister>
+              <Register />
+            </RedirectRegister>
+          }
+        />
         <Route
           path='/:user_id/:user_type/*'
           element={
@@ -67,7 +107,9 @@ const AnimatedRoutes = () => {
                 <Routes>
                   <Route path='dashboard' element={<Dashboard />} />
                   <Route path='gallery-images' element={<GalleryImageList />} />
-                  <Route path='products' element={<Products />} />
+                  <Route path='products' element={<ProductList />} />
+                  <Route path='products/create' element={<ProductCreate />} />
+                  <Route path='products/:id/edit' element={<ProductEdit />} />
                   <Route path='orders' element={<Orders />} />
                   <Route path='bios' element={<BioList />} />
                   <Route path='bios/create' element={<BioCreate />} />
@@ -102,13 +144,22 @@ const AnimatedRoutes = () => {
         />
         <Route path='/logged-out' element={<LoggedOut />} />
         <Route path='/gallery' element={<Gallery />} />
-        <Route path='/shop' element={<Shop />} />
+        <Route
+          path='/shop/*'
+          element={
+            <Routes>
+              <Route index={true} element={<Shop />} />
+              <Route path='*' element={<ProductDetails />} />
+            </Routes>
+          }
+        />
         <Route path='/contact' element={<Contact />} />
         <Route path='/contact/thank-you' element={<ContactThankYou />} />
         <Route path='/about' element={<About />} />
         <Route path='/services' element={<Services />} />
         <Route path='*' element={<Navigate to='/' replace />} />
       </Routes>
+      <Footer />
     </>
   );
 };

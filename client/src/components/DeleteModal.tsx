@@ -6,9 +6,13 @@ import styled from 'styled-components';
 import { DELETE_BIO } from '../mutations/deleteBio';
 import { DELETE_CONTACT_FORM } from '../mutations/deleteContactForm';
 import { DELETE_GALLERY_IMAGE } from '../mutations/deleteGalleryImage';
+import { DELETE_PRODUCT } from '../mutations/deleteProduct';
+import { DELETE_NEW_CLIENT_FORM } from '../queries/deleteNewClientForm';
 import { GALLERY_IMAGE_LIST } from '../queries/galleryImageList';
 import { GET_BIOS } from '../queries/getBios';
 import { GET_CONTACT_FORMS } from '../queries/getContactForms';
+import { GET_NEW_CLIENT_FORMS } from '../queries/getNewClientForms';
+import { GET_PRODUCTS } from '../queries/getProducts';
 
 const Content = styled.div`
   background: #fff;
@@ -60,6 +64,18 @@ const DeleteModal = ({ actionFunc, show, handleClose, id, publicId }: any) => {
       refetchQueries: [{ query: GET_CONTACT_FORMS }],
     }
   );
+  const [productDelete, { loading: loadingProduct }] = useMutation(
+    DELETE_PRODUCT,
+    {
+      refetchQueries: [{ query: GET_PRODUCTS }],
+    }
+  );
+  const [newClientFormDelete, { loading: loadingNewClientForm }] = useMutation(
+    DELETE_NEW_CLIENT_FORM,
+    {
+      refetchQueries: [{ query: GET_NEW_CLIENT_FORMS }],
+    }
+  );
 
   const getAction = async () => {
     setDeleting(true);
@@ -82,6 +98,30 @@ const DeleteModal = ({ actionFunc, show, handleClose, id, publicId }: any) => {
         break;
       case 'Contact Form':
         contactFormDelete({ variables: { id } });
+        handleClose();
+        setDeleting(false);
+        break;
+      case 'Product':
+        if (publicId) {
+          await axios.post(`/upload/${publicId}`);
+        }
+        productDelete({ variables: { id } });
+        handleClose();
+        setDeleting(false);
+        break;
+      case 'New Client Form':
+        // id has been a string up to this point
+        // with multiple documents to delete
+        // there are multiple id's
+        newClientFormDelete({
+          variables: {
+            id: id.id,
+            userId: id.user.id,
+            petsId: id.pets.map((pet: any) => pet.id),
+            vetId: id.vet.id,
+            addressId: id.address.id,
+          },
+        });
         handleClose();
         setDeleting(false);
         break;
@@ -108,14 +148,21 @@ const DeleteModal = ({ actionFunc, show, handleClose, id, publicId }: any) => {
         </Header>
         <Body>Are you sure?</Body>
         <Footer>
-          <Button className='px-3' variant='secondary' onClick={handleClose}>
+          <Button
+            className='px-3'
+            variant='secondary'
+            onClick={() => handleClose()}
+          >
             Cancel
           </Button>
           <Button className='px-4' variant='danger' onClick={getAction}>
             Yes{' '}
-            {(loading || deleting || loadingBios || loadingContactForm) && (
-              <Spinner animation='border' size='sm' />
-            )}
+            {(loading ||
+              deleting ||
+              loadingBios ||
+              loadingContactForm ||
+              loadingProduct ||
+              loadingNewClientForm) && <Spinner animation='border' size='sm' />}
           </Button>
         </Footer>
       </Content>

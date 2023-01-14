@@ -1,33 +1,28 @@
 import React, { useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
+import ContinueBtn from '../components/ContinueBtn';
 import {
   FormContainer,
   FormGroup,
   FormInput,
   FormLabel,
+  PageTitle,
+  ErrorText,
 } from '../components/styles/form';
-import { useForm } from '../utils/hooks/useForm';
+import { useNCFVetForm } from '../utils/hooks/useNCFVetForm';
 import { validateNewClientFormVet } from '../utils/validate';
-import { ErrorText, PageTitle } from './NewClientForm';
 
 const NewClientFormVet = () => {
   const [errors, setErrors] = useState() as any;
   const { state } = useLocation() as any;
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
-  const values = {
-    vet: {
-      name: '',
-      address: '',
-      phoneNumber: '',
-    },
-  };
-
-  const { inputs, handleInputChange } = useForm(values);
-
-  const handleSubmit = () => {
+  const ncfVetCalback = () => {
+    setLoading(true);
     const validForm = validateNewClientFormVet(setErrors, inputs);
+    setLoading(false);
 
     if (validForm) {
       navigate('/new-client-form/pets', {
@@ -52,47 +47,43 @@ const NewClientFormVet = () => {
     }
   };
 
+  const { inputs, handleInputChange, onSubmit } = useNCFVetForm(ncfVetCalback);
+
   return (
     <FormContainer>
       <PageTitle>Vet</PageTitle>
       <Form>
-        <FormGroup controlId='vetName'>
-          <FormLabel className='mb-0'>Name</FormLabel>
+        <FormGroup controlId='name'>
+          <FormLabel>Name</FormLabel>
           <FormInput
-            name='vetName'
+            name='name'
             value={inputs?.vet?.name || ''}
             type='text'
             onChange={handleInputChange}
           />
           <ErrorText>{errors?.name}</ErrorText>
         </FormGroup>
-        <FormGroup controlId='vetAddress'>
-          <FormLabel className='mb-0'>Address</FormLabel>
+        <FormGroup controlId='address'>
+          <FormLabel>Address</FormLabel>
           <FormInput
-            name='vetAddress'
+            name='address'
             value={inputs?.vet?.address || state?.vet?.address || ''}
             type='text'
             onChange={handleInputChange}
           />
           <ErrorText>{errors?.address}</ErrorText>
         </FormGroup>
-        <FormGroup controlId='vetPhoneNumber'>
-          <FormLabel className='mb-0'>Phone Number</FormLabel>
+        <FormGroup controlId='phoneNumber'>
+          <FormLabel>Phone Number</FormLabel>
           <FormInput
-            name='vetPhoneNumber'
+            name='phoneNumber'
             value={inputs?.vet?.phoneNumber || ''}
             type='tel'
             onChange={handleInputChange}
           />
           <ErrorText>{errors?.phoneNumber}</ErrorText>
         </FormGroup>
-        <Button
-          style={{ textTransform: 'capitalize' }}
-          onClick={handleSubmit}
-          className='d-flex align-items-center justify-content-center text-white mt-5'
-        >
-          Continue
-        </Button>
+        <ContinueBtn onSubmit={onSubmit} text='Continu' loading1={loading} />
       </Form>
     </FormContainer>
   );

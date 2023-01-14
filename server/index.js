@@ -71,6 +71,10 @@ const permissions = shield(
       bioList: allow,
       bioById: isAdmin,
       contactFormList: isAdmin,
+      contactFormById: isAdmin,
+      productList: allow,
+      productById: allow,
+      retreivePasscode: allow,
     },
     Mutation: {
       login: allow,
@@ -88,6 +92,9 @@ const permissions = shield(
       updateBio: isAdmin,
       deleteBio: isAdmin,
       deleteContactForm: isAdmin,
+      createProduct: isAdmin,
+      updateProduct: isAdmin,
+      deleteProduct: isAdmin,
     },
   },
   {
@@ -119,57 +126,18 @@ app
         try {
           let result = await streamUpload(req);
 
-          const createdGalleryImage = new GalleryImage({
-            publicId: result.public_id,
-            secureUrl: result.secure_url,
-            height: result.height,
-            width: result.width,
-            format: result.format,
-            bytes: result.bytes,
-          });
+          if (req.body.isGalleryImage === 'true') {
+            const createdGalleryImage = new GalleryImage({
+              publicId: result.public_id,
+              secureUrl: result.secure_url,
+              height: result.height,
+              width: result.width,
+              format: result.format,
+              bytes: result.bytes,
+            });
 
-          await createdGalleryImage.save();
-
-          writeToFile(
-            '/server/logs/success.txt',
-            '.🟢',
-            '.IMAGE_UPLOAD',
-            `.publicId: ${result.public_id}`
-          );
-
-          res.send('IMAGE_UPLOAD_SUCCESS');
-        } catch (err) {
-          writeToFile('/server/logs/error.txt', '.🔴', '.IMAGE_UPLOAD.', err);
-          res.send(err.message);
-        }
-      }
-
-      upload(req);
-    } catch (error) {
-      console.log('ERROR: ', error);
-    }
-  });
-app
-  .route('/upload/v2')
-  .post(fileUpload.single('image'), function (req, res, next) {
-    try {
-      let streamUpload = req => {
-        return new Promise((resolve, reject) => {
-          let stream = cloudinary.v2.uploader.upload_stream((error, result) => {
-            if (result) {
-              resolve(result);
-            } else {
-              reject(error);
-            }
-          });
-
-          streamifier.createReadStream(req.file.buffer).pipe(stream);
-        });
-      };
-
-      async function upload(req) {
-        try {
-          let result = await streamUpload(req);
+            await createdGalleryImage.save();
+          }
 
           writeToFile(
             '/server/logs/success.txt',
@@ -178,7 +146,11 @@ app
             `.publicId: ${result.public_id}`
           );
 
-          res.send(result);
+          res.send({
+            message: 'IMAGE_UPLOAD_SUCCESS',
+            public_id: result.public_id,
+            secure_url: result.secure_url,
+          });
         } catch (err) {
           writeToFile('/server/logs/error.txt', '.🔴', '.IMAGE_UPLOAD.', err);
           res.send(err.message);

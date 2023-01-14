@@ -1,8 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { Link, Text } from '../components/elements';
-import { FormContainer } from '../components/styles/form';
-import { PageTitle } from './NewClientForm';
+import { FormContainer, PageTitle } from '../components/styles/form';
 
 const ContactThankYou = () => {
   const { state } = useLocation() as any;

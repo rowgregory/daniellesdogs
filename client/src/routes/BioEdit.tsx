@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, Button, Form, Image, Spinner } from 'react-bootstrap';
+import { Alert, Form, Image, Spinner } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
 import { useForm } from '../utils/hooks/useForm';
 import {
@@ -8,42 +8,29 @@ import {
   FormInput,
   FormLabel,
   FormTextArea,
+  PageTitle,
+  ErrorText,
 } from '../components/styles/form';
-import { ErrorText, PageTitle } from './NewClientForm';
 import { validateBio } from '../utils/validate';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Text } from '../components/elements';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { GET_BIO_BY_ID } from '../queries/getBioById';
 import { UPDATE_BIO } from '../mutations/updateBio';
+import { GET_BIOS } from '../queries/getBios';
+import NavigateBtns from '../components/NavigateBtns';
+import { bioValues } from '../utils/form-values/values';
+import { imgConfig } from '../utils/config';
 
 const BioEdit = () => {
-  const params = useParams();
-  const id = params.id;
-  const { loading, data } = useQuery(GET_BIO_BY_ID, {
-    variables: { id },
-  });
-
+  const { id } = useParams();
   const [errors, setErrors] = useState({}) as any;
   const [graphQLErrors, setGraphQLErrors] = useState([]) as any;
-  const navigate = useNavigate();
   const [file, setFile] = useState(null) as any;
   const [uploading, setUploading] = useState(false);
 
-  const values = {
-    firstName: '',
-    lastName: '',
-    emailAddress: '',
-    title: '',
-    description: '',
-    image: '',
-  };
-
-  const config = {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  };
+  const { loading, data } = useQuery(GET_BIO_BY_ID, {
+    variables: { id },
+  });
 
   const createBioCallback = async () => {
     const validForm = validateBio(setErrors, inputs);
@@ -58,7 +45,7 @@ const BioEdit = () => {
 
         const formData = new FormData();
         formData.append('image', file);
-        const { data: info } = await axios.post('/upload/v2', formData, config);
+        const { data: info } = await axios.post('/upload', formData, imgConfig);
         uploadedImage = info;
       }
 
@@ -72,7 +59,9 @@ const BioEdit = () => {
             title: inputs.title,
             description: inputs.description,
             image: uploadedImage ? uploadedImage.secure_url : inputs.image,
-            publicId: uploadedImage ? uploadedImage.public_id : inputs.publicId,
+            publicId: uploadedImage
+              ? uploadedImage.public_id
+              : data.bioById.publicId,
           },
         },
       });
@@ -81,7 +70,7 @@ const BioEdit = () => {
 
   const { inputs, handleInputChange, onSubmit } = useForm(
     createBioCallback,
-    values,
+    bioValues,
     data
   );
 
@@ -92,16 +81,17 @@ const BioEdit = () => {
     onCompleted() {
       setUploading(false);
     },
-    refetchQueries: [{ query: GET_BIO_BY_ID, variables: { id } }],
+    refetchQueries: [
+      { query: GET_BIO_BY_ID, variables: { id } },
+      { query: GET_BIOS },
+    ],
   });
-
-  const handleChange = (e: any) => setFile(e.target.files[0]);
 
   return (
     <FormContainer>
       {loading && <Spinner animation='border' />}
       <PageTitle>Edit Bio</PageTitle>
-      <Form style={{ width: '235px' }}>
+      <Form>
         <Image
           src={data?.bioById?.image}
           width='200px'
@@ -113,7 +103,7 @@ const BioEdit = () => {
           <FormInput
             style={{ background: '#fff' }}
             type='file'
-            onChange={handleChange}
+            onChange={(e: any) => setFile(e.target.files[0])}
           />
         </FormGroup>
         <FormGroup controlId='firstName'>
@@ -167,33 +157,12 @@ const BioEdit = () => {
           />
           <ErrorText>{errors?.description}</ErrorText>
         </FormGroup>
-        <div className='d-flex justify-content-between'>
-          <Button
-            style={{ textTransform: 'capitalize' }}
-            onClick={onSubmit}
-            className='d-flex align-items-center justify-content-center text-white mt-5'
-          >
-            <Text
-              fontFamily={`Oxygen, sans-serif`}
-              color='#fff'
-              margin={[`0 ${uploading || loadingUpdate ? '0.5rem' : '0'} 0 0`]}
-            >
-              Updat
-              {uploading || loadingUpdate ? 'ing...' : 'e'}
-            </Text>
-            {(uploading || loadingUpdate) && (
-              <Spinner animation='border' size='sm' />
-            )}
-          </Button>
-          <Button
-            variant='secondary'
-            style={{ textTransform: 'capitalize' }}
-            onClick={() => navigate(-1)}
-            className='d-flex align-items-center justify-content-center mt-5'
-          >
-            Back
-          </Button>
-        </div>
+        <NavigateBtns
+          onSubmit={onSubmit}
+          text='Updat'
+          loading1={uploading}
+          loading2={loadingUpdate}
+        />
       </Form>
       {graphQLErrors?.map((error: any, i: number) => (
         <Alert key={i}>{error?.message}</Alert>

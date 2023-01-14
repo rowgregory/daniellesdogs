@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link, Text } from '../components/elements';
-import { FormContainer } from '../components/styles/form';
-import { PageTitle } from './NewClientForm';
+import { FormContainer, PageTitle } from '../components/styles/form';
 
 const ReturnHomeLink = styled(Link)`
   background: ${({ theme }) => theme.colors.primary};

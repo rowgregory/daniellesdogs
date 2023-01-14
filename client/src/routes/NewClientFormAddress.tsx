@@ -1,36 +1,30 @@
 import React, { useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import { useNavigate, useLocation } from 'react-router-dom';
+import ContinueBtn from '../components/ContinueBtn';
+import { useNCFAddressForm } from '../utils/hooks/useNCFAddressForm';
+import { STATES } from '../utils/states';
+import { validateNewClientFormAddress } from '../utils/validate';
 import {
   FormContainer,
   FormGroup,
   FormInput,
   FormLabel,
   FormSelect,
+  PageTitle,
+  ErrorText,
 } from '../components/styles/form';
-import { useForm } from '../utils/hooks/useForm';
-import { STATES } from '../utils/states';
-import { validateNewClientFormAddress } from '../utils/validate';
-import { ErrorText, PageTitle } from './NewClientForm';
 
 const NewClientFormAddress = () => {
   const [errors, setErrors] = useState() as any;
   const { state } = useLocation() as any;
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
-  const values = {
-    address: {
-      addressLine1: '',
-      city: '',
-      state: '',
-      zipPostalCode: '',
-    },
-  };
-
-  const { inputs, handleInputChange } = useForm(values);
-
-  const handleSubmit = () => {
+  const ncfAddressCalback = () => {
+    setLoading(true);
     const validForm = validateNewClientFormAddress(setErrors, inputs);
+    setLoading(false);
 
     if (validForm) {
       navigate('/new-client-form/vet', {
@@ -50,12 +44,15 @@ const NewClientFormAddress = () => {
     }
   };
 
+  const { inputs, handleInputChange, onSubmit } =
+    useNCFAddressForm(ncfAddressCalback);
+
   return (
     <FormContainer>
       <PageTitle>Address</PageTitle>
       <Form>
         <FormGroup controlId='addressLine1'>
-          <FormLabel className='mb-0'>Address</FormLabel>
+          <FormLabel>Address*</FormLabel>
           <FormInput
             name='addressLine1'
             value={inputs?.address?.addressLine1 || ''}
@@ -65,7 +62,7 @@ const NewClientFormAddress = () => {
           <ErrorText>{errors?.addressLine1}</ErrorText>
         </FormGroup>
         <FormGroup controlId='city'>
-          <FormLabel className='mb-0'>City</FormLabel>
+          <FormLabel>City*</FormLabel>
           <FormInput
             name='city'
             value={inputs?.address?.city || ''}
@@ -75,7 +72,7 @@ const NewClientFormAddress = () => {
           <ErrorText>{errors?.city}</ErrorText>
         </FormGroup>
         <FormGroup controlId='state'>
-          <FormLabel className='mb-0'>State</FormLabel>
+          <FormLabel>State*</FormLabel>
           <FormSelect
             name='state'
             value={inputs?.address?.state || ''}
@@ -90,7 +87,7 @@ const NewClientFormAddress = () => {
           <ErrorText>{errors?.state}</ErrorText>
         </FormGroup>
         <FormGroup controlId='zipPostalCode'>
-          <FormLabel className='mb-0'>Zip/Postal Code</FormLabel>
+          <FormLabel>Zip/Postal Code*</FormLabel>
           <FormInput
             name='zipPostalCode'
             value={inputs?.address?.zipPostalCode || ''}
@@ -99,15 +96,7 @@ const NewClientFormAddress = () => {
           />
           <ErrorText>{errors?.zipPostalCode}</ErrorText>
         </FormGroup>
-        <Button
-          onClick={handleSubmit}
-          className='py-1 px-3 d-flex align-items-center justify-content-center text-white mt-5'
-          style={{
-            textTransform: 'capitalize',
-          }}
-        >
-          Continue
-        </Button>
+        <ContinueBtn onSubmit={onSubmit} text='Continu' loading1={loading} />
       </Form>
     </FormContainer>
   );

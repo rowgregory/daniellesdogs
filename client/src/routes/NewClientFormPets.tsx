@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Flex, Text } from '../components/elements';
@@ -7,52 +7,22 @@ import {
   FormGroup,
   FormInput,
   FormLabel,
+  PageTitle,
+  ErrorText,
 } from '../components/styles/form';
-import { useForm } from '../utils/hooks/useForm';
 import { petValues } from '../utils/form-values/values';
-
 import { validateNewClientFormPets } from '../utils/validate';
-import { ErrorText, PageTitle } from './NewClientForm';
+import ContinueBtn from '../components/ContinueBtn';
+import { useNCFPetsForm } from '../utils/hooks/useNCFPetsForm';
 
 const NewClientFormPets = () => {
   const navigate = useNavigate();
   let [errors, setErrors] = useState([]) as any;
   const { state } = useLocation() as any;
+  const [loading, setLoading] = useState(false);
 
-  const values = useRef({
-    openYard: false,
-    pets: [
-      {
-        ...petValues,
-      },
-    ],
-  }) as any;
-
-  const { inputs, handleInputChange, setInputs } = useForm(values.current);
-  useEffect(() => {
-    setInputs(values.current);
-  }, [setInputs, values]);
-
-  const addPet = () => {
-    const values = [...inputs.pets];
-    values.push({ ...petValues });
-
-    setInputs((inputs: any) => ({
-      ...inputs,
-      pets: values,
-    }));
-  };
-
-  const handleRemovePet = (index: any) => {
-    const values = [...inputs.pets];
-    values.splice(index, 1);
-    setInputs(() => ({
-      ...inputs,
-      pets: values,
-    }));
-  };
-
-  const handleSubmit = () => {
+  const ncfPetsCalback = () => {
+    setLoading(true);
     const validForm = validateNewClientFormPets(setErrors, inputs);
 
     if (validForm) {
@@ -74,9 +44,31 @@ const NewClientFormPets = () => {
             phoneNumber: state?.vet?.phoneNumber,
           },
           pets: inputs?.pets,
+          openYard: inputs?.openYard,
         },
       });
     }
+  };
+
+  const { inputs, handleInputChange, setInputs, onSubmit } =
+    useNCFPetsForm(ncfPetsCalback);
+
+  const addPet = () => {
+    const values = [...inputs.pets];
+    values.push({ ...petValues });
+    setInputs((inputs: any) => ({
+      ...inputs,
+      pets: values,
+    }));
+  };
+
+  const handleRemovePet = (index: any) => {
+    const values = [...inputs.pets];
+    values.splice(index, 1);
+    setInputs(() => ({
+      ...inputs,
+      pets: values,
+    }));
   };
 
   return (
@@ -87,7 +79,7 @@ const NewClientFormPets = () => {
           {inputs?.pets?.map((pet: any, i: number) => (
             <div key={i} style={{ marginRight: '1rem' }}>
               <FormGroup controlId='name'>
-                <FormLabel className='mb-0'>Name</FormLabel>
+                <FormLabel>Name</FormLabel>
                 <FormInput
                   name='name'
                   value={pet.name}
@@ -97,7 +89,7 @@ const NewClientFormPets = () => {
                 <ErrorText>{i === 0 && [errors][0]?.name}</ErrorText>
               </FormGroup>
               <FormGroup controlId='age'>
-                <FormLabel className='mb-0'>Age</FormLabel>
+                <FormLabel>Age</FormLabel>
                 <FormInput
                   name='age'
                   value={pet.age}
@@ -107,7 +99,7 @@ const NewClientFormPets = () => {
                 <ErrorText>{i === 0 && [errors][0]?.age}</ErrorText>
               </FormGroup>
               <FormGroup controlId='breedString'>
-                <FormLabel className='mb-0'>Breed</FormLabel>
+                <FormLabel>Breed</FormLabel>
                 <FormInput
                   name='breedString'
                   value={pet.breedString}
@@ -117,7 +109,7 @@ const NewClientFormPets = () => {
                 <ErrorText>{i === 0 && [errors][0]?.breedString}</ErrorText>
               </FormGroup>
               <FormGroup controlId='sex'>
-                <FormLabel className='mb-0'>Sex</FormLabel>
+                <FormLabel>Sex</FormLabel>
                 <FormInput
                   name='sex'
                   value={pet.sex}
@@ -127,9 +119,7 @@ const NewClientFormPets = () => {
                 <ErrorText>{i === 0 && [errors][0]?.sex}</ErrorText>
               </FormGroup>
               <FormGroup controlId='preferredTimeOfService'>
-                <FormLabel className='mb-0'>
-                  Preferred Time of Service
-                </FormLabel>
+                <FormLabel>Preferred Time of Service</FormLabel>
                 <FormInput
                   name='preferredTimeOfService'
                   value={pet.preferredTimeOfService}
@@ -141,7 +131,7 @@ const NewClientFormPets = () => {
                 </ErrorText>
               </FormGroup>
               <FormGroup controlId='harnessLocation'>
-                <FormLabel className='mb-0'>Harness Location</FormLabel>
+                <FormLabel>Harness Location</FormLabel>
                 <FormInput
                   name='harnessLocation'
                   value={pet.harnessLocation}
@@ -151,7 +141,7 @@ const NewClientFormPets = () => {
                 <ErrorText>{i === 0 && [errors][0]?.harnessLocation}</ErrorText>
               </FormGroup>
               <FormGroup controlId='dropOffLocation'>
-                <FormLabel className='mb-0'>Drop Off Location</FormLabel>
+                <FormLabel>Drop Off Location</FormLabel>
                 <FormInput
                   name='dropOffLocation'
                   value={pet.dropOffLocation}
@@ -160,9 +150,8 @@ const NewClientFormPets = () => {
                 />
                 <ErrorText>{i === 0 && [errors][0]?.dropOffLocation}</ErrorText>
               </FormGroup>
-
               <FormGroup controlId='medications'>
-                <FormLabel className='mb-0'>Medications</FormLabel>
+                <FormLabel>Medications</FormLabel>
                 <FormInput
                   name='medications'
                   value={pet.medications}
@@ -172,7 +161,7 @@ const NewClientFormPets = () => {
                 <ErrorText>{i === 0 && [errors][0]?.medications}</ErrorText>
               </FormGroup>
               <FormGroup controlId='allergies'>
-                <FormLabel className='mb-0'>Allergies</FormLabel>
+                <FormLabel>Allergies</FormLabel>
                 <FormInput
                   name='allergies'
                   value={pet.allergies}
@@ -191,7 +180,7 @@ const NewClientFormPets = () => {
                 />
               </FormGroup>
               <FormGroup controlId='freeRoaming' className='mb-3'>
-                <FormLabel className='mb-0'>Free Roaming?</FormLabel>
+                <FormLabel>Free Roaming?</FormLabel>
                 <Form.Check
                   id='freeRoaming'
                   name='freeRoaming'
@@ -200,7 +189,7 @@ const NewClientFormPets = () => {
                 ></Form.Check>
               </FormGroup>
               <FormGroup controlId='isSprayed' className='mb-3'>
-                <FormLabel className='mb-0'>Spayed/Neutered?</FormLabel>
+                <FormLabel>Spayed/Neutered?</FormLabel>
                 <Form.Check
                   id='isSprayed'
                   name='isSprayed'
@@ -209,7 +198,7 @@ const NewClientFormPets = () => {
                 ></Form.Check>
               </FormGroup>
               <FormGroup controlId='goodWithStrangers' className='mb-3'>
-                <FormLabel className='mb-0'>Good With Strangers?</FormLabel>
+                <FormLabel>Good With Strangers?</FormLabel>
                 <Form.Check
                   id='goodWithStrangers'
                   name='goodWithStrangers'
@@ -230,14 +219,12 @@ const NewClientFormPets = () => {
           ))}
         </Flex>
         <FormGroup controlId='openYard' className='mb-3'>
-          <FormLabel className='mb-0'>
-            Is your yard open for play dates?
-          </FormLabel>
+          <FormLabel>Is your yard open for play dates?</FormLabel>
           <Form.Check
             id='openYard'
             name='openYard'
             type='switch'
-            onChange={handleInputChange}
+            onChange={(e) => handleInputChange(e)}
           ></Form.Check>
         </FormGroup>
         <div className='d-flex align-items-center mt-3'>
@@ -253,13 +240,7 @@ const NewClientFormPets = () => {
             Add Pet
           </Text>
         </div>
-        <Button
-          style={{ textTransform: 'capitalize' }}
-          onClick={handleSubmit}
-          className='d-flex align-items-center justify-content-center text-white mt-5'
-        >
-          Continue
-        </Button>
+        <ContinueBtn onSubmit={onSubmit} text='Continu' loading1={loading} />
       </Form>
     </FormContainer>
   );

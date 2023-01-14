@@ -42,10 +42,11 @@ const GalleryImageList = () => {
     setUploading(true);
     const formData = new FormData();
     formData.append('image', file);
+    formData.append('isGalleryImage', 'true');
 
     const { data } = await axios.post('/upload', formData, config);
 
-    if (data === 'IMAGE_UPLOAD_SUCCESS') {
+    if (data.message === 'IMAGE_UPLOAD_SUCCESS') {
       refetch();
       setUploading(false);
     }

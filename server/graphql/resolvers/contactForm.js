@@ -4,7 +4,47 @@ const writeToFile = require('../../utils/writeToFile.js');
 module.exports = {
   Query: {
     async contactFormList() {
-      return await ContactForm.find({});
+      try {
+        const contactFormList = await ContactForm.find({});
+
+        writeToFile(
+          '/server/logs/success.txt',
+          '.🟢',
+          '.CONTACT_FORM_LIST',
+          `.totalContactForms: ${contactFormList.length}`
+        );
+
+        return contactFormList;
+      } catch (err) {
+        writeToFile(
+          '/server/logs/error.txt',
+          '.🔴',
+          '.CONTACT_FORM_LIST',
+          `.error: ${err.message}`
+        );
+      }
+    },
+    async contactFormById(_, { id }) {
+      try {
+        const contactForm = await ContactForm.findById({ _id: id });
+
+        if (contactForm) {
+          writeToFile(
+            '/server/logs/success.txt',
+            '.🟢',
+            '.CONTACT_FORM_BY_ID',
+            `.id: ${contactForm.id}`
+          );
+          return contactForm;
+        }
+      } catch (err) {
+        writeToFile(
+          '/server/logs/error.txt',
+          '.🔴',
+          '.CONTACT_FORM_BY_ID',
+          `.error: ${err.message}`
+        );
+      }
     },
   },
   Mutation: {
@@ -48,7 +88,23 @@ module.exports = {
       }
     },
     async deleteContactForm(_, { id }) {
-      return await ContactForm.deleteOne({ _id: id });
+      try {
+        const deletedContactForm = await ContactForm.deleteOne({ _id: id });
+
+        writeToFile(
+          '/server/logs/success.txt',
+          '.🟢',
+          '.CONTACT_FORM_DELETE',
+          `.deletedCount: ${deletedContactForm.deletedCount}`
+        );
+      } catch (err) {
+        writeToFile(
+          '/server/logs/error.txt',
+          '.🔴',
+          '.CONTACT_FORM_DELETE',
+          `.error: ${err.message}`
+        );
+      }
     },
   },
 };

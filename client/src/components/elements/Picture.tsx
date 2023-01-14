@@ -17,6 +17,7 @@ interface ImageProps {
   objectfit?: string[];
   aspectratio?: string[];
   gridarea?: string[];
+  borderradius?: string[];
 }
 
 const Picture = styled(Image)<ImageProps>(
@@ -35,7 +36,8 @@ const Picture = styled(Image)<ImageProps>(
     transform: '',
     objectfit: 'cover',
     aspectratio: '',
-    gridArea: '',
+    gridarea: '',
+    borderradius: '',
   },
   ({
     color,
@@ -52,6 +54,7 @@ const Picture = styled(Image)<ImageProps>(
     objectfit,
     aspectratio,
     gridarea,
+    borderradius,
   }) => ({
     ...createMediaQueries([
       {
@@ -110,6 +113,10 @@ const Picture = styled(Image)<ImageProps>(
       {
         property: 'grid-area',
         values: gridarea,
+      },
+      {
+        property: 'border-radius',
+        values: borderradius,
       },
     ]),
   })

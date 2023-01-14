@@ -1,4 +1,4 @@
-import { Schema, model, SchemaTypes } from 'mongoose';
+const { Schema, model, SchemaTypes } = require('mongoose');
 
 const ProductSchema = Schema(
   {
@@ -18,26 +18,23 @@ const ProductSchema = Schema(
       type: String,
     },
     price: {
-      type: Number,
+      type: String,
       required: true,
       default: 0,
     },
     countInStock: {
-      type: Number,
+      type: String,
       default: 0,
     },
     publicId: {
       type: String,
     },
-    size: {
-      type: String,
-    },
-    isLimitedProduct: {
-      type: Boolean,
-    },
-    sizes: {
-      type: Array,
-    },
+    sizes: [
+      {
+        size: String,
+        qty: String,
+      },
+    ],
   },
   {
     timestamps: true,

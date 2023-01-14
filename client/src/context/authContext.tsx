@@ -6,9 +6,18 @@ const userDataFromStorage = localStorage.getItem('user-data')
   ? JSON.parse(localStorage.getItem('user-data') || '')
   : null;
 
+const cartItemsFromStorage = localStorage.getItem('cartItems')
+  ? JSON.parse(localStorage.getItem('cartItems') || '')
+  : [];
+
 const initialState = {
   user: userDataFromStorage,
   isLoggedIn: userDataFromStorage?.isLoggedIn || false,
+  cart: {
+    cartItems: cartItemsFromStorage || [],
+    cartItemsAmount: cartItemsFromStorage?.length || 0,
+    loadingCartAddItem: false,
+  },
 } as any;
 
 if (localStorage.getItem('token')) {
@@ -36,6 +45,12 @@ const AuthContext = createContext({
   isLoggedIn: false,
   login: (user: any) => user,
   logout: (navigate: any) => {},
+  cart: {
+    addItemToCart: (item: any) => item,
+    cartItems: cartItemsFromStorage,
+    cartItemsAmount: cartItemsFromStorage?.length,
+    loadingCartAddItem: false,
+  },
 });
 
 const authReducer = (state: any, action: any) => {
@@ -54,6 +69,43 @@ const authReducer = (state: any, action: any) => {
         user: null,
         isLoggedIn: false,
       };
+    case 'CART_ADD_ITEM_REQUEST':
+      return {
+        ...state,
+        loadingCartAddItem: true,
+      };
+    case 'CART_ADD_ITEM_SUCCESS':
+      const item = action.payload;
+      console.log('item: ', item);
+      console.log('cart items: ', state?.cartItems);
+
+      const existItem: any = state?.cartItems?.find(
+        (x: any) => x.product === item.product && x.size === item.size
+      );
+
+      if (existItem) {
+        return {
+          ...state,
+          cartItems: state?.cartItems.map((x: any) =>
+            x.product === existItem.product && x.size === existItem.size
+              ? item
+              : x
+          ),
+          loadingCartAddItem: false,
+        };
+      } else {
+        return {
+          ...state,
+          cartItems: [...state?.cartItems, item],
+          loadingCartAddItem: false,
+        };
+      }
+    case 'CART_ADD_ITEM_FAIL':
+      return {
+        ...state,
+        loadingCartAddItem: false,
+        success: false,
+      };
     default:
       return { ...state };
   }
@@ -61,6 +113,8 @@ const authReducer = (state: any, action: any) => {
 
 const AuthProvider = (props: any) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
+
+  console.log('state: ', state);
 
   const login = (user: any) => {
     authToken().setToken(user.token);
@@ -77,9 +131,50 @@ const AuthProvider = (props: any) => {
     });
   };
 
+  const addItemToCart = (item: any, qty: any, size: any) => {
+    try {
+      dispatch({ type: 'CART_ADD_ITEM_REQUEST' });
+
+      dispatch({
+        type: 'CART_ADD_ITEM_SUCCESS',
+        payload: {
+          product: item.id,
+          name: item.name,
+          image: item.image,
+          price: item.price,
+          countInStock: item.countInStock,
+          qty,
+          size,
+          sizes: item.sizes,
+        },
+      });
+
+      localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
+    } catch (err: any) {
+      dispatch({
+        type: 'CART_ADD_ITEM_FAIL',
+        payload:
+          err.response && err.response.data.message
+            ? err.response.data.message
+            : err.message,
+      });
+    }
+  };
+
   return (
     <AuthContext.Provider
-      value={{ user: state.user, isLoggedIn: state.isLoggedIn, login, logout }}
+      value={{
+        user: state.user,
+        isLoggedIn: state.isLoggedIn,
+        login,
+        logout,
+        cart: {
+          addItemToCart,
+          cartItems: state.cart.cartItems,
+          cartItemsAmount: state.cart.cartItemsAmount,
+          loadingCartAddItem: state.cart.loadingCartAddItem,
+        },
+      }}
       {...props}
     />
   );

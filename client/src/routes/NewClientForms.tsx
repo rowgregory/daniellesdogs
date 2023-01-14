@@ -1,52 +1,25 @@
-import React, { useRef, useState } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
+import React, { useState } from 'react';
+import { useQuery } from '@apollo/client';
 import { Text } from '../components/elements';
-import { Alert, Button, Col, Form, Table } from 'react-bootstrap';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import { Button, Spinner, Table } from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom';
-import DELETE_NEW_CLIENT_FORM from '../queries/deleteNewClientForm';
-import toaster from 'toasted-notes';
-import { ToastAlert } from '../components/elements/ToastAlert';
 import { GET_NEW_CLIENT_FORMS } from '../queries/getNewClientForms';
 import NewClientFormModal from '../components/NewClientFormModal';
-import { SearchBar } from '../components/styles/form';
+import { FormGroup, FormInput, FormLabel } from '../components/styles/form';
+import DeleteModal from '../components/DeleteModal';
 
 const NewClientForms = () => {
-  const params = useParams();
-  const userId = params.user_id;
-  const userType = params.user_type;
-  const { loading, error, data } = useQuery(GET_NEW_CLIENT_FORMS);
+  const { user_id, user_type } = useParams();
+  const { loading, data } = useQuery(GET_NEW_CLIENT_FORMS);
   const [show, setShow] = useState(false);
   const [id, setId] = useState('');
   const [text, setText] = useState('');
-  const tableBodyRef = useRef();
-  const [errors, setErrors] = useState([]) as any;
+  const [formData, setFormData] = useState({}) as any;
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const filteredNewClientForms = data?.getNewClientForms?.filter((form: any) =>
     form?.user.firstName?.toLowerCase().includes(text?.toLowerCase())
   );
-
-  const [deleteForm, { loading: loadingDelete, error: errorDelete }] =
-    useMutation(DELETE_NEW_CLIENT_FORM, {
-      refetchQueries: [
-        {
-          query: GET_NEW_CLIENT_FORMS,
-        },
-        'getNewClientForms',
-      ],
-      onError({ graphQLErrors }) {
-        setErrors(graphQLErrors);
-      },
-      onCompleted() {
-        toaster.notify(
-          ({ onClose }) => ToastAlert('FORM DELETED', onClose, 'success'),
-          {
-            duration: 2000,
-            position: 'bottom',
-          }
-        );
-      },
-    });
 
   const viewFormData = (form: any) => {
     setId(form.id);
@@ -55,22 +28,23 @@ const NewClientForms = () => {
 
   return (
     <>
+      <DeleteModal
+        actionFunc='New Client Form'
+        show={showDeleteModal}
+        handleClose={setShowDeleteModal}
+        id={formData}
+      />
       <NewClientFormModal show={show} setShow={setShow} id={id} />
-      {loading && 'Loading ...'}
-      {loadingDelete && 'Deleting Form ...'}
-      {error && <div>Error! ${error.message}</div>}
-      {errorDelete && <div>Error Deleting! ${errorDelete.message}</div>}
-      <Col className='d-flex align-items-center justify-content-between'>
-        <SearchBar>
-          <Form.Control
-            as='input'
-            type='text'
-            placeholder='Search by First Name'
-            value={text || ''}
-            onChange={(e: any) => setText(e.target.value)}
-          ></Form.Control>
-        </SearchBar>
-      </Col>
+      {loading && <Spinner animation='border' />}
+      <FormGroup className='mb-4'>
+        <FormLabel>Search by First Name</FormLabel>
+        <FormInput
+          as='input'
+          type='text'
+          value={text || ''}
+          onChange={(e: any) => setText(e.target.value)}
+        ></FormInput>
+      </FormGroup>
       <div style={{ tableLayout: 'fixed', overflowX: 'auto' }}>
         <Table responsive striped hover className='table-md'>
           <thead>
@@ -85,79 +59,61 @@ const NewClientForms = () => {
               <th>Delete</th>
             </tr>
           </thead>
-          <TransitionGroup component='tbody'>
+          <tbody>
             {filteredNewClientForms?.map((form: any) => (
-              <CSSTransition
-                nodeRef={tableBodyRef}
-                key={form?.id}
-                timeout={500}
-                classNames='item'
-              >
-                <tr ref={tableBodyRef.current}>
-                  <td onClick={() => viewFormData(form)}>
-                    <Text>{form?.user?.firstName}</Text>
-                  </td>
-                  <td onClick={() => viewFormData(form)}>
-                    <Text>{form?.user?.lastName}</Text>
-                  </td>
-                  <td onClick={() => viewFormData(form)}>
-                    <Text>{form?.user?.emailAddress}</Text>
-                  </td>
-                  <td onClick={() => viewFormData(form)}>
-                    <Text>{form?.user?.phoneNumber}</Text>
-                  </td>
-                  <td onClick={() => viewFormData(form)}>
-                    <Text>
-                      {form?.address?.addressLine1} {form?.address?.city},{' '}
-                      {form?.address?.state}
-                      {form?.address?.zipPostalCode}
+              <tr key={form?.id}>
+                <td onClick={() => viewFormData(form)}>
+                  <Text>{form?.user?.firstName}</Text>
+                </td>
+                <td onClick={() => viewFormData(form)}>
+                  <Text>{form?.user?.lastName}</Text>
+                </td>
+                <td onClick={() => viewFormData(form)}>
+                  <Text>{form?.user?.emailAddress}</Text>
+                </td>
+                <td onClick={() => viewFormData(form)}>
+                  <Text>{form?.user?.phoneNumber}</Text>
+                </td>
+                <td onClick={() => viewFormData(form)}>
+                  <Text>
+                    {form?.address?.addressLine1} {form?.address?.city},{' '}
+                    {form?.address?.state}
+                    {form?.address?.zipPostalCode}
+                  </Text>
+                </td>
+                <td onClick={() => viewFormData(form)}>
+                  {form?.pets?.map((pet: any, i: number) => (
+                    <Text key={i}>
+                      {pet.name}:{pet.breedString}
                     </Text>
-                  </td>
-                  <td>
-                    {form?.pets?.map((pet: any, i: number) => (
-                      <Text key={i}>
-                        {pet.name}:{pet.breedString}
-                      </Text>
-                    ))}
-                  </td>
+                  ))}
+                </td>
 
-                  <td>
-                    <Link
-                      to={`/${userId}/${userType}/new-client-forms/${form.id}`}
-                    >
-                      <Button className='btn-md'>
-                        <i className='fas fa-edit'></i>
-                      </Button>
-                    </Link>
-                  </td>
-                  <td>
-                    <Button
-                      onClick={() =>
-                        deleteForm({
-                          variables: {
-                            id: form.id,
-                            userId: form.user.id,
-                            petsId: form.pets.map((pet: any) => pet.id),
-                            vetId: form.vet.id,
-                            addressId: form.address.id,
-                          },
-                        })
-                      }
-                      variant='danger'
-                      className='btn-md'
-                    >
-                      <i className='fas fa-trash'></i>
+                <td>
+                  <Link
+                    to={`/${user_id}/${user_type}/new-client-forms/${form.id}`}
+                  >
+                    <Button>
+                      <i className='fas fa-edit'></i>
                     </Button>
-                  </td>
-                </tr>
-              </CSSTransition>
+                  </Link>
+                </td>
+                <td>
+                  <Button
+                    onClick={() => {
+                      setFormData(form);
+                      setShowDeleteModal(true);
+                    }}
+                    variant='danger'
+                  >
+                    <i className='fas fa-trash'></i>
+                  </Button>
+                </td>
+              </tr>
             ))}
-          </TransitionGroup>
+          </tbody>
         </Table>
       </div>
-      {errors.map((error: any, i: number) => (
-        <Alert key={i}>{error.message}</Alert>
-      ))}
     </>
   );
 };

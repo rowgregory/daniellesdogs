@@ -3,8 +3,7 @@ import { useQuery } from '@apollo/client';
 import { Text, Flex, Picture } from '../components/elements';
 import { Spinner } from 'react-bootstrap';
 import { GET_BIOS } from '../queries/getBios';
-import { FormContainer } from '../components/styles/form';
-import { PageTitle } from './NewClientForm';
+import { FormContainer, PageTitle } from '../components/styles/form';
 import styled from 'styled-components';
 
 const BioCard = styled.div`

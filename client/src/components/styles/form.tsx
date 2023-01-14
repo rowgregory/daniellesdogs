@@ -1,5 +1,6 @@
 import { Form } from 'react-bootstrap';
 import styled from 'styled-components';
+import { Text } from '../elements';
 
 export const FormContainer = styled.div`
   display: flex;
@@ -9,7 +10,7 @@ export const FormContainer = styled.div`
   max-width: 75rem;
   width: 100%;
   margin: 0 auto;
-  height: 100vh;
+  /* height: 100vh; */
 `;
 
 export const FormInput = styled.input`
@@ -59,8 +60,23 @@ export const FormLabel = styled(Form.Label)`
   text-transform: uppercase;
   font-family: 'Oxygen', sans-serif;
   margin-top: 1rem;
+  margin-bottom: 0;
 `;
 
 export const SearchBar = styled(Form.Group)`
-  width: 20rem;
+  width: 50em;
+`;
+
+export const ErrorText = styled(Text)`
+  font-family: 'Oxygen', sans-serif;
+  font-size: 0.875rem;
+  color: #d42825;
+  font-weight: bold;
+`;
+
+export const PageTitle = styled(Text)`
+  font-family: 'Oxygen', sans-serif;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
 `;

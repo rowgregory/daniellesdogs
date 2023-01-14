@@ -8,8 +8,9 @@ import {
   FormInput,
   FormLabel,
   FormTextArea,
+  PageTitle,
+  ErrorText,
 } from '../components/styles/form';
-import { ErrorText, PageTitle } from './NewClientForm';
 import { validateContactForm } from '../utils/validate';
 import { CREATE_CONTACT_FORM } from '../mutations/createContactForm';
 import { useNavigate } from 'react-router-dom';

@@ -36,8 +36,6 @@ export const GET_NEW_CLIENT_FORMS = gql`
 
 export const GET_USER_BY_EMAIL = gql`
   query GetUserByEmail($emailAddress: String!) {
-    getUserByEmail(emailAddress: $emailAddress) {
-      message
-    }
+    getUserByEmail(emailAddress: $emailAddress)
   }
 `;

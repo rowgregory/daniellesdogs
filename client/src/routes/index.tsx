@@ -1,15 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Container } from '../components/elements';
 import styled from 'styled-components';
 import AppLayoutWithSideBar from '../components/layouts/AppLayoutWithSideBar';
 import Navigation from '../components/Navigation';
 import AnimatedRoutes from './AnimatedRoutes';
-import Footer from '../components/Footer';
 import AdminSideBar from '../components/admin/AdminSideBar';
+import { Cart1 } from '../components/svg/Cart1';
+import Cart2 from '../components/svg/Cart2';
+import Cart3 from '../components/svg/Cart3';
+import { AuthContext } from '../context/authContext';
 
 const RouteContainer = styled(Container)`
   background: ${({ theme }) => theme.bg};
-  min-height: 100vh;
+  /* min-height: 100vh; */
 `;
 
 const InnerContainer = styled.div`
@@ -104,6 +107,9 @@ export const Routes = () => {
   const [showSideBar, setShowSideBar] = useState(false);
   const [showAdminPanel, setShowAdminPanel] = useState(false);
 
+  const context = useContext(AuthContext) as any;
+  console.log(context.cart.cartItems?.length);
+
   useEffect(() => {
     if (pgContent.current && showSideBar) {
       pgContent.current.style.transform = 'translateX(-550px)';
@@ -134,6 +140,35 @@ export const Routes = () => {
         showAdminPanel={showAdminPanel}
         setShowSideBar={setShowSideBar}
       />
+      <div
+        style={{
+          position: 'absolute',
+          zIndex: 100,
+          top: '40px',
+          right: '135px',
+          cursor: 'pointer',
+        }}
+      >
+        <Cart3 />
+      </div>
+      <div
+        className='d-flex justify-content-center align-items-center'
+        style={{
+          position: 'absolute',
+          zIndex: 100,
+          top: '40px',
+          right: '135px',
+          cursor: 'pointer',
+          height: '20px',
+          width: '20px',
+          borderRadius: '50%',
+          color: '#fff',
+          backgroundColor: 'lightpink',
+          fontWeight: 'bold',
+        }}
+      >
+        {context.cart.cartItemsAmount}
+      </div>
 
       <Burger
         ref={burgerRef}
@@ -161,7 +196,6 @@ export const Routes = () => {
           <AnimatedRoutes />
         </RouteContainer>
       </AppLayoutWithSideBar>
-      <Footer />
     </>
   );
 };

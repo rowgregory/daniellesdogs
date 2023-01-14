@@ -1,18 +1,14 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@apollo/client';
-import { Link, Text } from '../components/elements';
-import { Button, Image, Spinner, Table } from 'react-bootstrap';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import { Link, Picture, Text } from '../components/elements';
+import { Button, Spinner, Table } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { GET_BIOS } from '../queries/getBios';
 import DeleteModal from '../components/DeleteModal';
 
 const BioList = () => {
-  const params = useParams();
-  const userId = params.user_id;
-  const userType = params.user_type;
-  const { loading, error, data } = useQuery(GET_BIOS);
-  const tableBodyRef = useRef();
+  const { user_id, user_type } = useParams();
+  const { loading, data } = useQuery(GET_BIOS);
   const [show, setShow] = useState(false);
   const [imageData, setImageData] = useState({}) as any;
 
@@ -28,15 +24,15 @@ const BioList = () => {
         publicId={imageData.publicId}
       />
       {loading && <Spinner animation='border' />}
-      {error && <div>Error! ${error.message}</div>}
       <Link
-        style={{ borderBottom: '1px dotted #121212' }}
-        to={`/${userId}/${userType}/bios/create`}
+        className='py-1 px-2'
+        style={{ border: '1px dotted #121212' }}
+        to={`/${user_id}/${user_type}/bios/create`}
       >
         Create Bio
       </Link>
-      <div style={{ tableLayout: 'fixed', overflowX: 'auto' }}>
-        <Table responsive striped hover className='table-md'>
+      <div style={{ tableLayout: 'fixed', overflowX: 'auto' }} className='mt-4'>
+        <Table responsive striped hover>
           <thead>
             <tr>
               <th>First Name</th>
@@ -49,62 +45,54 @@ const BioList = () => {
               <th>Delete</th>
             </tr>
           </thead>
-          <TransitionGroup component='tbody'>
+          <tbody>
             {data?.bioList?.map((bio: any) => (
-              <CSSTransition
-                nodeRef={tableBodyRef}
-                key={bio?.id}
-                timeout={500}
-                classNames='item'
-              >
-                <tr ref={tableBodyRef.current}>
-                  <td>
-                    <Text>{bio?.firstName}</Text>
-                  </td>
-                  <td>
-                    <Text>{bio?.lastName}</Text>
-                  </td>
-                  <td>
-                    <Text>{bio?.emailAddress}</Text>
-                  </td>
-                  <td>
-                    <Text>{bio?.title}</Text>
-                  </td>
-                  <td>
-                    <Text>{bio?.description}</Text>
-                  </td>
-                  <td>
-                    <Image
-                      src={bio?.image}
-                      width='50px'
-                      height='50px'
-                      style={{ borderRadius: '50%', objectFit: 'cover' }}
-                    />
-                  </td>
-
-                  <td>
-                    <Link to={`/${userId}/${userType}/bios/${bio.id}/edit`}>
-                      <Button className='btn-md'>
-                        <i className='fas fa-edit'></i>
-                      </Button>
-                    </Link>
-                  </td>
-                  <td>
-                    <Button
-                      variant='danger'
-                      className='btn-md'
-                      onClick={() => {
-                        setImageData(bio);
-                        setShow(true);
-                      }}
-                    >
-                      <i className='fas fa-trash'></i>
+              <tr key={bio?.id}>
+                <td>
+                  <Text>{bio?.firstName}</Text>
+                </td>
+                <td>
+                  <Text>{bio?.lastName}</Text>
+                </td>
+                <td>
+                  <Text>{bio?.emailAddress}</Text>
+                </td>
+                <td>
+                  <Text>{bio?.title}</Text>
+                </td>
+                <td>
+                  <Text>{bio?.description}</Text>
+                </td>
+                <td>
+                  <Picture
+                    src={bio?.image}
+                    borderradius={['50%']}
+                    objectfit={['cover']}
+                    width='50px'
+                    height='50px'
+                  />
+                </td>
+                <td>
+                  <Link to={`/${user_id}/${user_type}/bios/${bio?.id}/edit`}>
+                    <Button>
+                      <i className='fas fa-edit'></i>
                     </Button>
-                  </td>
-                </tr>
-              </CSSTransition>
+                  </Link>
+                </td>
+                <td>
+                  <Button
+                    variant='danger'
+                    onClick={() => {
+                      setImageData(bio);
+                      setShow(true);
+                    }}
+                  >
+                    <i className='fas fa-trash'></i>
+                  </Button>
+                </td>
+              </tr>
             ))}
-          </TransitionGroup>
+          </tbody>
         </Table>
       </div>
     </>

@@ -386,3 +386,141 @@ export const validateBio = (setErrors: (errors: any) => void, inputs: any) => {
 
   return formIsValid;
 };
+
+export const validateProduct = (
+  setErrors: (errors: any) => void,
+  inputs: any
+) => {
+  let formIsValid = true;
+  if (!inputs?.name) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      name: 'Enter name to continue.',
+    }));
+  } else {
+    setErrors((errors: any) => ({ ...errors, name: '' }));
+  }
+  if (!inputs?.image) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      image: 'Select picture to continue.',
+    }));
+  } else {
+    setErrors((errors: any) => ({ ...errors, image: '' }));
+  }
+  if (!inputs?.description) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      description: 'Enter description to continue.',
+    }));
+  } else {
+    setErrors((errors: any) => ({ ...errors, description: '' }));
+  }
+  if (!inputs?.price) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      price: 'Enter price to continue.',
+    }));
+  } else {
+    setErrors((errors: any) => ({ ...errors, price: '' }));
+  }
+
+  return formIsValid;
+};
+
+export const validateRegister = (
+  setErrors: (errors: any) => void,
+  inputs: any
+) => {
+  let formIsValid = true;
+  if (!inputs?.firstName) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      firstName: 'Enter first name to continue.',
+    }));
+  } else {
+    setErrors((errors: any) => ({ ...errors, firstName: '' }));
+  }
+  if (!inputs?.lastName) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      lastName: 'Enter last name to continue.',
+    }));
+  } else {
+    setErrors((errors: any) => ({ ...errors, lastName: '' }));
+  }
+  if (!inputs?.emailAddress) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      emailAddress: 'Enter an email to continue.',
+    }));
+  } else if (!validateEmailRegex.test(inputs?.emailAddress)) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      emailAddress: 'Enter a valid email to continue.',
+    }));
+  } else {
+    setErrors((errors: any) => ({ ...errors, emailAddress: '' }));
+  }
+  if (!inputs?.password) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      password: 'Enter password to continue.',
+    }));
+  } else {
+    setErrors((errors: any) => ({ ...errors, password: '' }));
+  }
+  if (!inputs?.confirmPassword) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      confirmPassword: 'Enter confirm password to continue.',
+    }));
+  } else {
+    setErrors((errors: any) => ({ ...errors, confirmPassword: '' }));
+  }
+
+  return formIsValid;
+};
+
+export const validateLogin = (
+  setErrors: (errors: any) => void,
+  inputs: any
+) => {
+  let formIsValid = true;
+  if (!inputs?.emailAddress) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      emailAddress: 'Enter an email to continue.',
+    }));
+  } else if (!validateEmailRegex.test(inputs?.emailAddress)) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      emailAddress: 'Enter a valid email to continue.',
+    }));
+  } else {
+    setErrors((errors: any) => ({ ...errors, emailAddress: '' }));
+  }
+  if (!inputs?.password) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      password: 'Enter password to continue.',
+    }));
+  } else {
+    setErrors((errors: any) => ({ ...errors, password: '' }));
+  }
+
+  return formIsValid;
+};

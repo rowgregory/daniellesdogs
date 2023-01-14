@@ -4,6 +4,8 @@ const pet = require('./pet');
 const galleryImage = require('./galleryImage');
 const contactForm = require('./contactForm');
 const bio = require('./bio');
+const product = require('./product');
+const passcode = require('./passcode');
 
 module.exports = {
   Query: {
@@ -13,6 +15,8 @@ module.exports = {
     ...galleryImage.Query,
     ...bio.Query,
     ...contactForm.Query,
+    ...product.Query,
+    ...passcode.Query,
   },
   Mutation: {
     ...user.Mutation,
@@ -21,5 +25,6 @@ module.exports = {
     ...galleryImage.Mutation,
     ...contactForm.Mutation,
     ...bio.Mutation,
+    ...product.Mutation,
   },
 };

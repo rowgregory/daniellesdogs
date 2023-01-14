@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Text } from '../components/elements';
+import { FormContainer, PageTitle } from '../components/styles/form';
 
 const LoggedOut = () => {
   return (
-    <>
-      <Text>You've Logged Out</Text>
+    <FormContainer>
+      <PageTitle>You've Logged Out</PageTitle>
       <Link to='/login'>Log In</Link>
-    </>
+    </FormContainer>
   );
 };
 

@@ -17,6 +17,9 @@ interface TextProps {
   background?: string[];
   lineHeight?: string[];
   textAlign?: string[];
+  texttransform?: string;
+  bottom?: string;
+  right?: string;
 }
 
 const Text = styled.div<TextProps>(
@@ -32,10 +35,13 @@ const Text = styled.div<TextProps>(
     width: 'fit-content',
     fontWeight: '',
     flex: '',
-    cusros: '',
+    cursor: '',
     background: '',
     lineHeight: '',
     textAlign: undefined,
+    texttransform: '',
+    bottom: '',
+    right: '',
   },
   ({
     fontSize,
@@ -53,6 +59,9 @@ const Text = styled.div<TextProps>(
     background,
     lineHeight,
     textAlign,
+    texttransform,
+    bottom,
+    right,
   }) => ({
     ...createMediaQueries([
       {
@@ -114,6 +123,18 @@ const Text = styled.div<TextProps>(
       {
         property: 'text-align',
         values: textAlign,
+      },
+      {
+        property: 'text-transform',
+        values: texttransform,
+      },
+      {
+        property: 'bottom',
+        values: bottom,
+      },
+      {
+        property: 'right',
+        values: right,
       },
     ]),
   })

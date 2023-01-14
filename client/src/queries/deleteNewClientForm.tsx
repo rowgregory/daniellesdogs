@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-const DELETE_NEW_CLIENT_FORM = gql`
+export const DELETE_NEW_CLIENT_FORM = gql`
   mutation deleteNewClientForm(
     $id: ID
     $userId: ID
@@ -19,5 +19,3 @@ const DELETE_NEW_CLIENT_FORM = gql`
     }
   }
 `;
-
-export default DELETE_NEW_CLIENT_FORM;

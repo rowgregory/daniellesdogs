@@ -1,333 +1,33 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ReactPlayer from 'react-player/lazy';
-import styled from 'styled-components';
 import { Text, Flex } from '../components/elements';
 import Dog1 from '../components/assets/dogs_1.png';
 import Picture from '../components/elements/Picture';
 import gsap, { CSSPlugin } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import S1 from '../components/assets/service_1.png';
-import S2 from '../components/assets/service_2.png';
-import S3 from '../components/assets/service_3.png';
-import S4 from '../components/assets/service_4.png';
-import Fifth from '../components/assets/fifth.jpeg';
-import Thirteenth from '../components/assets/thirteenth.jpeg';
-import Flexible from '../components/svg/Flexible';
-import Convenience from '../components/svg/Convenience';
-import PhotoUpdates from '../components/svg/PhotoUpdates';
-import Communication from '../components/svg/Communication';
 import Map from '../components/Map';
 import Marquee from 'react-fast-marquee';
-import { Logo } from '../components/svg/Logo';
 import { Spinner } from 'react-bootstrap';
+import {
+  imgArr,
+  servicesData,
+  setsUsApartData,
+  SplitTextToChars,
+} from '../utils/home';
+import {
+  BannerLogoText,
+  CenterArea,
+  SMContainer,
+  IntroSection,
+  Skew,
+  TextStyled,
+  ImageGallery,
+  ZoomImg,
+  Skew2,
+} from '../components/styles/home';
+import { Logo } from '../components/svg/Logo';
 
 gsap.registerPlugin(ScrollTrigger, CSSPlugin);
-
-const BannerLogoText = styled(Text)`
-  position: relative;
-  &::before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 2px;
-    bottom: 30px;
-    left: 0;
-    background-color: lightpink;
-    visibility: hidden;
-    -webkit-transform: scaleX(0);
-    transform: scaleX(0);
-    -webkit-transition: all 0.3s ease-in-out 0s;
-    transition: all 0.3s ease-in-out 0s;
-  }
-
-  :hover {
-    &::before {
-      visibility: visible;
-      -webkit-transform: scaleX(1);
-      transform: scaleX(1);
-    }
-  }
-`;
-
-const Skew = styled.div`
-  transform-origin: top left;
-  transform: skewY(10deg);
-  overflow: hidden;
-  div {
-    transform-origin: top left;
-    transform: skewY(-10deg);
-    height: 500px;
-    background: linear-gradient(
-      90deg,
-      rgb(15, 15, 15) 0%,
-      rgb(35, 35, 35) 100%
-    );
-  }
-`;
-const Skew2 = styled.div`
-  transform-origin: bottom left;
-  transform: skewY(-10deg);
-  overflow: hidden;
-  div {
-    transform-origin: top left;
-    transform: skewY(10deg);
-    height: 500px;
-    background: linear-gradient(
-      90deg,
-      rgb(15, 15, 15) 0%,
-      rgb(35, 35, 35) 100%
-    );
-  }
-`;
-
-const SMContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: 0.5s;
-  cursor: pointer;
-  &::before {
-    content: '';
-    position: absolute;
-    border: 2px solid #f3f3f3;
-    border-radius: 0.5rem;
-    padding: 0.5rem;
-    width: 3.75rem;
-    height: 3.75rem;
-    transition: 500ms;
-  }
-
-  i {
-    transform: scale(1) rotateY(0deg);
-    transition: 250ms;
-    color: #f3f3f3;
-  }
-
-  :hover {
-    &::before {
-      content: '';
-      position: absolute;
-      transform: scale(1.4) rotateY(360deg);
-      transition: 0.5s;
-    }
-    i {
-      transform: scale(1.4) rotateY(360deg);
-      transition: 0.75s;
-      &.fa-facebook-f {
-        color: #1877f2;
-      }
-      &.fa-instagram {
-        background: linear-gradient(
-          45deg,
-          #ebcc50 0%,
-          #e14d3a 52%,
-          #a7308f 100%
-        );
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-    }
-  }
-`;
-
-const CenterArea = styled.div`
-  position: absolute;
-  margin-left: auto;
-  margin-right: auto;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  z-index: 10;
-`;
-
-const setsUsApartData = [
-  {
-    icon: <Flexible />,
-    text: 'Flexibility',
-  },
-  {
-    icon: <Convenience />,
-    text: 'Convenience',
-  },
-  {
-    icon: <Communication />,
-    text: 'Communcation',
-  },
-  {
-    icon: <PhotoUpdates />,
-    text: `Photo & Text Updates`,
-  },
-];
-
-const servicesData = [
-  {
-    img: S1,
-    text: 'Thirty Minute Walk',
-  },
-  {
-    img: S2,
-    text: 'One Hour Walk',
-  },
-  {
-    img: S3,
-    text: 'Overnight Care',
-  },
-  {
-    img: S4,
-    text: 'Check-Ins',
-  },
-];
-
-export const SplitTextToChars = (textNode: any) => {
-  const textContent = textNode.textContent;
-  const textSplit = textContent.split('');
-
-  const frag = document.createDocumentFragment();
-  textSplit.forEach((letter: any, i: number) => {
-    const span = document.createElement('span') as any;
-    span.textContent = letter;
-    span.style = `${letter === ' ' ? 'min-width: 0.45rem;' : ''}z-index: ${
-      textSplit.length - i
-    }; position: relative; display: inline-block;`;
-    frag.appendChild(span);
-  });
-  textNode.textContent = '';
-  textNode.appendChild(frag);
-
-  return textNode.children;
-};
-const TextStyled = styled(Text)`
-  font-weight: 500;
-  margin: 0;
-  color: #fff;
-`;
-
-const ImageGallery = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  width: 100%;
-  transition: 1000ms;
-  background: linear-gradient(90deg, rgb(15, 15, 15) 0%, rgb(35, 35, 35) 100%);
-  z-index: 100;
-  :hover {
-    img {
-      tranform: scale(1.2);
-    }
-  }
-  img {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-    aspect-ratio: 1/1;
-  }
-`;
-
-const ZoomImg = styled.div<{ text?: string }>`
-  overflow: hidden;
-  position: relative;
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: all 3s ease-out;
-  }
-
-  :hover {
-    &::before {
-      content: '';
-      position: absolute;
-      transform: translate(-100%, 0);
-    }
-    img {
-      transform: scale(1.3);
-    }
-  }
-  &::before {
-    font-family: Cormorant, serif;
-    content: '${({ text }) => text}';
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2rem;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    color: #fff;
-    background-color: rgba(0, 0, 0, 0.7);
-    text-align: center;
-    box-sizing: border-box;
-    z-index: 30;
-    transition: transform 500ms;
-    transform: translate(0, 0);
-  }
-`;
-
-const imgArr = [
-  {
-    first:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1660264184/M1_cucuux.png',
-    second:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1660265747/M10-min_z6pywe.png',
-    third: Thirteenth,
-    fourth:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1660265350/M2-min_khrx2h.png',
-    fifth:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1660265415/M3-min_lcsyzv.png',
-    sixth:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1660265446/M4-min_kes7ya.png',
-    seventh:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1660265453/M5-min_koc06p.png',
-    eigth:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1660265533/M6-min_rzhgqq.png',
-    ninth:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1660265562/M7-min_jvix21.png',
-    tenth:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1662833624/IMG_5634_jcwygm.png',
-    eleventh:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1663008137/IMG_2013_za0pih.png',
-    twelth:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1663008476/IMG_5597_eo0rsf.jpg',
-  },
-  {
-    first:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1663007945/IMG_7775_te5poe.png',
-    second:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1663007808/IMG_7823_lmunws.png',
-    third:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1663007800/IMG_6175_hi89pi.jpg',
-    fourth:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1660265599/M8-min_jtw364.png',
-    fifth:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1662834144/Screenshot_2022-07-28_at_5.10.42_PM_fig1vy.png',
-    sixth:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1660265650/M11-min_s0yxxn.png',
-    seventh: Fifth,
-    eigth:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1663008138/IMG_1192_d7ahmz.png',
-    ninth:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1662833626/IMG_5423_f5dgii.png',
-    tenth:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1662833624/IMG_0271_hzwto8.png',
-    eleventh:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1662833607/IMG_2909_jzizco.png',
-    twelth:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1662833619/IMG_5661_wmbxxo.png',
-  },
-];
-
-const IntroSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  padding-top: 12.5rem;
-  @media screen and (min-width: ${({ theme }) => theme.breakpoints[1]}) {
-    flex-direction: row;
-  }
-`;
 
 const Home = () => {
   const [showVideoLoader, setShowVideoLoader] = useState(true);
@@ -356,155 +56,155 @@ const Home = () => {
     document.title = `Danielle's Dog's`;
   });
 
-  useEffect(() => {
-    const el = firstImgRef.current;
-    const el2 = nameRef.current;
-    const el3 = quoteRef.current;
-    const el5 = revealRefs.current;
-    const el6 = apartRef.current;
-    const el7 = servicesRef.current;
-    const el7a = servicesRef2.current;
-    const el8 = zoomImgRefs.current;
+  // useEffect(() => {
+  //   const el = firstImgRef.current;
+  //   const el2 = nameRef.current;
+  //   const el3 = quoteRef.current;
+  //   const el5 = revealRefs.current;
+  //   const el6 = apartRef.current;
+  //   const el7 = servicesRef.current;
+  //   const el7a = servicesRef2.current;
+  //   const el8 = zoomImgRefs.current;
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: el,
-        start: `bottom-=600 bottom`,
-        end: 'bottom+=100 bottom',
-        toggleActions: 'play pause none reset',
-        // markers: true,
-        scrub: 0.5,
-      },
-    });
-    const tl2 = gsap.timeline();
+  //   const tl = gsap.timeline({
+  //     scrollTrigger: {
+  //       trigger: el,
+  //       start: `bottom-=600 bottom`,
+  //       end: 'bottom+=100 bottom',
+  //       toggleActions: 'play pause none reset',
+  //       // markers: true,
+  //       scrub: 0.5,
+  //     },
+  //   });
+  //   const tl2 = gsap.timeline();
 
-    tl.from(el, {
-      x: -400,
-      opacity: 0,
-      ease: 'power1',
-      duration: 0.7,
-    });
+  //   tl.from(el, {
+  //     x: -400,
+  //     opacity: 0,
+  //     ease: 'power1',
+  //     duration: 0.7,
+  //   });
 
-    tl.from(
-      el2,
-      {
-        x: 100,
-        opacity: 0,
-        ease: 'power1',
-        duration: 0.7,
-      },
-      '-=0.25'
-    ).from(
-      el3,
-      {
-        y: 100,
-        opacity: 0,
-        ease: 'power1',
-        duration: 0.7,
-      },
-      '-=0.15'
-    );
+  //   tl.from(
+  //     el2,
+  //     {
+  //       x: 100,
+  //       opacity: 0,
+  //       ease: 'power1',
+  //       duration: 0.7,
+  //     },
+  //     '-=0.25'
+  //   ).from(
+  //     el3,
+  //     {
+  //       y: 100,
+  //       opacity: 0,
+  //       ease: 'power1',
+  //       duration: 0.7,
+  //     },
+  //     '-=0.15'
+  //   );
 
-    tl2.to(el6, {
-      color: '#ffc7c7',
-      duration: 0.3,
-      scrollTrigger: {
-        start: 'bottom+=600 bottom',
-        end: 'top+=525 top',
-        trigger: el,
-        scrub: 0.5,
-        toggleActions: 'play pause none reset',
-      },
-    });
+  //   tl2.to(el6, {
+  //     color: '#ffc7c7',
+  //     duration: 0.3,
+  //     scrollTrigger: {
+  //       start: 'bottom+=600 bottom',
+  //       end: 'top+=525 top',
+  //       trigger: el,
+  //       scrub: 0.5,
+  //       toggleActions: 'play pause none reset',
+  //     },
+  //   });
 
-    el5.forEach((el: any) => {
-      gsap.fromTo(
-        el,
-        {
-          autoAlpha: 0,
-          x: 100,
-        },
-        {
-          duration: 1,
-          x: 0,
-          autoAlpha: 1,
-          ease: 'elastic',
-          scrollTrigger: {
-            trigger: el,
-            start: 'top center+=200',
-            toggleActions: 'play pause none reset',
-          },
-        }
-      );
-    });
+  //   el5.forEach((el: any) => {
+  //     gsap.fromTo(
+  //       el,
+  //       {
+  //         autoAlpha: 0,
+  //         x: 100,
+  //       },
+  //       {
+  //         duration: 1,
+  //         x: 0,
+  //         autoAlpha: 1,
+  //         ease: 'elastic',
+  //         scrollTrigger: {
+  //           trigger: el,
+  //           start: 'top center+=200',
+  //           toggleActions: 'play pause none reset',
+  //         },
+  //       }
+  //     );
+  //   });
 
-    if (!servicesRef.current) return;
-    const chars = SplitTextToChars(servicesRef.current);
+  //   if (!servicesRef.current) return;
+  //   const chars = SplitTextToChars(servicesRef.current);
 
-    gsap.set(servicesRef.current, {
-      perspective: 400,
-      transform: 'translate(0px, 0px',
-    });
+  //   gsap.set(servicesRef.current, {
+  //     perspective: 400,
+  //     transform: 'translate(0px, 0px',
+  //   });
 
-    gsap.from(chars, {
-      duration: 0.2,
-      opacity: 0,
-      scale: 1,
-      y: -40,
-      rotationX: -90,
-      transformOrigin: '0% 50% -50',
-      ease: 'inOut',
-      stagger: 0.025,
-      scrollTrigger: {
-        trigger: el7,
-        start: 'bottom+=500 bottom',
-        toggleActions: 'play pause none reset',
-      },
-    });
+  //   gsap.from(chars, {
+  //     duration: 0.2,
+  //     opacity: 0,
+  //     scale: 1,
+  //     y: -40,
+  //     rotationX: -90,
+  //     transformOrigin: '0% 50% -50',
+  //     ease: 'inOut',
+  //     stagger: 0.025,
+  //     scrollTrigger: {
+  //       trigger: el7,
+  //       start: 'bottom+=500 bottom',
+  //       toggleActions: 'play pause none reset',
+  //     },
+  //   });
 
-    if (!servicesRef2.current) return;
-    const chars2 = SplitTextToChars(servicesRef2.current);
+  //   if (!servicesRef2.current) return;
+  //   const chars2 = SplitTextToChars(servicesRef2.current);
 
-    gsap.set(servicesRef2.current, {
-      perspective: 400,
-      transform: 'translate(0px, 0px)',
-    });
+  //   gsap.set(servicesRef2.current, {
+  //     perspective: 400,
+  //     transform: 'translate(0px, 0px)',
+  //   });
 
-    gsap.from(chars2, {
-      duration: 0.2,
-      opacity: 0,
-      scale: 1,
-      delay: 0.5,
-      y: -40,
-      rotationX: -90,
-      transformOrigin: '0% 50% -50',
-      ease: 'inOut',
-      stagger: 0.025,
-      scrollTrigger: {
-        trigger: el7a,
-        start: 'bottom+=300 bottom',
-        toggleActions: 'play pause none reset',
-      },
-    });
+  //   gsap.from(chars2, {
+  //     duration: 0.2,
+  //     opacity: 0,
+  //     scale: 1,
+  //     delay: 0.5,
+  //     y: -40,
+  //     rotationX: -90,
+  //     transformOrigin: '0% 50% -50',
+  //     ease: 'inOut',
+  //     stagger: 0.025,
+  //     scrollTrigger: {
+  //       trigger: el7a,
+  //       start: 'bottom+=300 bottom',
+  //       toggleActions: 'play pause none reset',
+  //     },
+  //   });
 
-    gsap.from(el8, {
-      duration: 0.35,
-      opacity: 0,
-      x: -150,
-      ease: 'power4',
-      stagger: 0.125,
-      scrollTrigger: {
-        trigger: el7a,
-        start: 'top+=50 bottom',
-        toggleActions: 'play pause none reset',
-      },
-    });
+  //   gsap.from(el8, {
+  //     duration: 0.35,
+  //     opacity: 0,
+  //     x: -150,
+  //     ease: 'power4',
+  //     stagger: 0.125,
+  //     scrollTrigger: {
+  //       trigger: el7a,
+  //       start: 'top+=50 bottom',
+  //       toggleActions: 'play pause none reset',
+  //     },
+  //   });
 
-    return () => {
-      tl.kill();
-      tl2.kill();
-    };
-  }, []);
+  //   return () => {
+  //     tl.kill();
+  //     tl2.kill();
+  //   };
+  // }, []);
 
   return (
     <>
@@ -566,7 +266,7 @@ const Home = () => {
           <ReactPlayer
             onReady={() => setShowVideoLoader(false)}
             style={{ position: 'absolute', top: 0, left: 0 }}
-            url='https://res.cloudinary.com/little-paws-dachshund-rescue/video/upload/v1660078524/production_ID_5126333_tzxwzt.mp4'
+            url='https://res.cloudinary.com/dxc6zj0ir/video/upload/v1672257670/home_video_azbwo7.mp4'
             playsinline
             controls={false}
             playing={true}
@@ -588,6 +288,25 @@ const Home = () => {
             }}
           />
         </div>
+
+        <Text
+          bottom='10px'
+          right='10px'
+          color={['#fff']}
+          position={['absolute']}
+          className='d-flex justify-content-end'
+          margin={['0 4px 0 0']}
+          cursor='pointer'
+          fontSize={['10px']}
+          onClick={() =>
+            window.open(
+              'https://www.pexels.com/video/a-cute-dog-in-a-lavender-field-5126333/',
+              '_blank'
+            )
+          }
+        >
+          Video by Anastasia Shuraeva
+        </Text>
       </div>
       <div
         style={{
@@ -699,7 +418,7 @@ const Home = () => {
         </div>
 
         <ImageGallery>
-          {servicesData.map((obj, i) => (
+          {servicesData.map((obj: any, i: number) => (
             <ZoomImg key={i} text={obj.text} ref={addToZoomImgRefs}>
               <Picture src={obj.img} alt='DD' />
             </ZoomImg>
@@ -743,7 +462,7 @@ const Home = () => {
       </div>
       <div style={{ padding: '20rem 0' }}>
         <Marquee speed={150} gradientWidth={0} pauseOnHover={true}>
-          {imgArr.map((img, i) => (
+          {imgArr.map((img: any, i: number) => (
             <div
               key={i}
               style={{

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, Button, Form, Spinner } from 'react-bootstrap';
+import { Alert, Button, Form } from 'react-bootstrap';
 import { useMutation } from '@apollo/client';
 import { useForm } from '../utils/hooks/useForm';
 import {
@@ -7,14 +7,18 @@ import {
   FormGroup,
   FormInput,
   FormLabel,
+  PageTitle,
+  ErrorText,
 } from '../components/styles/form';
-import { ErrorText, PageTitle } from './NewClientForm';
 import { validateBio } from '../utils/validate';
 import { CREATE_BIO } from '../mutations/createBio';
 import { useNavigate } from 'react-router-dom';
-import { Flex, Text } from '../components/elements';
+import { Flex } from '../components/elements';
 import axios from 'axios';
 import { GET_BIOS } from '../queries/getBios';
+import ContinueBtn from '../components/ContinueBtn';
+import { imgConfig } from '../utils/config';
+import { bioValues } from '../utils/form-values/values';
 
 const BioCreate = () => {
   const [errors, setErrors] = useState({}) as any;
@@ -22,21 +26,6 @@ const BioCreate = () => {
   const navigate = useNavigate();
   const [file, setFile] = useState(null) as any;
   const [uploading, setUploading] = useState(false);
-
-  const values = {
-    firstName: '',
-    lastName: '',
-    emailAddress: '',
-    title: '',
-    description: '',
-    image: '',
-  };
-
-  const config = {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  };
 
   const createBioCallback = async () => {
     const validForm = validateBio(setErrors, inputs);
@@ -46,27 +35,30 @@ const BioCreate = () => {
 
       const formData = new FormData();
       formData.append('image', file);
-      const { data } = await axios.post('/upload/v2', formData, config);
 
-      bioCreate({
-        variables: {
-          bioInput: {
-            firstName: inputs.firstName,
-            lastName: inputs.lastName,
-            emailAddress: inputs.emailAddress,
-            title: inputs.title,
-            description: inputs.description,
-            image: data.secure_url,
-            publicId: data.public_id,
+      const { data } = await axios.post('/upload', formData, imgConfig);
+
+      if (data.message === 'IMAGE_UPLOAD_SUCCESS') {
+        bioCreate({
+          variables: {
+            bioInput: {
+              firstName: inputs.firstName,
+              lastName: inputs.lastName,
+              emailAddress: inputs.emailAddress,
+              title: inputs.title,
+              description: inputs.description,
+              image: data.secure_url,
+              publicId: data.public_id,
+            },
           },
-        },
-      });
+        });
+      }
     }
   };
 
   const { inputs, handleInputChange, setInputs, onSubmit } = useForm(
     createBioCallback,
-    values
+    bioValues
   );
 
   const [bioCreate, { loading }] = useMutation(CREATE_BIO, {
@@ -97,7 +89,6 @@ const BioCreate = () => {
             id='image'
             onChange={handleChange}
           />
-
           <ErrorText>{errors?.image}</ErrorText>
         </FormGroup>
         <FormGroup controlId='firstName'>
@@ -150,27 +141,18 @@ const BioCreate = () => {
           />
           <ErrorText>{errors?.description}</ErrorText>
         </FormGroup>
-        <Flex justifyContent={['space-between']}>
-          <Button
-            style={{ textTransform: 'capitalize' }}
-            onClick={onSubmit}
-            className='d-flex align-items-center justify-content-center text-white mt-5'
-          >
-            <Text
-              fontFamily={`Oxygen, sans-serif`}
-              color='#fff'
-              margin={[`0 ${loading || uploading ? '0.5rem' : '0'} 0 0`]}
-            >
-              Creat
-              {loading || uploading ? 'ing...' : 'e'}
-            </Text>
-            {(loading || uploading) && <Spinner animation='border' size='sm' />}
-          </Button>
+        <Flex justifyContent={['space-between']} margin={['48px 0 0 0']}>
+          <ContinueBtn
+            onSubmit={onSubmit}
+            text='Creat'
+            loading1={loading}
+            loading2={uploading}
+          />
           <Button
             variant='secondary'
             style={{ textTransform: 'capitalize' }}
             onClick={() => navigate(-1)}
-            className='d-flex align-items-center justify-content-center mt-5'
+            className='d-flex align-items-center justify-content-center'
           >
             Back
           </Button>

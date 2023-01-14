@@ -71,7 +71,9 @@ const authLink = setContext(async (req, { headers }) => {
 
 client = new ApolloClient({
   link: ApolloLink.from([consoleLink, authLink, httpsLink]),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    addTypename: false,
+  }),
 });
 
 const App = () => {
