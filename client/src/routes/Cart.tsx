@@ -38,7 +38,6 @@ const Cart = () => {
           style={{ color: showSideBar ? '#fff' : '#121212' }}
         ></i>
       </BurgerWrapper>
-
       <Wrapper>
         <InnerWrapper>
           <TitleText>Shopping Cart</TitleText>

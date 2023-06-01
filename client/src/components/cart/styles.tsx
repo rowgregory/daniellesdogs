@@ -87,6 +87,7 @@ export const BurgerWrapper = styled.div`
   position: fixed;
   top: 37px;
   right: 99px;
+  z-index: 300;
 `;
 export const CartWrapper = styled.div`
   position: fixed;

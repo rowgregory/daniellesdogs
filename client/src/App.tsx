@@ -91,14 +91,15 @@ const App = () => {
   }, []);
 
   const PayPalOptions = {
-    'client-id': process.env.REACT_APP_PAYPAL_CLIENT_ID,
+    'client-id':
+      'AQRyRE44rXzYPGCSb_y5WfDv_31HaXOEhM0NTPHYO5Ege8R0MFleh7MGogjOQDo4ZJ5bchCfKRFhWq9f',
     'merchant-id': process.env.REACT_APP_PAYPAL_MERCHANT_ID,
     currency: 'USD',
     intent: 'capture',
     components: 'buttons,funding-eligibility',
     'enable-funding': 'venmo',
   } as any;
-
+  console.log('PAYPAL CLIENT ID: ', process.env.REACT_APP_PAYPAL_CLIENT_ID);
   return (
     <PayPalScriptProvider options={PayPalOptions}>
       <AuthProvider>
