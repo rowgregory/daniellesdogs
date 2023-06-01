@@ -18,7 +18,7 @@ import {
   Skew2,
 } from '../components/styles/home';
 import { DDLogo } from '../components/svg/Logo';
-import LandingHigh from '../components/videos/landing-high.mp4';
+import LandingLow from '../components/videos/landing-low.mp4';
 
 const Home = () => {
   const [showVideoLoader, setShowVideoLoader] = useState(true);
@@ -86,7 +86,7 @@ const Home = () => {
           <ReactPlayer
             onReady={() => setShowVideoLoader(false)}
             style={{ position: 'absolute', top: 0, left: 0 }}
-            url={LandingHigh}
+            url={LandingLow}
             playsinline
             controls={false}
             playing={true}
