@@ -16,7 +16,6 @@ const Secure = () => {
   const navigate = useNavigate();
   const [errors, setErrors] = useState([]) as any;
   const [getPasscode, { loading, data }] = useLazyQuery(RETREIVE_PASSCODE, {
-    fetchPolicy: 'cache-and-network',
     onCompleted: () => {
       if (data?.retreivePasscode === inputs.passcode) {
         navigate('/register', {

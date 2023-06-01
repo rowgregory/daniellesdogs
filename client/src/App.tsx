@@ -91,8 +91,7 @@ const App = () => {
   }, []);
 
   const PayPalOptions = {
-    'client-id':
-      'AQRyRE44rXzYPGCSb_y5WfDv_31HaXOEhM0NTPHYO5Ege8R0MFleh7MGogjOQDo4ZJ5bchCfKRFhWq9f',
+    'client-id': process.env.REACT_APP_PAYPAL_CLIENT_ID,
     'merchant-id': process.env.REACT_APP_PAYPAL_MERCHANT_ID,
     currency: 'USD',
     intent: 'capture',
