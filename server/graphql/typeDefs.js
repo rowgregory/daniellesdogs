@@ -365,7 +365,7 @@ module.exports = gql`
     contactFormById(id: ID!): ContactForm
     productList: [Product]
     productById(id: ID!): Product
-    retreivePasscode: String
+    retreivePasscode(passcodeAttempt: String): Boolean
     getOrderById(id: ID!): Order
     orderList: [Order]
     getOrdersClientsGalleryImagesContactFormsTotals: Totals!

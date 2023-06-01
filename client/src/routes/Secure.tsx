@@ -17,12 +17,14 @@ const Secure = () => {
   const [errors, setErrors] = useState([]) as any;
   const [getPasscode, { loading, data }] = useLazyQuery(RETREIVE_PASSCODE, {
     onCompleted: () => {
-      if (data?.retreivePasscode === inputs.passcode) {
-        navigate('/register', {
-          state: {
-            secure_password: inputs.passcode,
-          },
-        });
+      if (data?.retreivePasscode) {
+        setTimeout(() => {
+          navigate('/register', {
+            state: {
+              secure_password: inputs.passcode,
+            },
+          });
+        }, 1000);
       } else {
         setErrors((errors: any) => [...errors, { message: 'Wrong passcode' }]);
         setTimeout(() => {
@@ -43,7 +45,7 @@ const Secure = () => {
         setErrors([]);
       }, 2000);
     } else {
-      getPasscode();
+      getPasscode({ variables: { passcodeAttempt: inputs.passcode } });
     }
   };
 
@@ -55,7 +57,15 @@ const Secure = () => {
   return (
     <FormContainer>
       <PageTitle>
-        Secure <i className='fas fa-lock ml-1 fa-sm'></i>
+        Secure{' '}
+        <i
+          style={{ color: data?.retreivePasscode ? 'green' : '' }}
+          className={
+            data?.retreivePasscode
+              ? `fas fa-unlock ml-1 fa-sm`
+              : 'fas fa-lock ml-1 fa-sm'
+          }
+        ></i>
       </PageTitle>
       {errors?.map((error: any, i: number) => (
         <Alert variant='danger' key={i}>
@@ -73,11 +83,13 @@ const Secure = () => {
           />
         </FormGroup>
         <Button
+          variant={data?.retreivePasscode ? 'success' : 'primary'}
           className='mt-5'
           onClick={onSubmit}
           disabled={errors?.length > 0}
         >
-          Unlock{loading && <Spinner animation='border' />}
+          Unlock{loading && <Spinner animation='border' size='sm' />}
+          {data?.retreivePasscode && 'ed!'}
         </Button>
       </Form>
     </FormContainer>

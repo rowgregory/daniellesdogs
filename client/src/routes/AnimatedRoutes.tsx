@@ -56,26 +56,6 @@ const RedirectLogin = ({ children }: any) => {
   );
 };
 
-const RedirectSecure = ({ children }: any) => {
-  const { state } = useLocation() as any;
-  const secretToken = process.env.REACT_APP_REGISTER_KEY;
-  return state?.secureToken === secretToken ? (
-    <Navigate to='/register' replace state={state?.secureToken} />
-  ) : (
-    children
-  );
-};
-
-const RedirectRegister = ({ children }: any) => {
-  const { state } = useLocation() as any;
-  const secretToken = process.env.REACT_APP_REGISTER_KEY;
-  return state?.secure_password !== secretToken ? (
-    <Navigate to='/secure' />
-  ) : (
-    children
-  );
-};
-
 const AnimatedRoutes = () => {
   const location = useLocation();
 
@@ -91,22 +71,8 @@ const AnimatedRoutes = () => {
             </RedirectLogin>
           }
         />
-        <Route
-          path='/secure'
-          element={
-            <RedirectSecure>
-              <Secure />
-            </RedirectSecure>
-          }
-        />
-        <Route
-          path='/register'
-          element={
-            <RedirectRegister>
-              <Register />
-            </RedirectRegister>
-          }
-        />
+        <Route path='/secure' element={<Secure />} />
+        <Route path='/register' element={<Register />} />
         <Route
           path='/admin/*'
           element={
