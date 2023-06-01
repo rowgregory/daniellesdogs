@@ -8,7 +8,7 @@ const ContactForm = Schema(
     subject: { type: String },
     message: { type: String },
   },
-  { timestaps: true }
+  { timestamps: true }
 );
 
 module.exports = model('ContactForm', ContactForm);

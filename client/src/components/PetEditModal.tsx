@@ -2,14 +2,16 @@ import React, { FC, useEffect, useState } from 'react';
 import { useMutation, useLazyQuery } from '@apollo/client';
 import { Alert, Button, Form, Modal, Spinner } from 'react-bootstrap';
 import { usePetEditModalForm } from '../utils/hooks/usePetEditModalForm';
-import { FormGroup, FormInput, FormLabel, PageTitle } from './styles/form';
-import { Flex } from './elements';
+import { FormGroup } from './styles/form';
+import { Flex, Text } from './elements';
 import { petEditModalData } from '../utils/petEditModalData';
 import { petValues } from '../utils/form-values/values';
 import { GET_PET_BY_ID } from '../queries/getPetById';
 import { GET_NEW_CLIENT_FORM_BY_ID } from '../queries/getNewClientFormById';
 import { UPDATE_PET } from '../mutations/updatePet';
 import { DELETE_PET } from '../mutations/deletePet';
+import { Input, Label } from './styles/backend-tables';
+import { Continue } from './ContinueBtn';
 
 interface PetEditModalProps {
   show: boolean;
@@ -80,19 +82,18 @@ const PetEditModal: FC<PetEditModalProps> = ({ show, setShow, id, formId }) => {
 
   return (
     <Modal show={show} onHide={() => setShow(false)} centered keyboard>
-      <Form className='p-5'>
+      <Form className='p-5' style={{ background: '#1f252b' }}>
         {loading && <Spinner animation='border' />}
         {error && <Alert>{error.message}</Alert>}
         {eDelete && (
           <Alert variant='info'>Error Deleting: {eDelete.message}</Alert>
         )}
-        <PageTitle>Pet</PageTitle>
         {petEditModalData(inputs).map((pet: any, i: number) => (
           <div key={i}>
             {pet.type !== 'switch' ? (
-              <FormGroup>
-                <FormLabel className='mb-1'>{pet.label}</FormLabel>
-                <FormInput
+              <FormGroup className='mb-2'>
+                <Label className='mb-1'>{pet.label}</Label>
+                <Input
                   name={pet.name}
                   value={pet.value}
                   type={pet.type}
@@ -101,8 +102,8 @@ const PetEditModal: FC<PetEditModalProps> = ({ show, setShow, id, formId }) => {
                 />
               </FormGroup>
             ) : (
-              <FormGroup>
-                <FormLabel className='mb-1'>{pet.label}</FormLabel>
+              <FormGroup className='mb-2'>
+                <Label className='mb-1'>{pet.label}</Label>
                 <Form.Check
                   id={pet.name}
                   name={pet.name}
@@ -115,7 +116,16 @@ const PetEditModal: FC<PetEditModalProps> = ({ show, setShow, id, formId }) => {
           </div>
         ))}
         <Flex justifyContent={['space-between']} className='mt-5'>
-          <Button onClick={onSubmit}>Update</Button>
+          <Continue onClick={onSubmit}>
+            <Text
+              texttransform='capitalize'
+              color='#fff'
+              fontFamily='Roboto'
+              fontWeight={['500']}
+            >
+              Update
+            </Text>
+          </Continue>
           <Button variant='danger' onClick={() => deletePet({})}>
             {lDelete && <Spinner animation='border' size='sm' />}
             {lDelete ? 'Deleting' : 'Delete'}

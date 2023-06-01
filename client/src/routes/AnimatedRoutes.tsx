@@ -1,11 +1,10 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import Login from './Login';
 import Register from './Register';
 import Home from './Home';
 import NewClientForm from './NewClientForm';
-import Waiver from './Waiver';
 import Dashboard from './Dashboard';
-import NewClientForms from './NewClientForms';
+import NewClientForms from './NewClientFormList';
 import { DashboardLayoutWithSideBar } from '../components/layouts/DashboardLayoutWithSideBar';
 import NewClientFormEdit from './NewClientFormEdit';
 import LoggedOut from './LoggedOut';
@@ -19,7 +18,6 @@ import NewClientFormVet from './NewClientFormVet';
 import NewClientFormPets from './NewClientFormPets';
 import Complete from './Complete';
 import GalleryImageList from './GalleryImageList';
-import Orders from './Orders';
 import Services from './Services';
 import { AuthContext } from '../context/authContext';
 import ContactThankYou from './ContactThankYou';
@@ -33,6 +31,16 @@ import ProductEdit from './ProductEdit';
 import Secure from './Secure';
 import Footer from '../components/Footer';
 import ProductDetails from './ProductDetails';
+import Confirmation from './Confirmation';
+import AdminSideBar from '../components/admin/AdminSideBar';
+import Cart from './Cart';
+import CheckoutPayPal from './CheckoutPayPal';
+import OrderReceipt from './OrderReceipt';
+import OrderList from './OrderList';
+import ContactFormView from './ContactFormView';
+import ServiceList from './ServiceList';
+import ServiceCreate from './ServiceCreate';
+import ServiceEdit from './ServiceEdit';
 
 const PrivateRoutes = ({ children }: any) => {
   const { user } = useContext(AuthContext);
@@ -42,7 +50,7 @@ const PrivateRoutes = ({ children }: any) => {
 const RedirectLogin = ({ children }: any) => {
   const { user } = useContext(AuthContext);
   return user?.userType === 'ADMIN' ? (
-    <Navigate to={`/${user?.id}/${user?.userType}/dashboard`} />
+    <Navigate to={`/admin/dashboard`} />
   ) : (
     children
   );
@@ -100,21 +108,28 @@ const AnimatedRoutes = () => {
           }
         />
         <Route
-          path='/:user_id/:user_type/*'
+          path='/admin/*'
           element={
-            <DashboardLayoutWithSideBar>
+            <DashboardLayoutWithSideBar sideBar={<AdminSideBar />}>
               <PrivateRoutes>
                 <Routes>
                   <Route path='dashboard' element={<Dashboard />} />
+                  <Route path='services' element={<ServiceList />} />
+                  <Route path='services/create' element={<ServiceCreate />} />
+                  <Route path='services/:id/edit' element={<ServiceEdit />} />
                   <Route path='gallery-images' element={<GalleryImageList />} />
                   <Route path='products' element={<ProductList />} />
                   <Route path='products/create' element={<ProductCreate />} />
                   <Route path='products/:id/edit' element={<ProductEdit />} />
-                  <Route path='orders' element={<Orders />} />
+                  <Route path='orders' element={<OrderList />} />
                   <Route path='bios' element={<BioList />} />
                   <Route path='bios/create' element={<BioCreate />} />
                   <Route path='bios/:id/edit' element={<BioEdit />} />
                   <Route path='contact-forms' element={<ContactFormList />} />
+                  <Route
+                    path='contact-forms/:id/view'
+                    element={<ContactFormView />}
+                  />
                   <Route
                     path='new-client-forms/*'
                     element={
@@ -137,7 +152,6 @@ const AnimatedRoutes = () => {
               <Route path='address' element={<NewClientFormAddress />} />
               <Route path='vet' element={<NewClientFormVet />} />
               <Route path='pets' element={<NewClientFormPets />} />
-              <Route path='waiver' element={<Waiver />} />
               <Route path='complete' element={<Complete />} />
             </Routes>
           }
@@ -149,7 +163,7 @@ const AnimatedRoutes = () => {
           element={
             <Routes>
               <Route index={true} element={<Shop />} />
-              <Route path='*' element={<ProductDetails />} />
+              <Route path=':id' element={<ProductDetails />} />
             </Routes>
           }
         />
@@ -157,6 +171,10 @@ const AnimatedRoutes = () => {
         <Route path='/contact/thank-you' element={<ContactThankYou />} />
         <Route path='/about' element={<About />} />
         <Route path='/services' element={<Services />} />
+        <Route path='/checkout/:id?' element={<CheckoutPayPal />} />
+        <Route path='/confirmation' element={<Confirmation />} />
+        <Route path='/cart' element={<Cart />} />
+        <Route path='/order/receipt/:id' element={<OrderReceipt />} />
         <Route path='*' element={<Navigate to='/' replace />} />
       </Routes>
       <Footer />

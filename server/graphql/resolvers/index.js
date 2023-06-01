@@ -6,6 +6,9 @@ const contactForm = require('./contactForm');
 const bio = require('./bio');
 const product = require('./product');
 const passcode = require('./passcode');
+const order = require('./order');
+const dashboard = require('./dashboard');
+const service = require('./service');
 
 module.exports = {
   Query: {
@@ -17,6 +20,9 @@ module.exports = {
     ...contactForm.Query,
     ...product.Query,
     ...passcode.Query,
+    ...order.Query,
+    ...dashboard.Query,
+    ...service.Query,
   },
   Mutation: {
     ...user.Mutation,
@@ -26,5 +32,7 @@ module.exports = {
     ...contactForm.Mutation,
     ...bio.Mutation,
     ...product.Mutation,
+    ...order.Mutation,
+    ...service.Mutation,
   },
 };

@@ -27,7 +27,7 @@ export const Category = styled.div<{ active: boolean }>`
 export const PageContent = styled.div`
   width: 100%;
   margin-inline: auto;
-  min-height: 700px;
+  padding-top: 100px;
 `;
 
 export const ProductContainer = styled.div<{ islargegrid: boolean }>`
@@ -115,5 +115,18 @@ export const ProceedBtn = styled.button`
   }
   :focus {
     background: #ffd813;
+  }
+`;
+
+export const ItemsContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-top: 32px;
+  @media screen and (min-width: ${({ theme }) => theme.breakpoints[1]}) {
+    grid-template-columns: 1fr 1fr;
+  }
+  @media screen and (min-width: ${({ theme }) => theme.breakpoints[2]}) {
+    grid-template-columns: 1fr 1fr 1fr;
   }
 `;

@@ -1,13 +1,15 @@
 import React, { FC, useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { Alert, Button, Form, Modal, Spinner } from 'react-bootstrap';
-import { FormGroup, FormInput, FormLabel, PageTitle } from './styles/form';
-import { Flex } from './elements';
+import { Alert, Form, Modal, Spinner } from 'react-bootstrap';
+import { FormGroup } from './styles/form';
+import { Text } from './elements';
 import { petEditModalData } from '../utils/petEditModalData';
 import { petValues } from '../utils/form-values/values';
 import { GET_NEW_CLIENT_FORM_BY_ID } from '../queries/getNewClientFormById';
 import { CREATE_PET } from '../mutations/createPet';
 import { usePetCreateModalForm } from '../utils/hooks/usePetCreateModalForm';
+import { Input, Label } from './styles/backend-tables';
+import { Continue } from './ContinueBtn';
 
 interface PetCreateModalProps {
   show: boolean;
@@ -42,14 +44,13 @@ const PetCreateModal: FC<PetCreateModalProps> = ({ show, setShow, formId }) => {
 
   return (
     <Modal show={show} onHide={() => setShow(false)} centered keyboard>
-      <Form className='p-5'>
-        <PageTitle>Pet Create</PageTitle>
+      <Form className='p-5' style={{ background: '#1f252b' }}>
         {petEditModalData(inputs).map((pet: any, i: number) => (
           <div key={i}>
             {pet.type !== 'switch' ? (
-              <FormGroup>
-                <FormLabel className='mb-1'>{pet.label}</FormLabel>
-                <FormInput
+              <FormGroup className='mb-2'>
+                <Label className='mb-1'>{pet.label}</Label>
+                <Input
                   name={pet.name}
                   value={pet.value}
                   type={pet.type}
@@ -57,8 +58,8 @@ const PetCreateModal: FC<PetCreateModalProps> = ({ show, setShow, formId }) => {
                 />
               </FormGroup>
             ) : (
-              <FormGroup>
-                <FormLabel className='mb-1'>{pet.label}</FormLabel>
+              <FormGroup className='mb-2'>
+                <Label className='mb-1'>{pet.label}</Label>
                 <Form.Check
                   id={pet.name}
                   name={pet.name}
@@ -70,11 +71,17 @@ const PetCreateModal: FC<PetCreateModalProps> = ({ show, setShow, formId }) => {
             )}
           </div>
         ))}
-        <Flex justifyContent={['space-between']}>
-          <Button onClick={onSubmit}>
+
+        <Continue onClick={onSubmit} className='mt-4'>
+          <Text
+            texttransform='capitalize'
+            color='#fff'
+            fontFamily='Roboto'
+            fontWeight={['500']}
+          >
             Add{loading && <Spinner animation='border' />}
-          </Button>
-        </Flex>
+          </Text>
+        </Continue>
       </Form>
       {mutationErrors.map((error: any, i: number) => (
         <Alert

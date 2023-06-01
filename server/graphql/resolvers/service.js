@@ -2,37 +2,69 @@ const Service = require('../../models/Service.js');
 
 module.exports = {
   Mutation: {
-    async createService(_, { serviceInput: { serviceType, frequency } }) {
-      console.log('BEGINNING OF CREATING SERVICE');
+    async createService(
+      _,
+      { serviceInput: { displayUrl, title, price, description } }
+    ) {
       try {
-        let amount;
-        if (serviceType === 'halfOurWalks') {
-          amount = '30';
-        } else {
-          amount = '50';
-        }
         const createdService = new Service({
-          serviceType,
-          frequency,
-          status: 'INACTIVE',
-          amount,
+          displayUrl,
+          title,
+          price,
+          description,
         });
 
-        const res = await createdService.save();
-        console.log('RESPONSE: ', res);
-        return res;
+        const savedService = await createdService.save();
+        return savedService;
       } catch (error) {
         throw new Error(error);
       }
     },
+    async updateService(
+      _,
+      { id, serviceInput: { title, price, displayUrl, description } }
+    ) {
+      try {
+        const updatedBio = await Service.findOneAndUpdate(
+          { _id: id },
+          {
+            title,
+            price,
+            displayUrl,
+            description,
+          }
+        );
+
+        return updatedBio;
+      } catch (err) {
+        writeToFile(
+          '/server/logs/error.txt',
+          '.🔴',
+          '.SERVICE_UPDATE',
+          `.error: ${err.message}`
+        );
+      }
+    },
+    async deleteService(_, { id }) {
+      try {
+        await Service.deleteOne({ _id: id });
+
+        return 'success';
+      } catch (err) {
+        writeToFile(
+          '/server/logs/error.txt',
+          '.🔴',
+          '.BIO_DELETE',
+          `.error: ${err.message}`
+        );
+      }
+    },
   },
   Query: {
-    async getServices() {
-      return await Service.find({}).select(
-        '_id serviceType frequency status amount'
-      );
+    async serviceList() {
+      return await Service.find({});
     },
-    async getServiceById(_, { id }) {
+    async serviceById(_, { id }) {
       return await Service.findById(id);
     },
   },

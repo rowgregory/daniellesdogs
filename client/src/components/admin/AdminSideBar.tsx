@@ -1,146 +1,143 @@
-import React, { FC, useContext } from 'react';
-import styled from 'styled-components';
+import { useContext } from 'react';
 import { Link, Text } from '../elements';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/authContext';
+import { DDLogo } from '../../components/svg/Logo';
+import styled from 'styled-components';
 
-const AdminBtn = styled.div`
-  position: fixed;
-  z-index: 70;
-  top: 25px;
-  left: 25px;
-  height: 70px;
-  width: 70px;
-  border-radius: 50px;
-  border: 2px solid #f3f3f3;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #f3f3f3;
+export const sidebarData = () => {
+  const prefix = '/admin/';
+  return [
+    {
+      textKey: 'Dashboard',
+      linkKey: `${prefix}dashboard`,
+      icon: <i className='fas fa-home'></i>,
+    },
+    {
+      textKey: 'New Client Forms',
+      linkKey: `${prefix}new-client-forms`,
+      icon: <i className='fas fa-book'></i>,
+    },
+    {
+      textKey: 'Orders',
+      linkKey: `${prefix}orders`,
+      icon: <i className='fas fa-box'></i>,
+    },
+    {
+      textKey: 'Contact Forms',
+      linkKey: `${prefix}contact-forms`,
+      icon: <i className='fas fa-id-card'></i>,
+    },
+    {
+      textKey: 'Gallery Images',
+      linkKey: `${prefix}gallery-images`,
+      icon: <i className='fas fa-images'></i>,
+    },
+    {
+      textKey: 'Products',
+      linkKey: `${prefix}products`,
+      icon: <i className='fas fa-store'></i>,
+    },
+    {
+      textKey: 'Bios',
+      linkKey: `${prefix}bios`,
+      icon: <i className='fas fa-newspaper'></i>,
+    },
+    {
+      textKey: 'Services',
+      linkKey: `${prefix}services`,
+      icon: <i className='fas fa-bell-concierge'></i>,
+    },
+  ];
+};
+
+export const StyledLink = styled(Link)<{ isactive?: string }>`
+  padding: 10px;
   transition: 300ms;
-  cursor: pointer;
-  font-family: 'Cormorant, serif';
-  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  background: ${({ isactive }) => (isactive === 'true' ? '#5a67ff' : '')};
+  color: ${({ isactive }) => (isactive === 'true' ? '#fff' : '')};
+
+  :hover {
+    background: #5a67ff;
+    color: #fff;
+  }
 `;
 
-interface AdminSideBarProps {
-  setShowAdminPanel: any;
-  showSideBar: any;
-  showAdminPanel: any;
-  setShowSideBar: any;
-}
+export const LogoutBtn = styled(Text)`
+  transition: 300ms;
+  :hover {
+    color: #5a67ff;
+  }
+`;
 
-const AdminSideBar: FC<AdminSideBarProps> = ({
-  setShowAdminPanel,
-  showSideBar,
-  showAdminPanel,
-  setShowSideBar,
-}) => {
-  const { user, logout } = useContext(AuthContext);
+const AdminSideBar = () => {
+  const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   return (
-    <>
-      {user?.userType === 'ADMIN' && (
-        <>
-          <AdminBtn
-            onClick={() => {
-              setShowAdminPanel(showSideBar ? true : !showAdminPanel);
-              setShowSideBar(false);
-            }}
-          >
-            {user?.firstName[0]}
-          </AdminBtn>
-          <div
-            style={{
-              position: 'fixed',
-              top: '200px',
-              left: '25px',
-              display: 'flex',
-              flexDirection: 'column',
-            }}
-          >
-            <Link
-              onClick={() => setShowAdminPanel(false)}
-              color={['#fff']}
-              margin={['0 0 1.5rem 0']}
-              to={`/${user?.id}/${user?.userType}/dashboard`}
-              fontSize={['1.5rem']}
-            >
-              Dashboard
-            </Link>
-
-            <Link
-              onClick={() => setShowAdminPanel(false)}
-              color={['#fff']}
-              margin={['0 0 1.5rem 0']}
-              to={`/${user?.id}/${user?.userType}/new-client-forms`}
-              fontSize={['1.5rem']}
-            >
-              New Client Forms
-            </Link>
-            <Link
-              onClick={() => setShowAdminPanel(false)}
-              color={['#fff']}
-              margin={['0 0 1.5rem 0']}
-              to={`/${user?.id}/${user?.userType}/orders`}
-              fontSize={['1.5rem']}
-            >
-              Orders
-            </Link>
-            <Link
-              onClick={() => setShowAdminPanel(false)}
-              color={['#fff']}
-              margin={['0 0 1.5rem 0']}
-              to={`/${user?.id}/${user?.userType}/contact-forms`}
-              fontSize={['1.5rem']}
-            >
-              Contact Forms
-            </Link>
-            <Link
-              onClick={() => setShowAdminPanel(false)}
-              color={['#fff']}
-              margin={['0 0 1.5rem 0']}
-              to={`/${user?.id}/${user?.userType}/gallery-images`}
-              fontSize={['1.5rem']}
-            >
-              Gallery Images
-            </Link>
-
-            <Link
-              onClick={() => setShowAdminPanel(false)}
-              color={['#fff']}
-              margin={['0 0 1.5rem 0']}
-              to={`/${user?.id}/${user?.userType}/products`}
-              fontSize={['1.5rem']}
-            >
-              Products
-            </Link>
-
-            <Link
-              onClick={() => setShowAdminPanel(false)}
-              color={['#fff']}
-              margin={['0 0 4rem 0']}
-              to={`/${user?.id}/${user?.userType}/bios`}
-              fontSize={['1.5rem']}
-            >
-              Bios
-            </Link>
-            <Text
-              cursor='pointer'
-              color={['#fff']}
-              fontSize={['1.5rem']}
-              onClick={() => {
-                logout(navigate);
-                setShowAdminPanel(false);
-              }}
-            >
-              Log Out
-            </Text>
-          </div>
-        </>
-      )}
-    </>
+    <div
+      style={{
+        width: '250px',
+        display: 'flex',
+        flexDirection: 'column',
+        transition: '300ms',
+      }}
+    >
+      <Link
+        to='/'
+        className='d-flex align-items-center w-100'
+        margin={['0 0 16px 0']}
+        padding={['0 8px']}
+        style={{
+          background: pathname !== '/admin/dashboard' ? '#0e1117' : '',
+          height: '57px',
+        }}
+      >
+        <DDLogo w='35pt' h='35pt' fill='#5a67ff' />
+        <Text
+          fontFamily='Roboto'
+          color={['#fff']}
+          margin={['0 0 0 8px']}
+          fontWeight={['600']}
+          fontSize={['14px']}
+        >
+          DANIELLE'S DOGS
+        </Text>
+      </Link>
+      {sidebarData().map((obj: any, i: number) => (
+        <StyledLink
+          isactive={[obj.linkKey]
+            .some((path) => pathname.includes(path))
+            .toString()}
+          key={i}
+          fontFamily='Roboto'
+          color={['#9ea5ba']}
+          margin={['0 8px 16px 8px']}
+          to={obj.linkKey}
+          fontSize={['14px']}
+          width={['232px']}
+        >
+          {obj.icon}&nbsp;&nbsp;
+          {obj.textKey}
+        </StyledLink>
+      ))}
+      <LogoutBtn
+        onClick={() => {
+          logout();
+          navigate('/logged-out');
+        }}
+        cursor='pointer'
+        fontFamily='Roboto'
+        color={['#9ea5ba']}
+        fontSize={['14px']}
+        margin={['40px 0 16px 8px']}
+        padding={['10px']}
+      >
+        <i className='fas fa-sign-out-alt'></i>&nbsp;&nbsp; Log Out
+      </LogoutBtn>
+    </div>
   );
 };
 

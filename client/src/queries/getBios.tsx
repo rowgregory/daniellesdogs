@@ -9,8 +9,7 @@ export const GET_BIOS = gql`
       emailAddress
       title
       description
-      image
-      publicId
+      displayUrl
     }
   }
 `;

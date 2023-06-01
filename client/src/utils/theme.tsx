@@ -42,6 +42,7 @@ export const themes = {
         color: '#b558b5',
       },
     },
+    white: '#fff',
   },
   dark: {
     ...base,
@@ -59,5 +60,6 @@ export const themes = {
         color: '#b558b5',
       },
     },
+    white: '#fff',
   },
 } as any;

@@ -1,28 +1,33 @@
-import { FC, ReactNode } from 'react';
+import { useContext } from 'react';
 import styled from 'styled-components';
+import { NavbarContext } from '../../context/navbarContext';
+import AnimatedRoutes from '../../routes/AnimatedRoutes';
+import Navbar from '../navbar/Navbar';
+import Navigation from '../Navigation';
 
-interface AppLayoutWithSideBarProps {
-  sideBar: ReactNode;
-  children: ReactNode;
-}
-
-const Container = styled.div`
-  /* min-height: 100vh; */
+const RouteContainer = styled.div`
+  background: #fff;
+  min-height: 100vh;
 `;
 
 const Main = styled.main`
   background: #232323;
 `;
 
-const AppLayoutWithSideBar: FC<AppLayoutWithSideBarProps> = ({
-  sideBar,
-  children,
-}): JSX.Element => {
+const AppLayoutWithSideBar = (): JSX.Element => {
+  const { showSideBar, setShowSideBar } = useContext(NavbarContext);
+
   return (
-    <Container>
-      <Main>{children}</Main>
-      <aside>{sideBar}</aside>
-    </Container>
+    <>
+      <Navbar />
+
+      <Main>
+        <RouteContainer onClick={() => showSideBar && setShowSideBar(false)}>
+          <AnimatedRoutes />
+        </RouteContainer>
+      </Main>
+      <Navigation />
+    </>
   );
 };
 

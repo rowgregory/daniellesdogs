@@ -2,13 +2,14 @@ const { Schema, model } = require('mongoose');
 
 const GalleryImage = Schema(
   {
-    linkKey: { type: String },
-    publicId: { type: String },
-    secureUrl: { type: String },
-    width: { type: String },
-    height: { type: String },
-    format: { type: String },
-    bytes: { type: String },
+    displayUrl: { type: String },
+    width: { type: Number },
+    height: { type: Number },
+    mimetype: { type: String },
+    title: { type: String },
+    size: { type: Number },
+    mediumImgUrl: { type: String },
+    thumbUrl: { type: String },
   },
   { timestaps: true }
 );

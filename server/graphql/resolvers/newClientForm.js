@@ -39,9 +39,6 @@ module.exports = {
           pets,
           vet,
           afterMeetingNotes,
-          signedWaiver,
-          signedWaiverSignature,
-          signedWaiverDate,
         },
       }
     ) {
@@ -77,9 +74,6 @@ module.exports = {
           afterMeetingNotes,
           address: createdAddress._id,
           user: createdUser._id,
-          signedWaiver,
-          signedWaiverSignature,
-          signedWaiverDate,
         });
 
         writeToFile(

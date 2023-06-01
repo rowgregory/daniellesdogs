@@ -1,8 +1,6 @@
 import { useQuery } from '@apollo/client';
-import React, { useState } from 'react';
-import { Image, Spinner } from 'react-bootstrap';
+import { useState } from 'react';
 import { GET_PRODUCTS } from '../queries/getProducts';
-import ShopDog from '../components/assets/IMG_2120.jpeg';
 import { Text } from '../components/elements';
 import {
   Category,
@@ -10,53 +8,37 @@ import {
   ClearFilter,
   FilterColumn,
   GridIconContainer,
+  ItemsContainer,
   PageContent,
 } from '../components/styles/shop';
-import NoShop from '../components/svg/NoShop';
 import { categories } from '../utils/shopCategories';
 import Product from '../components/shop/Product';
+import { Spinner } from 'react-bootstrap';
 
 const Shop = () => {
   const { loading, data } = useQuery(GET_PRODUCTS);
   const [currentCategory, setCurrentCategory] = useState('');
 
+  const filterProducts = data?.productList?.filter((product: any) =>
+    product?.category?.includes(currentCategory)
+  );
+
   return (
     <>
-      <div style={{ position: 'relative' }}>
-        <Image
-          src={ShopDog}
-          width='100%'
-          style={{ height: '700px', objectFit: 'cover' }}
-        />
-        <Text
-          fontWeight={['500']}
-          fontSize={['48px']}
-          color={['#fff']}
-          style={{
-            position: 'absolute',
-            top: '200px',
-            left: '50px',
-            zIndex: 2,
-          }}
-        >
-          Danielle's Dogs Clothing & Accessories
-        </Text>
-      </div>
-      {loading && <Spinner animation='border' />}
       <div
         style={{
           maxWidth: '1450px',
           width: '100%',
           marginInline: 'auto',
           paddingBottom: '64px',
-          marginTop: '56px',
+          paddingTop: '56px',
+          display: 'flex',
+          justifyContent: 'center',
+          minHeight: '100vh',
         }}
       >
         {data?.productList?.length === 0 ? (
-          <div className='d-flex flex-column align-items-center'>
-            <div className='mb-3'>
-              <NoShop />
-            </div>
+          <div className='d-flex flex-column align-items-center mt-5'>
             <Text>
               Sorry, no products available at the moment. Check back soon!
             </Text>
@@ -95,17 +77,19 @@ const Shop = () => {
                     {data?.productList?.length} item
                     {data?.productList?.length === 1 ? '' : 's'}
                   </GridIconContainer>
-                  <div className='d-flex flex-column'>
-                    {data?.productList?.length === 0 ? (
+                  <ItemsContainer>
+                    {loading ? (
+                      <Spinner animation='border' size='sm' />
+                    ) : data?.productList?.length === 0 ? (
                       <Text margin={['16px 0 0 0']}>No products available</Text>
                     ) : (
-                      data?.productList
+                      filterProducts
                         ?.map((product: any, i: number) => (
                           <Product product={product} key={i} />
                         ))
                         .reverse()
                     )}
-                  </div>
+                  </ItemsContainer>
                 </div>
               </div>
             </PageContent>

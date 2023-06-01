@@ -1,20 +1,32 @@
 import { Button, Col, Form } from 'react-bootstrap';
 import styled from 'styled-components';
 
+export const Container = styled.div`
+  padding: 96px 16px;
+  max-width: 1000px;
+  margin-inline: auto;
+  width: 100%;
+  min-height: 100vh;
+`;
+
 export const ProductDetailsContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr;
-  width: 100%;
-  margin-inline: auto;
   margin-top: 18px;
-
-  @media screen and (min-width: ${({ theme }) => theme.breakpoints[2]}) {
-    grid-template-columns: 40% 30% 20%;
-    justify-content: center;
+  img {
+    margin-bottom: 24px;
   }
-  @media screen and (min-width: ${({ theme }) => theme.breakpoints[3]}) {
-    grid-template-columns: 50% 30% 20%;
+  @media screen and (min-width: ${({ theme }) => theme.breakpoints[0]}) {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     justify-content: center;
+    gap: 24px;
+    img,
+    div {
+      max-width: 500px;
+    }
+  }
+  @media screen and (min-width: ${({ theme }) => theme.breakpoints[1]}) {
+    gap: 48px;
   }
 `;
 
@@ -28,6 +40,7 @@ export const SelectInputContainer = styled.div`
   margin-right: 16px;
   display: flex;
   flex-direction: column;
+  width: 84px;
 
   select {
     appearance: none;
@@ -39,11 +52,6 @@ export const SelectInputContainer = styled.div`
     background-position-x: 60px !important;
     background-position-y: 18px !important;
     padding: 24px 32px 16px 16px !important;
-  }
-  :hover {
-    div {
-      color: ${({ theme }) => theme.colors.quinary} !important;
-    }
   }
 `;
 
@@ -75,7 +83,7 @@ export const SelectInput = styled(Form.Control)<{ bg?: any; color?: any }>`
   }
 `;
 
-export const ThirdColumnWrapper = styled.div`
+export const SizeAndQtyContainer = styled.div`
   height: fit-content;
   border-radius: 0.75rem;
   display: flex;
@@ -171,4 +179,16 @@ export const Size = styled.div<{ active?: boolean }>`
     color: ${({ theme, active }) => theme.white};
     background: ${({ theme, active }) => (active ? '' : theme.colors.quinary)};
   }
+`;
+
+export const Mask = styled.div`
+  width: 100vw;
+  height: 100vh;
+  background: rgb(0 0 0/0.5);
+  position: fixed;
+  z-index: 150;
+  top:0;
+  right:0;
+  bottom:0;
+  left:0:
 `;

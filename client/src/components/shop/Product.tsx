@@ -1,40 +1,42 @@
 import React from 'react';
 import { Image } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { ProceedBtn } from '../styles/shop';
+import { Flex, Text } from '../elements';
 
-const Container = styled.div`
-  width: 100%;
-  max-width: 1100px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  padding-bottom: 48px;
-  padding-top: 48px;
-  border-bottom: 1px solid #ededed;
+const Container = styled(Link)`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 8px;
   gap: 16px;
-  @media screen and (min-width: ${({ theme }) => theme.breakpoints[1]}) {
-    grid-template-columns: 25% 42.5% 23%;
-    gap: 32px;
+  max-width: 420px;
+  width: 100%;
+  aspect-ratio: 1/1;
+  text-decoration: none;
+  transition: 300ms;
+  box-shadow: 0px 0px 20px -4px rgba(0, 0, 0, 0.53);
+  :hover {
+    box-shadow: 0px 0px 43px -4px rgba(0, 0, 0, 0.53);
   }
 `;
 
-const ProductName = styled(Link)`
+const ProductName = styled(Text)`
   font-weight: 400;
-  height: 42px;
-  font-size: 14px;
-  color: ${({ theme }) => theme.colors.secondary};
+
+  font-size: 18px;
+  margin-bottom: 8px;
 `;
 
 const ProductImg = styled(Image)`
-  object-fit: contain;
+  object-fit: cover;
   width: 100%;
-  width: 100%;
+  max-width: 420px;
   border-radius: 0;
+  justify-self: center;
 `;
 
-const Price = styled.div`
-  font-size: 25px;
+const Price = styled(Text)`
   font-weight: 600;
   margin-bottom: 16px;
   text-align: center;
@@ -44,24 +46,13 @@ const Price = styled.div`
 `;
 
 const Product = ({ product }: any) => {
-  const navigate = useNavigate();
-
   return (
-    <Container>
-      <Link to='product-details' state={{ product }}>
-        <ProductImg src={product.image} />
-      </Link>
-      <ProductName to='product-details' state={{ product }}>
-        {product?.name}
-      </ProductName>
-      <div className='d-flex flex-column'>
+    <Container to={`/shop/${product?.id}`}>
+      <ProductImg src={product.displayUrl} />
+      <Flex flexDirection={['column']} padding={['8px']}>
+        <ProductName>{product?.name}</ProductName>
         <Price>${product?.price}</Price>
-        <ProceedBtn
-          onClick={() => navigate(`${product?.name}`, { state: { product } })}
-        >
-          View Product
-        </ProceedBtn>
-      </div>
+      </Flex>
     </Container>
   );
 };

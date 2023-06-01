@@ -8,69 +8,66 @@ import {
   ApolloProvider,
   InMemoryCache,
   createHttpLink,
-  ApolloLink,
+  concat,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { AuthProvider } from './context/authContext';
 import { authToken } from './utils/authToken';
 import { GET_REFRESH_TOKEN } from './queries/getRefreshToken';
 import jwtDecode from 'jwt-decode';
+import { CartProvider } from './context/cartContext';
+import { NavbarProvider } from './context/navbarContext';
+import { PayPalScriptProvider } from '@paypal/react-paypal-js';
+import { DashboardProvider } from './context/dashboardContext';
 
-const httpsLink = createHttpLink({
+const httpLink = createHttpLink({
   uri: '/graphql',
 }) as any;
-
-const consoleLink = new ApolloLink((operation, forward) => {
-  console.log(`starting request for ${operation.operationName}`);
-  return forward(operation).map((data) => {
-    console.log(`ending request for ${operation.operationName}`);
-    return data;
-  });
-});
 
 let client: any;
 
 const authLink = setContext(async (req, { headers }) => {
   const opName = req.operationName;
-  if (opName !== 'getRefreshToken') {
-    let { bearer, getTokenState, setToken } = authToken() as any;
-    const shouldRefresh = getTokenState(bearer);
 
-    if (bearer && shouldRefresh.needRefresh) {
-      const decoded = jwtDecode(bearer) as any;
-      const { data } = await client.mutate({
-        variables: {
-          userType: decoded.user_type,
-          firstName: decoded.first_name,
-        },
-        mutation: GET_REFRESH_TOKEN,
-      });
-
-      if (shouldRefresh.valid === false) {
-        bearer = await data.getRefreshToken.accessToken;
-        setToken(bearer);
-      }
-    }
-
-    if (bearer) {
-      return {
-        headers: {
-          ...headers,
-          authorization: `Bearer ${bearer}`,
-        },
-      };
-    }
+  if (opName === 'getRefreshToken') {
     return {
       headers: { ...headers, authorization: '' },
     };
   }
+
+  let { bearer, getTokenState, setToken } = authToken() as any;
+  const shouldRefresh = getTokenState(bearer);
+
+  if (bearer && shouldRefresh.needRefresh) {
+    const decoded = jwtDecode(bearer) as any;
+    const { data } = await client.mutate({
+      variables: {
+        userType: decoded.user_type,
+        firstName: decoded.first_name,
+      },
+      mutation: GET_REFRESH_TOKEN,
+    });
+
+    if (shouldRefresh.valid === false) {
+      bearer = await data.getRefreshToken.refreshToken;
+      setToken(bearer);
+    }
+  }
+
+  const authorizationHeader = bearer ? `Bearer ${bearer}` : '';
+
   return {
-    headers: { ...headers, authorization: '' },
+    headers: {
+      ...headers,
+      authorization: authorizationHeader,
+    },
   };
 });
 
+const link = concat(authLink, httpLink);
+
 client = new ApolloClient({
-  link: ApolloLink.from([consoleLink, authLink, httpsLink]),
+  link,
   cache: new InMemoryCache({
     addTypename: false,
   }),
@@ -93,18 +90,35 @@ const App = () => {
       });
   }, []);
 
+  const PayPalOptions = {
+    'client-id': process.env.REACT_APP_PAYPAL_CLIENT_ID,
+    'merchant-id': process.env.REACT_APP_PAYPAL_MERCHANT_ID,
+    currency: 'USD',
+    intent: 'capture',
+    components: 'buttons,funding-eligibility',
+    'enable-funding': 'venmo',
+  } as any;
+
   return (
-    <AuthProvider>
-      <ApolloProvider client={client}>
-        <BrowserRouter>
-          <ThemeProvider theme={themes['light']}>
-            <Suspense fallback={<></>}>
-              <Routes />
-            </Suspense>
-          </ThemeProvider>
-        </BrowserRouter>
-      </ApolloProvider>
-    </AuthProvider>
+    <PayPalScriptProvider options={PayPalOptions}>
+      <AuthProvider>
+        <ApolloProvider client={client}>
+          <CartProvider>
+            <NavbarProvider>
+              <DashboardProvider>
+                <BrowserRouter>
+                  <ThemeProvider theme={themes['light']}>
+                    <Suspense fallback={<></>}>
+                      <Routes />
+                    </Suspense>
+                  </ThemeProvider>
+                </BrowserRouter>
+              </DashboardProvider>
+            </NavbarProvider>
+          </CartProvider>
+        </ApolloProvider>
+      </AuthProvider>
+    </PayPalScriptProvider>
   );
 };
 

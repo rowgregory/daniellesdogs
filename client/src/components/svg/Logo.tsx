@@ -7,12 +7,12 @@ const Group = styled.g<{ donothover: any }>`
   }
 `;
 
-export const Logo = ({ fill }: any) => (
+export const DDLogo = ({ fill, w, h }: any) => (
   <svg
     xmlns='http://www.w3.org/2000/svg'
     viewBox='0 0 250 250'
-    width='200pt'
-    height='200pt'
+    width={w ? w : '200pt'}
+    height={h ? h : '200pt'}
   >
     <Group
       donothover={fill}

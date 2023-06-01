@@ -5,11 +5,10 @@ export const GET_PRODUCTS = gql`
     productList {
       id
       name
-      image
+      displayUrl
       description
       price
       countInStock
-      publicId
       sizes {
         size
         qty

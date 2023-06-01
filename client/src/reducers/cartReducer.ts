@@ -1,77 +1,304 @@
-export const cartReducer = (
-  state = { loading: false, cartItems: [], shippingAddress: {} },
-  action: any
-) => {
+import { STATES } from '../utils/states';
+
+export const cartReducer = (state: any, action: any) => {
   switch (action.type) {
     case 'CART_ADD_ITEM_REQUEST':
       return {
-        ...state,
-        loading: true,
+        cart: {
+          ...state?.cart,
+          loadingCartAddItem: true,
+        },
       };
-    case 'CART_ADD_ITEM':
+    case 'CART_ADD_ITEM_SUCCESS':
       const item = action.payload;
 
-      const existItem: any = state.cartItems.find(
-        (x: any) => x.product === item.product && x.size === item.size
+      const existItem: any = state?.cart?.cartItems?.find(
+        (x: any) => x?.product === item?.product && x?.size === item?.size
       );
 
       if (existItem) {
+        const updatedCartItems = state?.cart?.cartItems?.map((x: any) =>
+          x?.product === existItem?.product && x?.size === existItem?.size
+            ? item
+            : x
+        );
+
+        const cartItemsAmount = updatedCartItems?.reduce(
+          (acc: any, obj: any) => {
+            return acc + +obj?.qty;
+          },
+          0
+        );
+        const subtotal = Number(
+          updatedCartItems?.reduce((acc: any, obj: any) => {
+            return acc + +obj?.qty * obj?.price;
+          }, 0) || 0
+        );
+
+        localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
         return {
-          ...state,
-          cartItems: state.cartItems.map((x: any) =>
-            x.product === existItem.product && x.size === existItem.size
-              ? item
-              : x
-          ),
-          loading: false,
+          cart: {
+            ...state.cart,
+            loadingCartAddItem: false,
+            cartItems: updatedCartItems,
+            cartItemsAmount,
+            subtotal,
+            orderTotal: subtotal + state?.cart?.shippingPrice,
+            taxAmount: 0,
+            shippingPrice: state?.cart?.shippingPrice,
+            success: true,
+          },
         };
       } else {
+        const updatedCartItems = [...state?.cart?.cartItems, item];
+        const cartItemsAmount = updatedCartItems?.reduce(
+          (acc: any, obj: any) => {
+            return acc + +obj.qty;
+          },
+          0
+        );
+        const subtotal = Number(
+          updatedCartItems?.reduce((acc: any, obj: any) => {
+            return acc + +obj?.qty * obj?.price;
+          }, 0) || 0
+        );
+
+        localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
         return {
-          ...state,
-          cartItems: [...state.cartItems, item],
-          loading: false,
+          cart: {
+            ...state.cart,
+            loadingCartAddItem: false,
+            cartItems: updatedCartItems,
+            cartItemsAmount,
+            subtotal,
+            orderTotal: subtotal + state?.cart?.shippingPrice,
+            taxAmount: 0,
+            shippingPrice: state?.cart?.shippingPrice,
+            success: true,
+          },
         };
       }
-    case 'CART_REMOVE_ITEM':
+    case 'DELETE_ITEM_FROM_CART':
+      const updatedItems = state.cart.cartItems.filter((item: any) =>
+        item.size !== ''
+          ? item.size !== action.payload.size &&
+            item.product !== action.payload.id
+          : item.product !== action.payload.id
+      );
+
+      localStorage.setItem('cartItems', JSON.stringify(updatedItems));
       return {
-        ...state,
-        cartItems: state.cartItems.filter((x: any) =>
-          x.size !== ''
-            ? x.size !== action.payload.size || x.product !== action.payload.id
-            : x.product !== action.payload.id
-        ),
+        cart: {
+          ...state.cart,
+          cartItems: updatedItems,
+          cartItemsAmount: updatedItems?.length,
+        },
       };
-    case 'CART_SAVE_SHIPPING_ADDRESS':
+    case 'CALCULATE_TAX':
+      let taxRate: number = 0;
+
+      // eslint-disable-next-line array-callback-return
+      STATES.some((obj: any) => {
+        if (obj.value === action.payload) return (taxRate = obj.taxRate / 100);
+      });
+
+      const taxAmount = state?.cart?.subtotal * taxRate;
+
+      const orderTotal =
+        state?.cart?.subtotal + state?.cart?.shippingPrice + taxAmount;
+
       return {
-        ...state,
-        shippingAddress: action.payload,
+        cart: {
+          ...state.cart,
+          taxAmount,
+          orderTotal,
+        },
       };
-    case 'CART_SAVE_PAYMENT_METHOD':
+    case 'REMOVE_SHIPPING_PRICE':
+      const shippingPrice = 5;
+      const MATaxRate = 0.0625;
+      const tax = state?.cart?.subtotal * MATaxRate;
+
+      const totalWithTaxOnly = state?.cart?.subtotal + tax;
+      const totalWithShippingPrice = state?.cart?.subtotal + shippingPrice;
+
       return {
-        ...state,
-        paymentMethod: action.payload,
+        cart: {
+          ...state.cart,
+          shippingPrice: action.payload ? 0 : shippingPrice,
+          orderTotal: action.payload
+            ? totalWithTaxOnly
+            : totalWithShippingPrice,
+          taxAmount: action.payload ? tax : 0,
+        },
       };
-    case 'CART_CLEAR_ITEMS':
+    case 'CLOSE_CART_DRAWER':
       return {
-        ...state,
-        cartItems: [],
+        cart: {
+          ...state.cart,
+          success: false,
+        },
       };
-    case 'CART_ADD_ITEM_FAIL':
+    case 'DELETE_ONE_ITEM':
+      const productWithSizeQty =
+        action.payload.item?.sizes.filter(
+          (obj: any) => obj?.size === action?.payload?.item?.size
+        )[0]?.qty ?? null;
+
+      let updatedCartItems = [];
+
+      if (productWithSizeQty === null) {
+        const qty = state?.cart?.cartItems?.find(
+          (item: any) =>
+            item.product === action.payload.item.product && item.qty
+        ).qty;
+
+        if (qty === 1) {
+          updatedCartItems = state?.cart?.cartItems?.filter(
+            (item: any) => item.product !== action.payload.item.product
+          );
+        } else {
+          updatedCartItems = state.cart.cartItems.map((item: any) =>
+            item.product === action.payload.item.product
+              ? {
+                  ...item,
+                  qty: Number(item.qty) - 1,
+                }
+              : item
+          );
+        }
+      } else {
+        const qty = state.cart.cartItems.find(
+          (item: any) =>
+            item.product === action.payload.item.product &&
+            item.size === action.payload.item.size
+        ).qty;
+
+        if (qty === 1) {
+          updatedCartItems = state?.cart?.cartItems?.filter(
+            (item: any) =>
+              item.product !== action.payload.item.product ||
+              item.size !== action.payload.item.size
+          );
+        } else {
+          updatedCartItems = state.cart.cartItems.map((item: any) => {
+            if (
+              item.product === action.payload.item.product &&
+              item.size === action.payload.item.size
+            ) {
+              return {
+                ...item,
+                qty: Number(item.qty) - 1,
+              };
+            } else {
+              return item;
+            }
+          });
+        }
+      }
+
+      localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+
+      const subTotal =
+        updatedCartItems?.reduce((acc: any, obj: any) => {
+          return Number(acc + +obj?.qty * +obj?.price);
+        }, 0) || 0;
+
       return {
-        ...state,
-        errors: action.payload,
+        cart: {
+          ...state.cart,
+          cartItems: updatedCartItems,
+          cartItemsAmount:
+            updatedCartItems?.reduce((acc: any, obj: any) => {
+              return acc + +obj?.qty;
+            }, 0) || 0,
+          success: true,
+          subtotal: subTotal,
+          orderTotal: subTotal + 5,
+        },
       };
-    case 'CART_ADD_ITEM_SUCCESS':
+    case 'ADD_ONE_ITEM':
+      const qtyWithSize =
+        action?.payload?.item?.sizes.filter(
+          (obj: any) => obj?.size === action?.payload?.item?.size
+        )[0]?.qty ?? null;
+
+      let cartItemsUpdated = [];
+
+      if (qtyWithSize === null) {
+        const qty = state.cart.cartItems.find(
+          (item: any) => item.product === action.payload.item.product
+        )?.qty;
+
+        if (Number(qty) === Number(action.payload.item.countInStock)) {
+          return { cart: { ...state?.cart } };
+        }
+
+        cartItemsUpdated = state.cart.cartItems.map((item: any) =>
+          item.product === action.payload.item.product
+            ? {
+                ...item,
+                qty: Number(item.qty) + 1,
+              }
+            : item
+        );
+      } else {
+        const qty = state.cart.cartItems.find(
+          (item: any) =>
+            item.product === action.payload.item.product &&
+            item.size === action.payload.item.size
+        ).qty;
+
+        if (qty === qtyWithSize) {
+          return { cart: { ...state?.cart } };
+        }
+
+        cartItemsUpdated = state.cart.cartItems.map((item: any) => {
+          if (
+            item.product === action.payload.item.product &&
+            item.size === action.payload.item.size
+          ) {
+            return {
+              ...item,
+              qty: Number(item.qty) + 1,
+            };
+          } else {
+            return item;
+          }
+        });
+      }
+
+      localStorage.setItem('cartItems', JSON.stringify(cartItemsUpdated));
+
+      const subtotal =
+        cartItemsUpdated?.reduce((acc: any, obj: any) => {
+          return Number(acc + +obj?.qty * +obj?.price);
+        }, 0) || 0;
+
       return {
-        ...state,
-        success: true,
+        cart: {
+          ...state.cart,
+          cartItems: cartItemsUpdated,
+          cartItemsAmount:
+            cartItemsUpdated?.reduce((acc: any, obj: any) => {
+              return acc + +obj?.qty;
+            }, 0) || 0,
+          success: true,
+          subtotal,
+          orderTotal: subtotal + 5,
+        },
       };
-    case 'CART_ADD_ITEM_RESET':
+    case 'CLEAR_CART':
       return {
-        ...state,
-        success: false,
+        cart: {
+          ...state.cart,
+          cartItems: [],
+          cartItemsAmount: 0,
+          subtotal: 0,
+          orderTotal: 0,
+        },
       };
     default:
-      return state;
+      return { ...state, cart: { ...state.cart } };
   }
 };

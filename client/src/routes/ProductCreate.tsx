@@ -1,20 +1,11 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { Alert, Form } from 'react-bootstrap';
 import { useMutation } from '@apollo/client';
-import { useForm } from '../utils/hooks/useForm';
 import { validateProduct } from '../utils/validate';
 import { useNavigate } from 'react-router-dom';
 import { GET_PRODUCTS } from '../queries/getProducts';
 import { CREATE_PRODUCT } from '../mutations/createProduct';
-import {
-  FormContainer,
-  FormGroup,
-  FormInput,
-  FormLabel,
-  PageTitle,
-  ErrorText,
-} from '../components/styles/form';
+import { FormGroup, ErrorText } from '../components/styles/form';
 import {
   Quantity,
   SelectInput,
@@ -22,10 +13,22 @@ import {
   Size,
   SizeContainer,
 } from '../components/styles/productEdit';
-import NavigateBtns from '../components/NavigateBtns';
-import { imgConfig } from '../utils/config';
 import { productValues } from '../utils/form-values/values';
 import { sizes } from '../utils/productData';
+import { useProductForm } from '../utils/hooks/useProductForm';
+import { API } from '../utils/api';
+import { NoVideoModal } from '../components/NoVideoModal';
+import {
+  ContentWrapper,
+  GoBackLink,
+  SubNav,
+  TableContainer,
+  Label,
+  Input,
+  TextArea,
+} from '../components/styles/backend-tables';
+import ContinueBtn from '../components/ContinueBtn';
+import { categories } from '../utils/shopCategories';
 
 const ProductCreate = () => {
   const [errors, setErrors] = useState({}) as any;
@@ -35,38 +38,45 @@ const ProductCreate = () => {
   const [uploading, setUploading] = useState(false);
   const [doesProductHaveSizes, setDoesProductHaveSizes] = useState(false);
   const [productSizes, setProductSizes] = useState([]) as any;
+  const [showNoVideo, setShowNoVideo] = useState(false);
+
+  const handleClose = () => {
+    setShowNoVideo(false);
+  };
 
   const createProductCallback = async () => {
     const validForm = validateProduct(setErrors, inputs);
 
     if (validForm) {
       setUploading(true);
-      const formData = new FormData();
-      formData.append('image', file);
+      try {
+        const res = await API.uploadImageToImgbb(file);
 
-      const { data } = await axios.post('/upload', formData, imgConfig);
+        const hasSizes = productSizes?.length > 0;
 
-      const hasSizes = productSizes?.length > 0;
-
-      if (data.message === 'IMAGE_UPLOAD_SUCCESS') {
-        productCreate({
-          variables: {
-            productInput: {
-              name: inputs.name,
-              price: inputs.price,
-              description: inputs.description,
-              countInStock: hasSizes ? '0' : inputs.countInStock,
-              sizes: productSizes,
-              image: data.secure_url,
-              publicId: data.public_id,
+        if (res.data) {
+          productCreate({
+            variables: {
+              productInput: {
+                name: inputs.name,
+                price: inputs.price,
+                description: inputs.description,
+                countInStock: hasSizes ? null : inputs.countInStock,
+                sizes: productSizes,
+                displayUrl: res.data.image.url,
+                category: inputs.category,
+              },
             },
-          },
-        });
+          });
+        }
+      } catch (err) {
+        console.error('ERROR: ', err);
+        setUploading(false);
       }
     }
   };
 
-  const { inputs, handleInputChange, setInputs, onSubmit } = useForm(
+  const { inputs, handleInputChange, setInputs, onSubmit } = useProductForm(
     createProductCallback,
     productValues
   );
@@ -77,14 +87,20 @@ const ProductCreate = () => {
     },
     onCompleted() {
       setUploading(false);
-      navigate(-1);
+      navigate('/admin/products');
     },
     refetchQueries: [{ query: GET_PRODUCTS }],
   });
 
   const handleChange = (e: any) => {
-    setInputs((inputs: any) => ({ ...inputs, image: e.target.files[0] }));
-    setFile(e.target.files[0]);
+    if (['video/mp4', 'video/quicktime'].includes(e?.target?.files[0]?.type)) {
+      setShowNoVideo(true);
+      setUploading(false);
+      return;
+    } else {
+      setInputs((inputs: any) => ({ ...inputs, image: e.target.files[0] }));
+      setFile(e.target.files[0]);
+    }
   };
 
   const chooseSizes = (obj: any) => {
@@ -115,109 +131,131 @@ const ProductCreate = () => {
     );
 
   return (
-    <FormContainer>
-      <PageTitle>Create Product</PageTitle>
-      <Form>
-        <FormGroup controlId='image'>
-          <FormLabel className='mb-1'>Product Pic</FormLabel>
-          <FormInput
-            style={{ background: '#fff' }}
-            type='file'
-            id='image'
-            onChange={handleChange}
-          />
-          <ErrorText>{errors?.image}</ErrorText>
-        </FormGroup>
-        <FormGroup controlId='name'>
-          <FormLabel className='mb-1'>Name</FormLabel>
-          <FormInput
-            name='productName'
-            value={inputs?.name || ''}
-            type='text'
-            onChange={handleInputChange}
-          />
-          <ErrorText>{errors?.name}</ErrorText>
-        </FormGroup>
-        <FormGroup controlId='price'>
-          <FormLabel className='mb-1'>Price</FormLabel>
-          <FormInput
-            name='productPrice'
-            value={inputs?.price || ''}
-            type='number'
-            onChange={handleInputChange}
-          />
-          <ErrorText>{errors?.price}</ErrorText>
-        </FormGroup>
-        <FormGroup controlId='description'>
-          <FormLabel className='mb-1'>Description</FormLabel>
-          <FormInput
-            name='productDescription'
-            value={inputs?.description || ''}
-            type='text'
-            onChange={handleInputChange}
-          />
-          <ErrorText>{errors?.description}</ErrorText>
-        </FormGroup>
-        {!doesProductHaveSizes && (
-          <FormGroup controlId='countInStock'>
-            <FormLabel>Count In Stock</FormLabel>
-            <FormInput
-              name='productCountInStock'
-              type='number'
-              value={inputs?.countInStock || ''}
-              onChange={handleInputChange}
+    <>
+      <NoVideoModal show={showNoVideo} close={handleClose} />
+      <TableContainer>
+        <SubNav>
+          <GoBackLink to='/admin/products'>GO BACK</GoBackLink>
+        </SubNav>
+        <ContentWrapper className='create'>
+          <Form className='w-100'>
+            <FormGroup className='mb-3' controlId='image'>
+              <Label className='mb-1'>Product Pic</Label>
+              <Input type='file' id='image' onChange={handleChange} />
+              <ErrorText>{errors?.image}</ErrorText>
+            </FormGroup>
+            <FormGroup className='mb-3' controlId='name'>
+              <Label className='mb-1'>Name</Label>
+              <Input
+                name='name'
+                value={inputs?.name || ''}
+                type='text'
+                onChange={handleInputChange}
+              />
+              <ErrorText>{errors?.name}</ErrorText>
+            </FormGroup>
+            <FormGroup className='mb-3' controlId='price'>
+              <Label className='mb-1'>Price</Label>
+              <Input
+                name='price'
+                value={inputs?.price || ''}
+                type='number'
+                onChange={handleInputChange}
+              />
+              <ErrorText>{errors?.price}</ErrorText>
+            </FormGroup>
+            <FormGroup className='mb-3' controlId='category'>
+              <Label className='mb-1'>Category</Label>
+              <Input
+                name='category'
+                as='select'
+                value={inputs.category || categories[0]}
+                onChange={handleInputChange}
+              >
+                {categories?.map((category: any, i: number) => (
+                  <option key={i} disabled={i === 0}>
+                    {category}
+                  </option>
+                ))}
+              </Input>
+              <ErrorText>{errors?.category}</ErrorText>
+            </FormGroup>
+            <FormGroup className='mb-3' controlId='description'>
+              <Label className='mb-1'>Description</Label>
+              <TextArea
+                name='description'
+                value={inputs?.description || ''}
+                rows={5}
+                onChange={handleInputChange}
+              />
+              <ErrorText>{errors?.description}</ErrorText>
+            </FormGroup>
+
+            {!doesProductHaveSizes && (
+              <FormGroup className='mb-3' controlId='countInStock'>
+                <Label>Count In Stock</Label>
+                <Input
+                  name='countInStock'
+                  type='number'
+                  value={inputs?.countInStock || ''}
+                  onChange={handleInputChange}
+                />
+              </FormGroup>
+            )}
+            <FormGroup className='mb-3' controlId='doesProductHaveSizes'>
+              <Label>Does this product have sizes?</Label>
+              <Form.Check
+                type='switch'
+                checked={doesProductHaveSizes || false}
+                onChange={() => setDoesProductHaveSizes(!doesProductHaveSizes)}
+              ></Form.Check>
+            </FormGroup>
+            {doesProductHaveSizes && (
+              <FormGroup
+                className='d-flex flex-column mb-3'
+                controlId='chooseSizes'
+              >
+                <Label>Choose which sizes you want.</Label>
+                <SizeContainer>
+                  {sizes?.map((s, i) => (
+                    <div key={i} className='d-flex'>
+                      <Size active={isActive(s)} onClick={() => chooseSizes(s)}>
+                        {s?.size}
+                      </Size>
+                      {isActive(s) && (
+                        <SelectInputContainer>
+                          <Quantity>QTY</Quantity>
+                          <SelectInput
+                            value={isSelected(s)}
+                            as='select'
+                            onChange={(e: any) => handleSelectOnChange(e, s)}
+                          >
+                            {[...Array(20).keys()].map((x, i) => (
+                              <option key={i} value={x + 1}>
+                                {i + 1}
+                              </option>
+                            ))}
+                          </SelectInput>
+                        </SelectInputContainer>
+                      )}
+                    </div>
+                  ))}
+                </SizeContainer>
+              </FormGroup>
+            )}
+            <ContinueBtn
+              onSubmit={onSubmit}
+              text='Create'
+              loading1={loading}
+              loading2={uploading}
             />
-          </FormGroup>
-        )}
-        <FormGroup controlId='doesProductHaveSizes'>
-          <FormLabel>Does this product have sizes?</FormLabel>
-          <Form.Check
-            type='switch'
-            checked={doesProductHaveSizes || false}
-            onChange={() => setDoesProductHaveSizes(!doesProductHaveSizes)}
-          ></Form.Check>
-        </FormGroup>
-        {doesProductHaveSizes && (
-          <FormGroup className='d-flex flex-column' controlId='chooseSizes'>
-            <FormLabel>Choose which sizes you want.</FormLabel>
-            <SizeContainer>
-              {sizes?.map((s, i) => (
-                <div key={i} className='d-flex'>
-                  <Size active={isActive(s)} onClick={() => chooseSizes(s)}>
-                    {s?.size}
-                  </Size>
-                  {isActive(s) && (
-                    <SelectInputContainer>
-                      <Quantity>QTY</Quantity>
-                      <SelectInput
-                        value={isSelected(s)}
-                        as='select'
-                        onChange={(e: any) => handleSelectOnChange(e, s)}
-                      >
-                        {[...Array(20).keys()].map((x, i) => (
-                          <option key={i} value={x + 1}>
-                            {i + 1}
-                          </option>
-                        ))}
-                      </SelectInput>
-                    </SelectInputContainer>
-                  )}
-                </div>
-              ))}
-            </SizeContainer>
-          </FormGroup>
-        )}
-        <NavigateBtns
-          onSubmit={onSubmit}
-          text='Creat'
-          loading1={loading}
-          loading2={uploading}
-        />
-      </Form>
-      {graphQLErrors?.map((error: any, i: number) => (
-        <Alert key={i}>{error?.message}</Alert>
-      ))}
-    </FormContainer>
+          </Form>
+        </ContentWrapper>
+        {graphQLErrors?.map((error: any, i: number) => (
+          <Alert key={i}>{error?.message}</Alert>
+        ))}
+      </TableContainer>
+    </>
   );
 };
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import { Logo } from './svg/Logo';
+import { DDLogo } from './svg/Logo';
 import SocialMediaNavbar from '../components/SocialMediaNavbar';
 
 const quickLinks = () => {
@@ -24,7 +24,7 @@ const quickLinks = () => {
     },
     {
       linkKey: 'Contact Us',
-      linkPath: '/contact-us',
+      linkPath: '/contact',
     },
   ];
 };
@@ -68,6 +68,7 @@ const LinkWrapper = styled.div`
     grid-template-columns: auto auto auto;
   }
 `;
+
 const LinkSection = styled.div`
   margin-bottom: 1.25rem;
   @media screen and (min-width: ${({ theme }) => theme.breakpoints[4]}) {
@@ -156,87 +157,100 @@ const LegalWrapper = styled.div`
 
 const Footer = () => {
   const location = useLocation();
-
+  const invalidPaths = [
+    '/shop/',
+    '/dashboard',
+    '/admin',
+    '/cart',
+    '/checkout',
+    '/order/receipt',
+  ];
+  const pagesToBlock = invalidPaths.some((path) =>
+    location.pathname.includes(path)
+  );
   return (
-    <div style={{ position: 'relative' }}>
+    <div
+      style={{
+        position: 'relative',
+        display: pagesToBlock ? 'none' : 'block',
+      }}
+    >
       <div
         style={{
-          background: `linear-gradient(rgb(246, 246, 246) 0%, rgba(246, 246, 246, 0) 80%`,
+          background: `linear-gradient(rgb(255, 255, 255) 0%, rgba(246, 246, 246, 0) 80%`,
           position: 'absolute',
           top: 0,
           left: 0,
-          bottom: '50%',
+          bottom: '45%',
           zIndex: 10,
           width: '100%',
         }}
       ></div>
-      {!location.pathname.includes('/admin') && (
-        <StyledFooter>
-          <TopFooter>
-            <Logo fill='#aaa' />
-            <LinkWrapper>
-              <LinkSection>
-                <LinkCategory>Our Address</LinkCategory>
-                <StyledText>Address</StyledText>
-                <StyledText>City, State, Zip Postal Code</StyledText>
-              </LinkSection>
-              <LinkSection>
-                <LinkCategory>Quick Links</LinkCategory>
-                <div className='d-flex flex-column'>
-                  {quickLinks().map((l, i) => (
-                    <StyledLink key={i} to={{ pathname: l.linkPath }}>
-                      {l.linkKey}
-                    </StyledLink>
-                  ))}
-                </div>
-              </LinkSection>
-              <LinkSection>
-                <LinkCategory>Legal</LinkCategory>
-                <StyledText>
-                  &copy; {new Date().getFullYear()} Danielle's Dog's
-                </StyledText>
-                <StyledText>All Rights Reserved.</StyledText>
-                <LegalWrapper>
-                  <StyledExternalLink
-                    onClick={() =>
-                      window.open(
-                        'https://www.privacypolicies.com/live/c37902bc-11cd-430e-a925-2b82ce905c88',
-                        '_blank'
-                      )
-                    }
-                  >
-                    Privacy Policy
-                  </StyledExternalLink>
-                  <StyledExternalLink
-                    onClick={() =>
-                      window.open('https://oag.ca.gov/privacy/ccpa', '_blank')
-                    }
-                  >
-                    California Consumer Privacy Act
-                  </StyledExternalLink>
-                  <StyledExternalLink
-                    onClick={() =>
-                      window.open(
-                        'https://www.termsandconditionsgenerator.com/live.php?token=K9R7fXZjABJKZhIWlXr43oY6qca6jjVn',
-                        '_blank'
-                      )
-                    }
-                  >
-                    Terns & Conditions
-                  </StyledExternalLink>
-                </LegalWrapper>
-              </LinkSection>
-            </LinkWrapper>
-          </TopFooter>
-          <BottomFooter>
-            <SocialMediaNavbar />
-            <StyledExternalLink onClick={() => window.scrollTo({ top: 0 })}>
-              Top
-            </StyledExternalLink>
-            <Signature>Developed by Gregory Row</Signature>
-          </BottomFooter>
-        </StyledFooter>
-      )}
+      <StyledFooter>
+        <TopFooter>
+          <DDLogo fill='#aaa' />
+          <LinkWrapper>
+            <LinkSection>
+              <LinkCategory>Our Address</LinkCategory>
+              <StyledText>Address</StyledText>
+              <StyledText>City, State, Zip Postal Code</StyledText>
+            </LinkSection>
+            <LinkSection>
+              <LinkCategory>Quick Links</LinkCategory>
+              <div className='d-flex flex-column'>
+                {quickLinks().map((l, i) => (
+                  <StyledLink key={i} to={{ pathname: l.linkPath }}>
+                    {l.linkKey}
+                  </StyledLink>
+                ))}
+              </div>
+            </LinkSection>
+            <LinkSection>
+              <LinkCategory>Legal</LinkCategory>
+              <StyledText>
+                &copy; {new Date().getFullYear()} Danielle's Dog's
+              </StyledText>
+              <StyledText>All Rights Reserved.</StyledText>
+              <LegalWrapper>
+                <StyledExternalLink
+                  onClick={() =>
+                    window.open(
+                      'https://www.privacypolicies.com/live/c37902bc-11cd-430e-a925-2b82ce905c88',
+                      '_blank'
+                    )
+                  }
+                >
+                  Privacy Policy
+                </StyledExternalLink>
+                <StyledExternalLink
+                  onClick={() =>
+                    window.open('https://oag.ca.gov/privacy/ccpa', '_blank')
+                  }
+                >
+                  California Consumer Privacy Act
+                </StyledExternalLink>
+                <StyledExternalLink
+                  onClick={() =>
+                    window.open(
+                      'https://www.termsandconditionsgenerator.com/live.php?token=K9R7fXZjABJKZhIWlXr43oY6qca6jjVn',
+                      '_blank'
+                    )
+                  }
+                >
+                  Terns & Conditions
+                </StyledExternalLink>
+              </LegalWrapper>
+            </LinkSection>
+          </LinkWrapper>
+        </TopFooter>
+        <BottomFooter>
+          <SocialMediaNavbar />
+          <StyledExternalLink onClick={() => window.scrollTo({ top: 0 })}>
+            Top
+          </StyledExternalLink>
+          <Signature>Developed by Gregory Row</Signature>
+        </BottomFooter>
+      </StyledFooter>
     </div>
   );
 };

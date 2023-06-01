@@ -12,6 +12,8 @@ interface LinkProps {
   display?: string[];
   textDecoration?: string[];
   width?: string[];
+  alignitems?: string[];
+  fontWeight?: string[];
 }
 
 const Link = styled(RouterLink)<LinkProps>(
@@ -25,6 +27,8 @@ const Link = styled(RouterLink)<LinkProps>(
     display: '',
     textDecoration: 'none',
     width: 'fit-content',
+    alignitems: '',
+    fontWeight: '',
   },
   ({
     fontSize,
@@ -36,6 +40,8 @@ const Link = styled(RouterLink)<LinkProps>(
     display,
     textDecoration,
     width,
+    alignitems,
+    fontWeight,
   }) => ({
     ...createMediaQueries([
       {
@@ -73,6 +79,14 @@ const Link = styled(RouterLink)<LinkProps>(
       {
         property: 'width',
         values: width,
+      },
+      {
+        property: 'align-items',
+        values: alignitems,
+      },
+      {
+        property: 'font-weight',
+        values: fontWeight,
       },
     ]),
   })

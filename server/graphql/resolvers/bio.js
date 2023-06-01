@@ -58,8 +58,7 @@ module.exports = {
           emailAddress,
           title,
           description,
-          image,
-          publicId,
+          displayUrl,
         },
       }
     ) {
@@ -70,8 +69,7 @@ module.exports = {
           emailAddress,
           title,
           description,
-          image,
-          publicId,
+          displayUrl,
         });
 
         writeToFile(
@@ -101,8 +99,7 @@ module.exports = {
           emailAddress,
           title,
           description,
-          image,
-          publicId,
+          displayUrl,
         },
       }
     ) {
@@ -115,8 +112,7 @@ module.exports = {
             emailAddress,
             title,
             description,
-            image,
-            publicId,
+            displayUrl,
           }
         );
 

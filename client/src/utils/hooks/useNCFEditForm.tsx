@@ -12,20 +12,20 @@ export const useNCFEditForm = (callback: any, data: any) => {
 
       setInputs((inputs) => ({
         ...inputs,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        emailAddress: user.emailAddress,
-        phoneNumber: user.phoneNumber,
+        firstName: user?.firstName,
+        lastName: user?.lastName,
+        emailAddress: user?.emailAddress,
+        phoneNumber: user?.phoneNumber,
         address: {
-          addressLine1: address.addressLine1,
-          city: address.city,
-          state: address.state,
-          zipPostalCode: address.zipPostalCode,
+          addressLine1: address?.addressLine1,
+          city: address?.city,
+          state: address?.state,
+          zipPostalCode: address?.zipPostalCode,
         },
         vet: {
-          name: vet.name,
-          phoneNumber: vet.phoneNumber,
-          address: vet.address,
+          name: vet?.name,
+          phoneNumber: vet?.phoneNumber,
+          address: vet?.address,
         },
         openYard,
       }));

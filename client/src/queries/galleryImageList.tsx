@@ -4,12 +4,14 @@ export const GALLERY_IMAGE_LIST = gql`
   query galleryImageLIst {
     galleryImageList {
       id
-      publicId
-      secureUrl
-      height
+      displayUrl
       width
-      format
-      bytes
+      height
+      mimetype
+      title
+      size
+      mediumImgUrl
+      thumbUrl
     }
   }
 `;

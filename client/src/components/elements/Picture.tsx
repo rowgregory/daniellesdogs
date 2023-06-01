@@ -18,6 +18,7 @@ interface ImageProps {
   aspectratio?: string[];
   gridarea?: string[];
   borderradius?: string[];
+  height?: string;
 }
 
 const Picture = styled(Image)<ImageProps>(
@@ -38,6 +39,7 @@ const Picture = styled(Image)<ImageProps>(
     aspectratio: '',
     gridarea: '',
     borderradius: '',
+    height: '',
   },
   ({
     color,
@@ -55,6 +57,7 @@ const Picture = styled(Image)<ImageProps>(
     aspectratio,
     gridarea,
     borderradius,
+    height,
   }) => ({
     ...createMediaQueries([
       {
@@ -117,6 +120,10 @@ const Picture = styled(Image)<ImageProps>(
       {
         property: 'border-radius',
         values: borderradius,
+      },
+      {
+        property: 'height',
+        values: height,
       },
     ]),
   })

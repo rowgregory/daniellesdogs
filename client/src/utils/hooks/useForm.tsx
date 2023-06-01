@@ -4,28 +4,18 @@ export const useForm = (callback?: any, values?: any, data?: any) => {
   const [inputs, setInputs] = useState(values);
 
   useEffect(() => {
+    let object: any;
     if (data?.bioById) {
-      const {
-        bioById: {
-          firstName,
-          lastName,
-          emailAddress,
-          title,
-          description,
-          image,
-        },
-      } = data;
-
-      setInputs((inputs: any) => ({
-        ...inputs,
-        firstName,
-        lastName,
-        emailAddress,
-        title,
-        description,
-        image,
-      }));
+      object = data?.bioById;
+    } else if (data?.serviceById) {
+      object = data.serviceById;
+      console.log(object);
     }
+
+    setInputs((inputs: any) => ({
+      ...inputs,
+      ...object,
+    }));
   }, [data]);
 
   const handleInputChange = (e: any) => {

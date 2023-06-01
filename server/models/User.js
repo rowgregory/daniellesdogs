@@ -44,6 +44,9 @@ const UserSchema = Schema(
       type: SchemaTypes.ObjectId,
       ref: 'Pet',
     },
+    lastLoginTime: {
+      type: String,
+    },
   },
   {
     timestamps: true,

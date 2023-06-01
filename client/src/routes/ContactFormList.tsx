@@ -1,101 +1,132 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useLazyQuery } from '@apollo/client';
+import React, { useState } from 'react';
+import { useQuery } from '@apollo/client';
 import { Link, Text } from '../components/elements';
-import { Button, Spinner, Table } from 'react-bootstrap';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import { useParams } from 'react-router-dom';
+import { FormGroup, Table } from 'react-bootstrap';
 import { GET_CONTACT_FORMS } from '../queries/getContactForms';
 import DeleteModal from '../components/DeleteModal';
+import {
+  ContentWrapper,
+  FilterInput,
+  SubNav,
+  TableContainer,
+  TableData,
+  TableHeader,
+  TableRow,
+} from '../components/styles/backend-tables';
+import { Maze } from '../components/ContinueBtn';
 
 const ContactFormList = () => {
-  const params = useParams();
-  const userId = params.user_id;
-  const userType = params.user_type;
-  const [getContactForms, { loading, data }] = useLazyQuery(GET_CONTACT_FORMS, {
-    fetchPolicy: 'network-only',
-  });
-  const tableBodyRef = useRef();
+  const { loading, data } = useQuery(GET_CONTACT_FORMS);
+  const [text, setText] = useState('');
   const [show, setShow] = useState(false);
-  const [contactFormData, setContactFormData] = useState({}) as any;
+  const [contactFormId, setContactFormId] = useState({}) as any;
 
   const handleClose = () => setShow(false);
 
-  useEffect(() => {
-    getContactForms();
-  }, [getContactForms]);
+  const filteredContactForms = data?.contactFormList?.filter((form: any) =>
+    form?.firstName?.toLowerCase().includes(text?.toLowerCase())
+  );
+
+  const noContactForms = filteredContactForms?.length === 0;
 
   return (
-    <>
+    <TableContainer>
       <DeleteModal
         actionFunc='Contact Form'
         show={show}
         handleClose={handleClose}
-        id={contactFormData.id}
+        id={contactFormId.id}
       />
-      {loading && <Spinner animation='border' />}
-      <div style={{ tableLayout: 'fixed', overflowX: 'auto' }}>
-        <Table responsive striped hover className='table-md'>
-          <thead>
-            <tr>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Email Address</th>
-              <th>Subject</th>
-              <th>Message</th>
-            </tr>
-          </thead>
-          <TransitionGroup component='tbody'>
-            {data?.contactFormList?.map((contactForm: any) => (
-              <CSSTransition
-                nodeRef={tableBodyRef}
-                key={contactForm?.id}
-                timeout={500}
-                classNames='item'
-              >
-                <tr ref={tableBodyRef.current}>
+      <SubNav className='p-0 d-flex align-items-center'>
+        {!noContactForms && (
+          <FormGroup style={{ marginLeft: '26px' }}>
+            <FilterInput
+              placeholder='Search by first name'
+              as='input'
+              type='text'
+              value={text || ''}
+              onChange={(e: any) => setText(e.target.value)}
+            ></FilterInput>
+          </FormGroup>
+        )}
+      </SubNav>
+      <ContentWrapper>
+        {loading ? (
+          <Maze />
+        ) : noContactForms ? (
+          <Text fontFamily='Roboto' color={['#ededed']}>
+            No Contact Forms
+          </Text>
+        ) : (
+          <Table responsive striped hover>
+            <thead>
+              <tr>
+                <th>
+                  <TableHeader>First Name</TableHeader>
+                </th>
+                <th>
+                  <TableHeader>Last Namee</TableHeader>
+                </th>
+                <th>
+                  <TableHeader>Email Address</TableHeader>
+                </th>
+                <th>
+                  <TableHeader>Subject</TableHeader>
+                </th>
+                <th>
+                  <TableHeader>Message</TableHeader>
+                </th>
+                <th>
+                  <TableHeader>View</TableHeader>
+                </th>
+                <th>
+                  <TableHeader>Delete</TableHeader>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredContactForms?.map((contactForm: any) => (
+                <TableRow key={contactForm.id}>
                   <td>
-                    <Text>{contactForm?.firstName}</Text>
+                    <TableData>{contactForm?.firstName}</TableData>
                   </td>
                   <td>
-                    <Text>{contactForm?.lastName}</Text>
+                    <TableData>{contactForm?.lastName}</TableData>
                   </td>
                   <td>
-                    <Text>{contactForm?.emailAddress}</Text>
+                    <TableData>{contactForm?.emailAddress}</TableData>
                   </td>
                   <td>
-                    <Text>{contactForm?.subject}</Text>
+                    <TableData>{contactForm?.subject}</TableData>
                   </td>
                   <td>
-                    <Text>{contactForm?.message}</Text>
+                    <TableData>{contactForm?.message}</TableData>
                   </td>
                   <td>
-                    <Link
-                      to={`/${userId}/${userType}/contact-form/${contactForm?.id}/view`}
-                    >
-                      <Button className='btn-md'>
-                        <i className='fas fa-edit'></i>
-                      </Button>
+                    <Link to={`/admin/contact-forms/${contactForm?.id}/view`}>
+                      <i
+                        className='fas fa-edit'
+                        style={{ color: '#d1d1d1' }}
+                      ></i>
                     </Link>
                   </td>
                   <td>
-                    <Button
-                      variant='danger'
-                      className='btn-md'
+                    <i
                       onClick={() => {
-                        setContactFormData(contactForm);
+                        setContactFormId(contactForm?.id);
                         setShow(true);
                       }}
-                    >
-                      <i className='fas fa-trash'></i>
-                    </Button>
+                      className='fas fa-trash'
+                      style={{ color: 'red' }}
+                    ></i>
                   </td>
-                </tr>
-              </CSSTransition>
-            ))}
-          </TransitionGroup>
-        </Table>
-      </div>
-    </>
+                </TableRow>
+              ))}
+            </tbody>
+          </Table>
+        )}
+      </ContentWrapper>
+    </TableContainer>
   );
 };
 

@@ -1,230 +1,138 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Col, Image, Spinner } from 'react-bootstrap';
-import { useLocation } from 'react-router-dom';
-import { Text } from '../components/elements';
-import LeftArrow from '../components/elements/LeftArrow';
+import { useQuery } from '@apollo/client';
+import { useContext, useEffect, useState } from 'react';
+import { Spinner } from 'react-bootstrap';
+import { useParams } from 'react-router-dom';
+import { Flex, Picture, Text } from '../components/elements';
+import StickyFooter from '../components/product-details/StickyFooter';
 import {
-  AddToCartBtn,
-  HorizontalLine,
+  Container,
+  Mask,
   ProductDetailsContainer,
   Quantity,
   SelectInput,
   SelectInputContainer,
-  ThirdColumnWrapper,
+  SizeAndQtyContainer,
 } from '../components/styles/product-details';
-import { AuthContext } from '../context/authContext';
+import { GET_PRODUCT_BY_ID } from '../queries/getProductById';
+import CartDrawer from '../components/product-details/CartDrawer';
+import { CartContext } from '../context/cartContext';
 
 const ProductDetails = () => {
-  const [qty, setQty] = useState<number>(1);
-  const [message, setMessage] = useState('');
-  const [size, setSize] = useState('');
+  const { id } = useParams();
+  const [qty, setQty] = useState<number | string>(1);
   const [outOfStock, setOutOfStock] = useState(false);
-  const context = useContext(AuthContext) as any;
-
+  const [size, setSize] = useState('');
   const {
-    state: { product },
-  } = useLocation() as any;
-  console.log(product);
+    cart: { success },
+  } = useContext(CartContext);
 
-  // useEffect(() => {
-  //   const isProduct = product !== undefined && Object.keys(product).length > 0;
+  const { loading, data } = useQuery(GET_PRODUCT_BY_ID, {
+    variables: { id },
+  });
 
-  //   if (isProduct) {
-  //     const objIndex = product?.sizes?.findIndex(
-  //       (obj: any) => obj?.size === size
-  //     );
-  //     const productAmount =
-  //       product?.sizes?.[objIndex >= 0 ? objIndex : 0]?.amount;
+  const product = data?.productById;
+  const count = product?.countInStock;
+  const amount = product?.sizes?.filter((item: any) => item?.size === size)[0]
+    ?.qty;
 
-  //     setSize(product?.sizes?.[objIndex >= 0 ? objIndex : 0]?.size);
+  useEffect(() => {
+    setSize(product?.sizes[0]?.size);
+  }, [product]);
 
-  //     if (productAmount === 0) return setOutOfStock(true);
-  //     if (productAmount >= 1) return setOutOfStock(false);
-  //   }
-  //   if (product?.countInStock === 0) return setOutOfStock(true);
-  //   if (product?.countInStock >= 1) return setOutOfStock(false);
-  // }, [product, size]);
+  useEffect(() => {
+    if (count === '0' || amount === '0') return setOutOfStock(true);
+    if (count >= 1 || amount >= 1) return setOutOfStock(false);
+  }, [count, amount]);
 
-  const addToCartHandler = (item?: any) => {
-    context.cart.addItemToCart(item, qty, size);
-  };
-
-  console.log('cart items: ', context.cart);
-
-  // if (errorProductPublicDetails)
-  //   return <Message variant='danger'>{errorProductPublicDetails}</Message>;
+  const arr = Array.from(
+    {
+      length: count ?? amount,
+    },
+    (_, i) => i
+  );
 
   return (
-    <div
-      style={{
-        padding: '128px 16px',
-        maxWidth: '1400px',
-        marginInline: 'auto',
-        width: '100%',
-      }}
-    >
-      <LeftArrow text='Shop' url='/shop' />
-      <ProductDetailsContainer>
-        <Image
-          src={product?.image}
-          alt={product?.name}
-          width='100%'
-          style={{
-            aspectRatio: '1/1',
-            objectFit: 'contain',
-            maxWidth: '600px',
-            marginBottom: '24px',
-          }}
-        />
-        <Col>
-          <Text fontSize={['28px']} fontWeight={['400']}>
-            {product?.name}
-          </Text>
-          <HorizontalLine margin='0 0 1rem 0' />
-          <div className='d-flex'>
-            <div style={{ position: 'relative' }}>
-              <Text style={{ position: 'absolute', top: '6px' }}>$</Text>
-            </div>
+    <>
+      <Container>
+        {success && <Mask />}
+        <CartDrawer />
+        {loading && <Spinner animation='border' />}
+        <ProductDetailsContainer>
+          <Picture
+            aspectratio={['1/1']}
+            objectfit={['contain']}
+            margin={['0 auto']}
+            background={['#edeff1']}
+            src={product?.displayUrl}
+            alt={product?.name}
+            width='100%'
+          />
+          <Flex flexDirection={['column']}>
             <Text
-              margin={['0 0 0.8rem 0.7rem']}
-              fontWeight={['bold']}
-              fontSize={['2rem']}
-              position={['relative']}
+              fontSize={['38px']}
+              fontWeight={['600']}
+              margin={['0 0 24px 0']}
             >
-              {product?.price?.toString()?.split('.')[0]}
-              <sup
-                style={{
-                  fontWeight: '500',
-                  fontSize: '0.8rem',
-                  top: '-15px',
-                }}
-              >
-                {product?.price?.toString()?.split('.')[1]}
-              </sup>
+              {product?.name}
             </Text>
-          </div>
-          {/* {message && (
-            <Message variant='success'>
-              {message} <span onClick={() => setMessage('')}>X</span>
-            </Message>
-          )} */}
-          {product?.sizes?.length !== 0 && (
-            <SelectInputContainer
-              style={{
-                width: '84px',
-                border: 0,
-                marginBottom: '1rem',
-              }}
-            >
-              <Quantity>Size</Quantity>
-              <SelectInput
-                value={size}
-                as='select'
-                onChange={(e: any) => setSize(e.target.value)}
-              >
-                {product?.sizes?.map((x: any, i: number) => (
-                  <option key={i} value={x?.size}>
-                    {x.size}
-                  </option>
-                ))}
-              </SelectInput>
-            </SelectInputContainer>
-          )}
-          <HorizontalLine margin='0 0 1rem 0' />
-          <Text fontWeight={['bold']}>About this item</Text>
-          <ul className='pl-4'>
-            {product?.description?.split('|').map((item: any, i: number) => (
-              <Text key={i}>
-                <li>{item}</li>
-              </Text>
-            ))}
-          </ul>
-        </Col>
-        <Col>
-          <ThirdColumnWrapper>
-            <div className='d-flex'>
-              <div style={{ position: 'relative' }}>
-                <Text style={{ position: 'absolute', top: '6px' }}>$</Text>
-              </div>
-              <Text
-                margin={['0 0 0.8rem 0.7rem']}
-                fontWeight={['bold']}
-                fontSize={['2rem']}
-                position={['relative']}
-              >
-                {product?.price?.toString()?.split('.')[0]}
-                <sup
-                  style={{
-                    fontWeight: '500',
-                    fontSize: '0.8rem',
-                    top: '-15px',
-                  }}
-                >
-                  {product?.price?.toString()?.split('.')[1]}
-                </sup>
-              </Text>
-            </div>
-            <Text
-              fontSize={['1.5rem']}
-              fontWeight={['500']}
-              fontFamily='Duru Sans'
-              margin={['0 0 0.2rem 0']}
-              style={{
-                textRendering: 'optimizeLegibility',
-                lineHeight: '24px',
-              }}
-            >
-              {outOfStock ? 'Not In stock' : 'In stock'}
-            </Text>
-            {!outOfStock && (
-              <>
-                <Text margin={['0 0 1rem 0']} fontWeight={['400']}>
-                  Usually ships within 4 to 5 days
+            <ul>
+              {product?.description?.split('|').map((item: any, i: number) => (
+                <Text key={i}>
+                  <li>{item}</li>
                 </Text>
-
-                <SelectInputContainer
-                  style={{
-                    width: '90px',
-                    marginBottom: '0.75rem',
-                  }}
+              ))}
+            </ul>
+            <SizeAndQtyContainer>
+              {outOfStock ? (
+                <Text
+                  fontSize={['1.5rem']}
+                  fontWeight={['500']}
+                  margin={['0 0 0.2rem 0']}
+                  lineHeight={['24px']}
                 >
-                  <Quantity>Qty</Quantity>
-                  <SelectInput
-                    value={qty}
-                    as='select'
-                    onChange={(e: any) => setQty(e.target.value)}
-                  >
-                    {[
-                      ...Array(
-                        product?.sizes?.length >= 1
-                          ? product?.sizes?.filter(
-                              (item: any) => item?.size === size
-                            )[0]?.amount === -1
-                            ? 0
-                            : product?.sizes?.filter(
-                                (item: any) => item?.size === size
-                              )[0]?.amount
-                          : product?.countInStock
-                      ).keys(),
-                    ].map((x: any, i: number) => (
-                      <option key={i} value={x?.amount}>
-                        {x + 1}
-                      </option>
-                    ))}
-                  </SelectInput>
-                </SelectInputContainer>
-              </>
-            )}
-            <AddToCartBtn
-              disabled={outOfStock}
-              onClick={() => addToCartHandler(product)}
-            >
-              Add To Cart
-            </AddToCartBtn>
-          </ThirdColumnWrapper>
-        </Col>
-      </ProductDetailsContainer>
-    </div>
+                  Not In Stock
+                </Text>
+              ) : (
+                <Flex>
+                  {!count && (
+                    <SelectInputContainer>
+                      <Quantity>Size</Quantity>
+                      <SelectInput
+                        value={size}
+                        as='select'
+                        onChange={(e: any) => setSize(e.target.value)}
+                      >
+                        {product?.sizes?.map((x: any, i: number) => (
+                          <option key={i}>{x.size}</option>
+                        ))}
+                      </SelectInput>
+                    </SelectInputContainer>
+                  )}
+                  <SelectInputContainer>
+                    <Quantity>Qty</Quantity>
+                    <SelectInput
+                      value={qty}
+                      as='select'
+                      onChange={(e: any) => setQty(e.target.value)}
+                    >
+                      {arr?.map((x: any, i: number) => (
+                        <option key={i}>{x + 1}</option>
+                      ))}
+                    </SelectInput>
+                  </SelectInputContainer>
+                </Flex>
+              )}
+            </SizeAndQtyContainer>
+          </Flex>
+        </ProductDetailsContainer>
+      </Container>
+      <StickyFooter
+        product={product}
+        qty={qty}
+        size={size}
+        outOfStock={outOfStock}
+      />
+    </>
   );
 };
 

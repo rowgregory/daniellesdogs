@@ -19,7 +19,11 @@ interface TextProps {
   textAlign?: string[];
   texttransform?: string;
   bottom?: string;
-  right?: string;
+  right?: string[];
+  transition?: string;
+  maxWidth?: string[];
+  alignSelf?: string[];
+  textShadow?: string[];
 }
 
 const Text = styled.div<TextProps>(
@@ -42,6 +46,10 @@ const Text = styled.div<TextProps>(
     texttransform: '',
     bottom: '',
     right: '',
+    transition: '',
+    maxWidth: '',
+    alignSelf: '',
+    textShadow: '',
   },
   ({
     fontSize,
@@ -62,6 +70,10 @@ const Text = styled.div<TextProps>(
     texttransform,
     bottom,
     right,
+    transition,
+    maxWidth,
+    alignSelf,
+    textShadow,
   }) => ({
     ...createMediaQueries([
       {
@@ -135,6 +147,22 @@ const Text = styled.div<TextProps>(
       {
         property: 'right',
         values: right,
+      },
+      {
+        property: 'transition',
+        values: transition,
+      },
+      {
+        property: 'max-width',
+        values: maxWidth,
+      },
+      {
+        property: 'align-self',
+        values: alignSelf,
+      },
+      {
+        property: 'text-shadow',
+        values: textShadow,
       },
     ]),
   })

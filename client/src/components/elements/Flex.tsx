@@ -10,6 +10,12 @@ interface FlexProps {
   flex?: string[];
   margin?: string[];
   width?: string[];
+  maxWidth?: string[];
+  padding?: string[];
+  cursor?: string[];
+  position?: string[];
+  transform?: string[];
+  borderBottom?: string[];
 }
 
 const Flex = styled.div<FlexProps>(
@@ -22,6 +28,12 @@ const Flex = styled.div<FlexProps>(
     flex: '',
     margin: '',
     width: '',
+    maxWidth: '',
+    padding: '',
+    cursor: '',
+    position: 'relative',
+    transform: '',
+    borderBottom: '',
   },
   ({
     display,
@@ -32,6 +44,12 @@ const Flex = styled.div<FlexProps>(
     flexWrap,
     margin,
     width,
+    maxWidth,
+    padding,
+    cursor,
+    position,
+    transform,
+    borderBottom,
   }) => ({
     ...createMediaQueries([
       {
@@ -65,6 +83,30 @@ const Flex = styled.div<FlexProps>(
       {
         property: 'width',
         values: width,
+      },
+      {
+        property: 'max-width',
+        values: maxWidth,
+      },
+      {
+        property: 'padding',
+        values: padding,
+      },
+      {
+        property: 'cursor',
+        values: cursor,
+      },
+      {
+        property: 'position',
+        values: position,
+      },
+      {
+        property: 'transform',
+        values: transform,
+      },
+      {
+        property: 'border-bottom',
+        values: borderBottom,
       },
     ]),
   })

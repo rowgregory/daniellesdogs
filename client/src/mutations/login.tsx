@@ -9,6 +9,7 @@ export const LOGIN = gql`
       tokenExpiration
       firstName
       userType
+      lastLoginTime
     }
   }
 `;

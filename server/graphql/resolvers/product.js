@@ -53,44 +53,31 @@ module.exports = {
       {
         productInput: {
           name,
-          image,
+          displayUrl,
           description,
           price,
           countInStock,
-          publicId,
-          isLimitedProduct,
           sizes,
+          category,
         },
       }
     ) {
       try {
         const createdProduct = await Product.create({
           name,
-          image,
+          displayUrl,
           description,
           price,
           countInStock,
-          publicId,
-          isLimitedProduct,
           sizes,
+          category,
         });
 
         await createdProduct.save();
 
-        writeToFile(
-          '/server/logs/success.txt',
-          '.🟢',
-          '.PRODUCT_CREATE',
-          `._id: ${createdProduct._id}`
-        );
         return createdProduct;
       } catch (err) {
-        writeToFile(
-          '/server/logs/error.txt',
-          '.🔴',
-          '.PRODUCT_CREATE',
-          `.error: ${err.message}`
-        );
+        console.error(err);
       }
     },
     async updateProduct(
@@ -99,13 +86,14 @@ module.exports = {
         id,
         productInput: {
           name,
-          image,
+          displayUrl,
           description,
           price,
           countInStock,
           publicId,
           isLimitedProduct,
           sizes,
+          category,
         },
       }
     ) {
@@ -114,13 +102,14 @@ module.exports = {
           { _id: id },
           {
             name,
-            image,
+            displayUrl,
             description,
             price,
             countInStock,
             publicId,
             isLimitedProduct,
             sizes,
+            category,
           }
         );
 

@@ -42,17 +42,18 @@ const bioValues = {
   emailAddress: '',
   title: '',
   description: '',
-  image: '',
+  displayUrl: '',
 };
 
 const productValues = {
   name: '',
-  image: '',
+  displayUrl: '',
   description: '',
   price: '',
   countInStock: '',
   publicId: '',
   sizes: [],
+  category: '',
 };
 
 const registerValues = {
@@ -107,6 +108,13 @@ const ncfWaiverValues = {
   signedWaiverDate: currentDate,
 };
 
+const serviceValues = {
+  title: '',
+  displayUrl: '',
+  description: '',
+  price: '',
+};
+
 export {
   petValues,
   newClientFormEditValues,
@@ -119,4 +127,5 @@ export {
   ncfVetValues,
   ncfPetsValues,
   ncfWaiverValues,
+  serviceValues,
 };

@@ -1,26 +1,28 @@
 import { useMutation, useQuery } from '@apollo/client';
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import {
-  FormContainer,
-  FormGroup,
-  FormInput,
-  FormLabel,
-  PageTitle,
-} from '../components/styles/form';
+import { FormGroup } from '../components/styles/form';
 import { Flex, Text } from '../components/elements';
-import { Alert, Button, Col, Form, Row, Spinner } from 'react-bootstrap';
+import { Alert, Col, Form, Row, Spinner } from 'react-bootstrap';
 import { GET_NEW_CLIENT_FORM_BY_ID } from '../queries/getNewClientFormById';
 import PetEditModal from '../components/PetEditModal';
 import { UPDATE_NEW_CLIENT_FORM } from '../mutations/updateNewClientForm';
 import styled from 'styled-components';
 import { GET_NEW_CLIENT_FORMS } from '../queries/getNewClientForms';
 import PetCreateModal from '../components/PetCreateModal';
-import NavigateBtns from '../components/NavigateBtns';
 import { useNCFEditForm } from '../utils/hooks/useNCFEditForm';
+import {
+  ContentWrapper,
+  GoBackLink,
+  Input,
+  Label,
+  SubNav,
+  TableContainer,
+} from '../components/styles/backend-tables';
+import ContinueBtn, { Continue } from '../components/ContinueBtn';
 
 const PetCard = styled.div`
-  background: ${({ theme }) => theme.secondaryBg};
+  background: #0e1117;
   width: 100%;
   padding: 2rem;
   border-radius: 0.875rem;
@@ -38,7 +40,7 @@ const PetCard = styled.div`
 
 const NewClientFormEdit = () => {
   const navigate = useNavigate();
-  const { formId, user_id, user_type } = useParams();
+  const { formId } = useParams();
   const [errors, setErrors] = useState([]) as any;
   const [showEditModal, setShowEditModal] = useState(false);
   const [id, setId] = useState(null) as any;
@@ -78,7 +80,7 @@ const NewClientFormEdit = () => {
         { query: GET_NEW_CLIENT_FORMS },
       ],
       onCompleted() {
-        navigate(`/${user_id}/${user_type}/new-client-forms`);
+        navigate(`/admin/new-client-forms`);
       },
     }
   );
@@ -96,202 +98,265 @@ const NewClientFormEdit = () => {
         setShow={setShowCreateModal}
         formId={formId}
       />
-      <FormContainer>
-        {loading && <Spinner animation='border' />}
-        <PageTitle>New Client Form</PageTitle>
-        <Form>
-          <Row className='mb-5'>
-            <Col md={5}>
-              <Text fontSize={['1.5rem']}>Basic Info</Text>
-              <FormGroup controlId='firstName'>
-                <FormLabel className='mb-1'>First Name</FormLabel>
-                <FormInput
-                  name='firstName'
-                  value={inputs.firstName || ''}
-                  type='text'
-                  onChange={handleInputChange}
-                />
-              </FormGroup>
-              <FormGroup controlId='lastName'>
-                <FormLabel className='mb-1'>Last Name</FormLabel>
-                <FormInput
-                  name='lastName'
-                  value={inputs.lastName || ''}
-                  type='text'
-                  onChange={handleInputChange}
-                />
-              </FormGroup>
-              <FormGroup controlId='emailAddress'>
-                <FormLabel className='mb-1'>Email Address</FormLabel>
-                <FormInput
-                  name='emailAddress'
-                  value={inputs.emailAddress || ''}
-                  type='text'
-                  onChange={handleInputChange}
-                />
-              </FormGroup>
-              <FormGroup controlId='phoneNumber'>
-                <FormLabel className='mb-1'>Phone Number</FormLabel>
-                <FormInput
-                  name='phoneNumber'
-                  value={inputs.phoneNumber || ''}
-                  type='text'
-                  onChange={handleInputChange}
-                />
-              </FormGroup>
-              <FormGroup
-                controlId='openYard'
-                className='d-flex align-items-center flex-row'
-              >
-                <Form.Check
-                  className='mt-3 mb-1'
-                  id='openYard'
-                  name='openYard'
-                  type='switch'
-                  checked={inputs.openYard}
-                  onChange={handleInputChange}
-                ></Form.Check>
-                <FormLabel className='mb-1'>
-                  Is your yard open for play dates?
-                </FormLabel>
-              </FormGroup>
-              <Text margin={['1.5rem 0 0 0']} fontSize={['1.5rem']}>
-                Address
-              </Text>
-              <FormGroup controlId='addressLine1'>
-                <FormLabel className='mb-1'>Address</FormLabel>
-                <FormInput
-                  name='addressLine1'
-                  value={inputs.address.addressLine1 || ''}
-                  type='text'
-                  onChange={handleInputChange}
-                />
-              </FormGroup>
-              <FormGroup controlId='city'>
-                <FormLabel className='mb-1'>City</FormLabel>
-                <FormInput
-                  name='city'
-                  value={inputs.address.city || ''}
-                  type='text'
-                  onChange={handleInputChange}
-                />
-              </FormGroup>
-              <FormGroup controlId='state'>
-                <FormLabel className='mb-1'>State</FormLabel>
-                <FormInput
-                  name='state'
-                  value={inputs.address.state || ''}
-                  type='text'
-                  onChange={handleInputChange}
-                />
-              </FormGroup>
-              <FormGroup controlId='zipPostalCode'>
-                <FormLabel className='mb-1'>Zip/Postal Code</FormLabel>
-                <FormInput
-                  name='zipPostalCode'
-                  value={inputs.address.zipPostalCode || ''}
-                  type='text'
-                  onChange={handleInputChange}
-                />
-              </FormGroup>
-              <Text margin={['1.5rem 0 0 0']} fontSize={['1.5rem']}>
-                Vet
-              </Text>
-              <FormGroup controlId='name'>
-                <FormLabel className='mb-1'>Name</FormLabel>
-                <FormInput
-                  name='name'
-                  value={inputs.vet.name || ''}
-                  type='text'
-                  onChange={handleInputChange}
-                />
-              </FormGroup>
-              <FormGroup controlId='address'>
-                <FormLabel className='mb-1'>Address</FormLabel>
-                <FormInput
-                  name='address'
-                  value={inputs.vet.address || ''}
-                  type='text'
-                  onChange={handleInputChange}
-                />
-              </FormGroup>
-              <FormGroup controlId='vetPhoneNumber'>
-                <FormLabel className='mb-1'>Phone Number</FormLabel>
-                <FormInput
-                  name='vetPhoneNumber'
-                  value={inputs.vet.phoneNumber || ''}
-                  type='number'
-                  onChange={handleInputChange}
-                />
-              </FormGroup>
-            </Col>
-            <Col md={3}>
-              <Text fontSize={['1.5rem']}>Pet</Text>
-              <Flex flexDirection={['column']}>
-                {data?.getNewClientFormById?.pets?.map(
-                  (pet: any, i: number) => (
-                    <PetCard
-                      key={i}
-                      onClick={() => {
-                        setId(pet.id);
-                        setShowEditModal(true);
-                      }}
+      <TableContainer>
+        <SubNav>
+          <GoBackLink to='/admin/new-client-forms'>
+            GO BACK&nbsp;&nbsp;
+            {(loading || loadingUpdate) && (
+              <Spinner
+                animation='border'
+                size='sm'
+                style={{ color: '#5a67ff' }}
+              />
+            )}
+          </GoBackLink>
+        </SubNav>
+        <ContentWrapper className='edit'>
+          <Form className='d-flex flex-column w-100'>
+            <Row className='mb-5'>
+              <Col md={8} sm={12}>
+                <Text
+                  color={['#ededed']}
+                  fontFamily='Roboto'
+                  margin={['1.5rem 0 12px 0']}
+                  fontSize={['16px']}
+                >
+                  Basic Info
+                </Text>
+                <FormGroup controlId='firstName'>
+                  <Label className='mb-1'>First Name</Label>
+                  <Input
+                    name='firstName'
+                    value={inputs.firstName || ''}
+                    type='text'
+                    onChange={handleInputChange}
+                  />
+                </FormGroup>
+                <FormGroup controlId='lastName'>
+                  <Label className='mb-1'>Last Name</Label>
+                  <Input
+                    name='lastName'
+                    value={inputs.lastName || ''}
+                    type='text'
+                    onChange={handleInputChange}
+                  />
+                </FormGroup>
+                <FormGroup controlId='emailAddress'>
+                  <Label className='mb-1'>Email Address</Label>
+                  <Input
+                    name='emailAddress'
+                    value={inputs.emailAddress || ''}
+                    type='text'
+                    onChange={handleInputChange}
+                  />
+                </FormGroup>
+                <FormGroup controlId='phoneNumber'>
+                  <Label className='mb-1'>Phone Number</Label>
+                  <Input
+                    name='phoneNumber'
+                    value={inputs.phoneNumber || ''}
+                    type='text'
+                    onChange={handleInputChange}
+                  />
+                </FormGroup>
+                <FormGroup
+                  controlId='openYard'
+                  className='d-flex align-items-center flex-row'
+                >
+                  <Form.Check
+                    className='mt-3 mb-1'
+                    id='openYard'
+                    name='openYard'
+                    type='switch'
+                    checked={inputs.openYard}
+                    onChange={handleInputChange}
+                  ></Form.Check>
+                  <Label className='mb-1'>
+                    Is your yard open for play dates?
+                  </Label>
+                </FormGroup>
+                <Text
+                  color={['#ededed']}
+                  fontFamily='Roboto'
+                  margin={['1.5rem 0 12px 0']}
+                  fontSize={['16px']}
+                >
+                  Address
+                </Text>
+                <FormGroup controlId='addressLine1'>
+                  <Label className='mb-1'>Address</Label>
+                  <Input
+                    name='addressLine1'
+                    value={inputs?.address?.addressLine1 || ''}
+                    type='text'
+                    onChange={handleInputChange}
+                  />
+                </FormGroup>
+                <FormGroup controlId='city'>
+                  <Label className='mb-1'>City</Label>
+                  <Input
+                    name='city'
+                    value={inputs?.address?.city || ''}
+                    type='text'
+                    onChange={handleInputChange}
+                  />
+                </FormGroup>
+                <FormGroup controlId='state'>
+                  <Label className='mb-1'>State</Label>
+                  <Input
+                    name='state'
+                    value={inputs?.address?.state || ''}
+                    type='text'
+                    onChange={handleInputChange}
+                  />
+                </FormGroup>
+                <FormGroup controlId='zipPostalCode'>
+                  <Label className='mb-1'>Zip/Postal Code</Label>
+                  <Input
+                    name='zipPostalCode'
+                    value={inputs?.address?.zipPostalCode || ''}
+                    type='text'
+                    onChange={handleInputChange}
+                  />
+                </FormGroup>
+                <Text
+                  color={['#ededed']}
+                  fontFamily='Roboto'
+                  margin={['1.5rem 0 12px 0']}
+                  fontSize={['16px']}
+                >
+                  Vet
+                </Text>
+                <FormGroup controlId='name'>
+                  <Label className='mb-1'>Name</Label>
+                  <Input
+                    name='name'
+                    value={inputs.vet.name || ''}
+                    type='text'
+                    onChange={handleInputChange}
+                  />
+                </FormGroup>
+                <FormGroup controlId='address'>
+                  <Label className='mb-1'>Address</Label>
+                  <Input
+                    name='address'
+                    value={inputs.vet.address || ''}
+                    type='text'
+                    onChange={handleInputChange}
+                  />
+                </FormGroup>
+                <FormGroup controlId='vetPhoneNumber'>
+                  <Label className='mb-1'>Phone Number</Label>
+                  <Input
+                    name='vetPhoneNumber'
+                    value={inputs.vet.phoneNumber || ''}
+                    type='number'
+                    onChange={handleInputChange}
+                  />
+                </FormGroup>
+              </Col>
+              <Col md={4} sm={12}>
+                <Text
+                  color={['#ededed']}
+                  fontFamily='Roboto'
+                  margin={['1.5rem 0 12px 0']}
+                  fontSize={['16px']}
+                >
+                  Pet
+                </Text>
+                <Flex flexDirection={['column']}>
+                  {data?.getNewClientFormById?.pets?.map(
+                    (pet: any, i: number) => (
+                      <PetCard
+                        key={i}
+                        onClick={() => {
+                          setId(pet.id);
+                          setShowEditModal(true);
+                        }}
+                      >
+                        <div className='d-flex'>
+                          <Text
+                            display={['flex']}
+                            flex={['1']}
+                            fontWeight={['800']}
+                            color={['#ededed']}
+                          >
+                            Name:
+                          </Text>
+                          <Text
+                            display={['flex']}
+                            flex={['1']}
+                            color={['#ededed']}
+                          >
+                            {pet.name}
+                          </Text>
+                        </div>
+                        <div className='d-flex'>
+                          <Text
+                            display={['flex']}
+                            flex={['1']}
+                            fontWeight={['800']}
+                            color={['#ededed']}
+                          >
+                            Breed:
+                          </Text>
+                          <Text
+                            display={['flex']}
+                            flex={['1']}
+                            color={['#ededed']}
+                          >
+                            {pet.breedString}
+                          </Text>
+                        </div>
+                        <div className='d-flex'>
+                          <Text
+                            display={['flex']}
+                            flex={['1']}
+                            fontWeight={['800']}
+                            color={['#ededed']}
+                          >
+                            Age:
+                          </Text>
+                          <Text
+                            display={['flex']}
+                            flex={['1']}
+                            color={['#ededed']}
+                          >
+                            {pet.age}
+                          </Text>
+                        </div>
+                      </PetCard>
+                    )
+                  )}
+                  <Continue
+                    onClick={(e: any) => {
+                      e.preventDefault();
+                      setShowCreateModal(true);
+                    }}
+                  >
+                    <Text
+                      texttransform='capitalize'
+                      color='#fff'
+                      fontFamily='Roboto'
+                      fontWeight={['500']}
                     >
-                      <div className='d-flex'>
-                        <Text
-                          display={['flex']}
-                          flex={['1']}
-                          fontWeight={['800']}
-                        >
-                          Name:
-                        </Text>
-                        <Text display={['flex']} flex={['1']}>
-                          {pet.name}
-                        </Text>
-                      </div>
-                      <div className='d-flex'>
-                        <Text
-                          display={['flex']}
-                          flex={['1']}
-                          fontWeight={['800']}
-                        >
-                          Breed:
-                        </Text>
-                        <Text display={['flex']} flex={['1']}>
-                          {pet.breedString}
-                        </Text>
-                      </div>
-                      <div className='d-flex'>
-                        <Text
-                          display={['flex']}
-                          flex={['1']}
-                          fontWeight={['800']}
-                        >
-                          Age:
-                        </Text>
-                        <Text display={['flex']} flex={['1']}>
-                          {pet.age}
-                        </Text>
-                      </div>
-                    </PetCard>
-                  )
-                )}
-                <Button onClick={() => setShowCreateModal(true)}>
-                  Add Pet
-                </Button>
-              </Flex>
-            </Col>
-          </Row>
-          <NavigateBtns
-            onSubmit={onSubmit}
-            text='Updat'
-            loading1={loadingUpdate}
-          />
-        </Form>
+                      Add Pet
+                    </Text>
+                  </Continue>
+                </Flex>
+              </Col>
+            </Row>
+            <ContinueBtn
+              onSubmit={onSubmit}
+              text='Update'
+              loading1={loadingUpdate}
+            />
+          </Form>
+        </ContentWrapper>
         {errors.map((error: any, i: number) => (
           <Alert key={i}>{error.message}</Alert>
         ))}
-      </FormContainer>
+      </TableContainer>
     </>
   );
 };

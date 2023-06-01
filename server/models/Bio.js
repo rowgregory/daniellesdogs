@@ -7,8 +7,7 @@ const Bio = Schema(
     emailAddress: { type: String },
     title: { type: String },
     description: { type: String },
-    image: { type: String },
-    publicId: { type: String },
+    displayUrl: { type: String },
   },
   { timestaps: true }
 );

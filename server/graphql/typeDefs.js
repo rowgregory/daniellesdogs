@@ -1,6 +1,8 @@
 const { gql } = require('apollo-server');
 
 module.exports = gql`
+  scalar String
+
   enum Frequency {
     DAILY
     WEEKLY
@@ -22,10 +24,11 @@ module.exports = gql`
   }
 
   type Service {
-    serviceType: String
-    status: Status
-    frequency: Frequency!
-    amount: String
+    id: ID
+    displayUrl: String
+    title: String
+    price: String
+    description: String
   }
 
   type User {
@@ -40,10 +43,10 @@ module.exports = gql`
     tokenExpiration: String
     pinCode: String
     keyLocation: String
-    services: [Service]
     address: Address
     newClientForm: NewClientForm
     userType: UserType
+    lastLoginTime: String
   }
 
   type Vet {
@@ -78,9 +81,6 @@ module.exports = gql`
     afterMeetingNotes: String
     user: User
     address: Address
-    signedWaiver: Boolean
-    signedWaiverSignature: String
-    signedWaiverDate: String
   }
 
   type Address {
@@ -92,7 +92,6 @@ module.exports = gql`
   }
 
   type AuthTokens {
-    accessToken: String
     refreshToken: String
   }
 
@@ -102,12 +101,14 @@ module.exports = gql`
 
   type GalleryImage {
     id: ID
-    publicId: String
-    secureUrl: String
-    height: String
-    width: String
-    format: String
-    bytes: String
+    displayUrl: String
+    width: Int
+    height: Int
+    mimetype: String
+    title: String
+    size: Int
+    mediumImgUrl: String
+    thumbUrl: String
   }
 
   type ContactForm {
@@ -117,6 +118,7 @@ module.exports = gql`
     emailAddress: String
     subject: String
     message: String
+    createdAt: String
   }
 
   type Bio {
@@ -126,8 +128,7 @@ module.exports = gql`
     emailAddress: String
     title: String
     description: String
-    image: String
-    publicId: String
+    displayUrl: String
   }
 
   type Size {
@@ -138,11 +139,10 @@ module.exports = gql`
   type Product {
     id: ID
     name: String
-    image: String
+    displayUrl: String
     description: String
     price: String
     countInStock: String
-    publicId: String
     sizes: [Size]
     category: String
   }
@@ -150,6 +150,65 @@ module.exports = gql`
   type Passcode {
     id: ID
     passcode: String
+  }
+
+  type OrderItem {
+    name: String!
+    qty: Int
+    displayUrl: String!
+    price: Float!
+    product: Product!
+    size: String
+  }
+
+  type Order {
+    id: ID!
+    orderItems: [OrderItem!]!
+    shippingAddress: Address
+    taxPrice: Float!
+    shippingPrice: Float
+    totalPrice: Float!
+    paidOn: String
+    isShipped: Boolean
+    shippedOn: String
+    paypalOrderId: String!
+    name: String!
+    emailAddress: String!
+    cellPhoneNumber: String
+    town: String
+    createdAt: String!
+    updatedAt: String!
+  }
+
+  type Totals {
+    orderCount: Int!
+    newClientFormCount: Int!
+    galleryImageCount: Int!
+    contactFormCount: Int!
+  }
+
+  type BarChartData {
+    datasets: [Float!]
+  }
+  type TransformedNewClientForm {
+    firstName: String
+    lastName: String
+    emailAddress: String
+    phoneNumber: String
+    pets: [String]
+  }
+
+  type RecentOrders {
+    displayUrl: String
+    name: String
+    productName: String
+    totalPrice: Float
+    id: ID
+  }
+
+  type UpdateOrderResult {
+    success: Boolean!
+    message: String
   }
 
   input AddressInput {
@@ -191,9 +250,6 @@ module.exports = gql`
     pets: [PetInput]
     vet: VetInput
     afterMeetingNotes: String
-    signedWaiver: Boolean
-    signedWaiverSignature: String
-    signedWaiverDate: String
   }
 
   input NewClientFormEditInput {
@@ -221,8 +277,10 @@ module.exports = gql`
   }
 
   input ServiceInput {
-    serviceType: String
-    frequency: Frequency
+    displayUrl: String
+    title: String
+    price: String
+    description: String
   }
 
   input ContactFormInput {
@@ -239,8 +297,7 @@ module.exports = gql`
     emailAddress: String
     title: String
     description: String
-    image: String
-    publicId: String
+    displayUrl: String
   }
 
   input SizeInput {
@@ -250,13 +307,47 @@ module.exports = gql`
 
   input ProductInput {
     name: String
-    image: String
+    displayUrl: String
     description: String
     price: String
     countInStock: String
-    publicId: String
     sizes: [SizeInput]
     category: String
+  }
+
+  input GalleryImageInput {
+    displayUrl: String
+    width: Int
+    height: Int
+    mimetype: String
+    title: String
+    size: Int
+    mediumImgUrl: String
+    thumbUrl: String
+  }
+
+  input OrderInput {
+    shippingAddress: AddressInput
+    taxPrice: Float!
+    shippingPrice: Float
+    totalPrice: Float!
+    paypalOrderId: String!
+    orderItems: [OrderItemInput!]
+    name: String!
+    emailAddress: String!
+    cellPhoneNumber: String
+    town: String
+  }
+
+  input OrderItemInput {
+    countInStock: String
+    name: String
+    qty: Int
+    displayUrl: String
+    price: String
+    product: ID
+    size: String
+    sizes: [SizeInput]
   }
 
   type Query {
@@ -266,7 +357,6 @@ module.exports = gql`
     getNewClientFormById(id: ID!): NewClientForm
     getNewClientForms: [NewClientForm]
     getServiceById(id: ID!): Service
-    getServices: [Service]
     getPetById(id: ID!): Pet
     galleryImageList: [GalleryImage]
     bioList: [Bio]
@@ -276,6 +366,14 @@ module.exports = gql`
     productList: [Product]
     productById(id: ID!): Product
     retreivePasscode: String
+    getOrderById(id: ID!): Order
+    orderList: [Order]
+    getOrdersClientsGalleryImagesContactFormsTotals: Totals!
+    getSalesByMonth: BarChartData!
+    getTransformedNewClientForm: [TransformedNewClientForm]
+    getRecentOrders: [RecentOrders]
+    serviceList: [Service]
+    serviceById(id: ID!): Service
   }
 
   type Mutation {
@@ -283,10 +381,10 @@ module.exports = gql`
     register(registerInput: RegisterInput): User
     createNewClientForm(newClientFormInput: NewClientFormInput): NewClientForm
     updateNewClientForm(
-      id: ID!
-      userId: ID!
-      addressId: ID!
-      vetId: ID!
+      id: ID
+      userId: ID
+      addressId: ID
+      vetId: ID
       newClientFormEditInput: NewClientFormEditInput
     ): NewClientForm
     deleteNewClientForm(
@@ -297,18 +395,24 @@ module.exports = gql`
       addressId: ID
     ): NewClientForm
     createService(serviceInput: ServiceInput): Service
+    updateService(id: ID!, serviceInput: ServiceInput): Service
+    deleteService(id: ID!): Service
     updatePet(id: ID!, petEditInput: PetInput): Pet
     createPet(id: ID, petCreateInput: PetInput): Pet
     deletePet(id: ID!): Pet
     getRefreshToken(userType: String, firstName: String): AuthTokens
     deleteGalleryImage(id: ID!): Message
+    createGalleryImage(galleryImageInput: GalleryImageInput): GalleryImage
     createContactForm(contactFormInput: ContactFormInput): ContactForm
+    deleteContactForm(id: ID!): ContactForm
     createBio(bioInput: BioInput): Bio
     updateBio(id: ID!, bioInput: BioInput): Bio
     deleteBio(id: ID!): Bio
-    deleteContactForm(id: ID!): ContactForm
     createProduct(productInput: ProductInput): Product
     updateProduct(id: ID!, productInput: ProductInput): Product
     deleteProduct(id: ID!): Product
+    createOrder(orderInput: OrderInput!): Order!
+    logoutUser(id: ID!): User
+    updateOrderToShipped(id: ID!): UpdateOrderResult
   }
 `;

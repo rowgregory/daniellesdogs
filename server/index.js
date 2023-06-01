@@ -17,24 +17,12 @@ const {
 } = require('apollo-server-core');
 const { InMemoryLRUCache } = require('@apollo/utils.keyvaluecache');
 const cors = require('cors');
-const cloudinary = require('cloudinary');
-const multer = require('multer');
-const streamifier = require('streamifier');
-const GalleryImage = require('./models/GalleryImage.js');
-const writeToFile = require('./utils/writeToFile');
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
 connectDB();
-
-cloudinary.v2.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-  secure: true,
-});
 
 const httpServer = http.createServer(app);
 
@@ -52,6 +40,7 @@ const createContext = ({ req, res }) => {
   let auth = null;
 
   const token = headers?.authorization?.split(' ')[1];
+
   if (token) {
     const user = jwt.verify(token, 'secret_password');
     if (user) auth = user;
@@ -75,6 +64,14 @@ const permissions = shield(
       productList: allow,
       productById: allow,
       retreivePasscode: allow,
+      getOrderById: allow,
+      orderList: isAdmin,
+      getOrdersClientsGalleryImagesContactFormsTotals: isAdmin,
+      getSalesByMonth: isAdmin,
+      getTransformedNewClientForm: isAdmin,
+      getRecentOrders: isAdmin,
+      serviceList: allow,
+      serviceById: isAdmin,
     },
     Mutation: {
       login: allow,
@@ -87,6 +84,7 @@ const permissions = shield(
       deletePet: isAdmin,
       getRefreshToken: allow,
       deleteGalleryImage: isAdmin,
+      createGalleryImage: isAdmin,
       createContactForm: allow,
       createBio: isAdmin,
       updateBio: isAdmin,
@@ -95,84 +93,18 @@ const permissions = shield(
       createProduct: isAdmin,
       updateProduct: isAdmin,
       deleteProduct: isAdmin,
+      createOrder: allow,
+      logoutUser: allow,
+      createService: isAdmin,
+      updateService: isAdmin,
+      deleteService: isAdmin,
+      updateOrderToShipped: isAdmin,
     },
   },
   {
     debug: true,
   }
 );
-
-const fileUpload = multer();
-
-app
-  .route('/upload')
-  .post(fileUpload.single('image'), function (req, res, next) {
-    try {
-      let streamUpload = req => {
-        return new Promise((resolve, reject) => {
-          let stream = cloudinary.v2.uploader.upload_stream((error, result) => {
-            if (result) {
-              resolve(result);
-            } else {
-              reject(error);
-            }
-          });
-
-          streamifier.createReadStream(req.file.buffer).pipe(stream);
-        });
-      };
-
-      async function upload(req) {
-        try {
-          let result = await streamUpload(req);
-
-          if (req.body.isGalleryImage === 'true') {
-            const createdGalleryImage = new GalleryImage({
-              publicId: result.public_id,
-              secureUrl: result.secure_url,
-              height: result.height,
-              width: result.width,
-              format: result.format,
-              bytes: result.bytes,
-            });
-
-            await createdGalleryImage.save();
-          }
-
-          writeToFile(
-            '/server/logs/success.txt',
-            '.🟢',
-            '.IMAGE_UPLOAD',
-            `.publicId: ${result.public_id}`
-          );
-
-          res.send({
-            message: 'IMAGE_UPLOAD_SUCCESS',
-            public_id: result.public_id,
-            secure_url: result.secure_url,
-          });
-        } catch (err) {
-          writeToFile('/server/logs/error.txt', '.🔴', '.IMAGE_UPLOAD.', err);
-          res.send(err.message);
-        }
-      }
-
-      upload(req);
-    } catch (error) {
-      console.log('ERROR: ', error);
-    }
-  });
-
-app.route('/upload/:id').post((req, res, next) => {
-  const publicId = req.params.id;
-  try {
-    cloudinary.uploader.destroy(publicId, result => {
-      res.send(result);
-    });
-  } catch (error) {
-    console.log('ERROR: ', error);
-  }
-});
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));

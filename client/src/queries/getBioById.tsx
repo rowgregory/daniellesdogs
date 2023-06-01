@@ -9,8 +9,7 @@ export const GET_BIO_BY_ID = gql`
       emailAddress
       title
       description
-      image
-      publicId
+      displayUrl
     }
   }
 `;

@@ -1,76 +1,93 @@
 import { useQuery } from '@apollo/client';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Carousel, Image, Spinner } from 'react-bootstrap';
 import { FormContainer, PageTitle } from '../components/styles/form';
+import { GALLERY_IMAGE_LIST } from '../queries/galleryImageList';
 import {
-  CloseBtn,
-  FullScreenImage,
   GalleryGrid,
   GalleryImage,
   Toggle,
 } from '../components/styles/gallery';
-import { GALLERY_IMAGE_LIST } from '../queries/galleryImageList';
+import { Flex, Text } from '../components/elements';
 
 const Gallery = () => {
-  const { data } = useQuery(GALLERY_IMAGE_LIST);
+  const { data, loading } = useQuery(GALLERY_IMAGE_LIST);
   const [isGrid, setIsGrid] = useState(true) as any;
   const [index, setIndex] = useState(0);
-  const [fullScreen, setFullScreen] = useState('');
-  let [loadingImages, setLoading] = useState(true);
 
   const handleSelect = (selectedIndex: any) => {
     setIndex(selectedIndex);
   };
 
+  const noImages = data?.galleryImageList?.length === 0;
+
   return (
     <>
-      {fullScreen === '' && (
+      {!noImages && (
         <Toggle
           onClick={() => {
-            setFullScreen('');
             setIsGrid(!isGrid);
           }}
         >
-          {isGrid ? 'Slide Show' : 'Grid'}
+          {isGrid ? (
+            <i className='fa-brands fa-slideshare fa-2x'></i>
+          ) : (
+            <i className='fa-solid fa-grip fa-2x'></i>
+          )}
         </Toggle>
       )}
-      {fullScreen !== '' && (
-        <>
-          <CloseBtn
-            onClick={() => setFullScreen('')}
-            className='fas fa-times fa-2x'
-          ></CloseBtn>
-          <FullScreenImage src={fullScreen} />
-        </>
-      )}
-      {isGrid && fullScreen === '' && (
+      {isGrid && (
         <FormContainer>
           <PageTitle>Gallery</PageTitle>
-          {loadingImages && <Spinner animation='border' />}
+          {noImages && <Text>Check back soon</Text>}
           <GalleryGrid>
-            {data?.galleryImageList?.map((img: any, i: number) => (
-              <GalleryImage
-                onLoad={() => setLoading(false)}
-                key={i}
-                src={img?.secureUrl}
-                onClick={() => setFullScreen(img.secureUrl)}
-              />
-            ))}
+            {loading ? (
+              <Flex
+                style={{ aspectRatio: '1/1' }}
+                width={['100%']}
+                justifyContent={['center']}
+                alignItems={['center']}
+              >
+                <Spinner animation='border' />
+              </Flex>
+            ) : (
+              data?.galleryImageList?.map((img: any, i: number) => (
+                <GalleryImage
+                  key={i}
+                  src={img?.mediumImgUrl}
+                  onClick={() => {
+                    setIsGrid(false);
+                    setIndex(i);
+                  }}
+                />
+              ))
+            )}
           </GalleryGrid>
         </FormContainer>
       )}
       {!isGrid && (
-        <Carousel interval={2000} activeIndex={index} onSelect={handleSelect}>
+        <Carousel
+          interval={2000}
+          activeIndex={index}
+          onSelect={handleSelect}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            bottom: 0,
+            right: 0,
+            zIndex: 202,
+          }}
+        >
           {data?.galleryImageList?.map((img: any, i: number) => (
             <Carousel.Item key={i} style={{ height: '100vh' }}>
               <Image
                 fluid
-                className='h-100 d-block mx-auto'
-                src={img.secureUrl}
+                className='h-100 d-block'
+                src={img.mediumImgUrl}
                 alt={`Gallery Image - ${img._id}`}
-                style={{
-                  objectFit: 'cover',
-                }}
+                style={{ objectFit: 'cover' }}
+                width='100%'
               />
             </Carousel.Item>
           ))}

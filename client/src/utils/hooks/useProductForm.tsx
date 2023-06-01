@@ -4,21 +4,19 @@ import { productValues } from '../form-values/values';
 export const useProductForm = (callback: any, data: any) => {
   const [inputs, setInputs] = useState(productValues);
 
-  console.log('data: ', data);
-
   useEffect(() => {
     if (data?.productById) {
-      const {
-        productById: { name, image, price, description, countInStock, sizes },
-      } = data;
+      const product = data?.productById;
+
       setInputs((inputs: any) => ({
         ...inputs,
-        name,
-        image,
-        price,
-        description,
-        countInStock,
-        sizes,
+        name: product?.name,
+        displayUrl: product?.displayUrl,
+        price: product?.price,
+        description: product?.description,
+        countInStock: product?.countInStock,
+        sizes: product?.sizes,
+        category: product?.category,
       }));
     }
   }, [data]);

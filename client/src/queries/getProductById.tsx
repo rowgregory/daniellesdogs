@@ -5,11 +5,11 @@ export const GET_PRODUCT_BY_ID = gql`
     productById(id: $id) {
       id
       name
-      image
+      displayUrl
       description
       price
       countInStock
-      publicId
+      category
       sizes {
         size
         qty

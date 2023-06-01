@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Form } from 'react-bootstrap';
 import { useMutation } from '@apollo/client';
 import { useForm } from '../utils/hooks/useForm';
@@ -21,7 +21,6 @@ import GraphQLAlert from '../components/elements/GraphQLAlert';
 
 const Login = () => {
   const context = useContext(AuthContext);
-  const navigate = useNavigate();
   const [errors, setErrors] = useState([]) as any;
   const [graphqlErrors, setGraphQLErrors] = useState([]) as any;
 
@@ -49,11 +48,11 @@ const Login = () => {
             tokenExpiration: user.tokenExpiration,
             firstName: user.firstName,
             userType: user.userType,
+            lastLoginTime: user.lastLoginTime,
           },
         },
       });
       context.login(user);
-      navigate(`/${user.id}/${user.userType}/dashboard`);
     },
     onError({ graphQLErrors }) {
       setGraphQLErrors(graphQLErrors);

@@ -7,10 +7,10 @@ export const FormContainer = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   padding: 7.5rem 1rem 5rem 1rem;
-  max-width: 75rem;
+  max-width: ${({ theme }) => theme.breakpoints[1]};
   width: 100%;
   margin: 0 auto;
-  /* height: 100vh; */
+  min-height: calc(100vh - 617px);
 `;
 
 export const FormInput = styled.input`
@@ -58,7 +58,7 @@ export const FormLabel = styled(Form.Label)`
   font-size: 0.6875rem;
   font-weight: 700;
   text-transform: uppercase;
-  font-family: 'Oxygen', sans-serif;
+  font-family: Roboto;
   margin-top: 1rem;
   margin-bottom: 0;
 `;

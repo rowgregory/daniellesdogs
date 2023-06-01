@@ -73,7 +73,7 @@ const NewClientFormVet = () => {
           />
           <ErrorText>{errors?.address}</ErrorText>
         </FormGroup>
-        <FormGroup controlId='phoneNumber'>
+        <FormGroup controlId='phoneNumber' className='mb-4'>
           <FormLabel>Phone Number</FormLabel>
           <FormInput
             name='phoneNumber'
@@ -83,7 +83,7 @@ const NewClientFormVet = () => {
           />
           <ErrorText>{errors?.phoneNumber}</ErrorText>
         </FormGroup>
-        <ContinueBtn onSubmit={onSubmit} text='Continu' loading1={loading} />
+        <ContinueBtn onSubmit={onSubmit} text='Continue' loading1={loading} />
       </Form>
     </FormContainer>
   );

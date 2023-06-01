@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Text } from '../elements';
 
 export const BannerLogoText = styled(Text)`
+  width: max-content;
   position: relative;
   &::before {
     content: '';
@@ -34,12 +35,16 @@ export const Skew = styled.div`
   div {
     transform-origin: top left;
     transform: skewY(-10deg);
-    height: 500px;
+    height: 200px;
     background: linear-gradient(
       90deg,
       rgb(15, 15, 15) 0%,
       rgb(35, 35, 35) 100%
     );
+
+    @media screen and (min-width: ${({ theme }) => theme.breakpoints[0]}) {
+      height: 500px;
+    }
   }
 `;
 export const Skew2 = styled.div`
@@ -49,12 +54,16 @@ export const Skew2 = styled.div`
   div {
     transform-origin: top left;
     transform: skewY(10deg);
-    height: 500px;
+    height: 200px;
     background: linear-gradient(
       90deg,
       rgb(15, 15, 15) 0%,
       rgb(35, 35, 35) 100%
     );
+
+    @media screen and (min-width: ${({ theme }) => theme.breakpoints[0]}) {
+      height: 500px;
+    }
   }
 `;
 
@@ -128,7 +137,7 @@ export const TextStyled = styled(Text)`
 
 export const ImageGallery = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr;
   width: 100%;
   transition: 1000ms;
   background: linear-gradient(90deg, rgb(15, 15, 15) 0%, rgb(35, 35, 35) 100%);
@@ -143,6 +152,10 @@ export const ImageGallery = styled.div`
     width: 100%;
     height: 100%;
     aspect-ratio: 1/1;
+  }
+
+  @media screen and (min-width: ${({ theme }) => theme.breakpoints[1]}) {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 `;
 
@@ -193,7 +206,7 @@ export const IntroSection = styled.div`
   flex-direction: column;
   position: relative;
   padding-top: 12.5rem;
-  @media screen and (min-width: ${({ theme }) => theme.breakpoints[1]}) {
+  @media screen and (min-width: ${({ theme }) => theme.breakpoints[0]}) {
     flex-direction: row;
   }
 `;

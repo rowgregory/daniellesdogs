@@ -321,7 +321,11 @@ export const validateContactForm = (
   return formIsValid;
 };
 
-export const validateBio = (setErrors: (errors: any) => void, inputs: any) => {
+export const validateBio = (
+  setErrors: (errors: any) => void,
+  inputs: any,
+  doNotValidateImage?: boolean
+) => {
   let formIsValid = true;
   if (!inputs?.firstName) {
     formIsValid = false;
@@ -374,7 +378,7 @@ export const validateBio = (setErrors: (errors: any) => void, inputs: any) => {
   } else {
     setErrors((errors: any) => ({ ...errors, description: '' }));
   }
-  if (!inputs?.image) {
+  if (!inputs?.image && !doNotValidateImage) {
     formIsValid = false;
     setErrors((errors: any) => ({
       ...errors,
@@ -389,7 +393,8 @@ export const validateBio = (setErrors: (errors: any) => void, inputs: any) => {
 
 export const validateProduct = (
   setErrors: (errors: any) => void,
-  inputs: any
+  inputs: any,
+  isEdit?: boolean
 ) => {
   let formIsValid = true;
   if (!inputs?.name) {
@@ -401,7 +406,7 @@ export const validateProduct = (
   } else {
     setErrors((errors: any) => ({ ...errors, name: '' }));
   }
-  if (!inputs?.image) {
+  if (!inputs?.image && !isEdit) {
     formIsValid = false;
     setErrors((errors: any) => ({
       ...errors,
@@ -427,6 +432,15 @@ export const validateProduct = (
     }));
   } else {
     setErrors((errors: any) => ({ ...errors, price: '' }));
+  }
+  if (!inputs?.category) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      category: 'Choose category to continue.',
+    }));
+  } else {
+    setErrors((errors: any) => ({ ...errors, category: '' }));
   }
 
   return formIsValid;
@@ -520,6 +534,52 @@ export const validateLogin = (
     }));
   } else {
     setErrors((errors: any) => ({ ...errors, password: '' }));
+  }
+
+  return formIsValid;
+};
+
+export const validateService = (
+  setErrors: (errors: any) => void,
+  inputs: any
+) => {
+  let formIsValid = true;
+  if (!inputs?.title) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      title: 'Enter a title to continue.',
+    }));
+  } else {
+    setErrors((errors: any) => ({ ...errors, title: '' }));
+  }
+  if (!inputs?.displayUrl) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      displayUrl: 'Choose image to continue.',
+    }));
+  } else {
+    setErrors((errors: any) => ({ ...errors, displayUrl: '' }));
+  }
+
+  if (!inputs?.price) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      price: 'Enter price to continue.',
+    }));
+  } else {
+    setErrors((errors: any) => ({ ...errors, price: '' }));
+  }
+  if (!inputs?.description) {
+    formIsValid = false;
+    setErrors((errors: any) => ({
+      ...errors,
+      description: 'Enter description to continue.',
+    }));
+  } else {
+    setErrors((errors: any) => ({ ...errors, description: '' }));
   }
 
   return formIsValid;

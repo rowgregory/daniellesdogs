@@ -1,30 +1,57 @@
-import Flexible from '../components/svg/Flexible';
-import Convenience from '../components/svg/Convenience';
-import PhotoUpdates from '../components/svg/PhotoUpdates';
-import Communication from '../components/svg/Communication';
 import S1 from '../components/assets/service_1.png';
 import S2 from '../components/assets/service_2.png';
 import S3 from '../components/assets/service_3.png';
 import S4 from '../components/assets/service_4.png';
-import Fifth from '../components/assets/fifth.jpeg';
-import Thirteenth from '../components/assets/thirteenth.jpeg';
+import M1 from '../components/assets/M1.png';
+import M2 from '../components/assets/M2.png';
+import M3 from '../components/assets/M3.png';
+import M4 from '../components/assets/M4.png';
+import M5 from '../components/assets/M5.png';
+import M6 from '../components/assets/M6.png';
+import M7 from '../components/assets/M7.jpeg';
+import M8 from '../components/assets/M8.png';
+import M9 from '../components/assets/M9.png';
+import M10 from '../components/assets/M10.png';
+import M11 from '../components/assets/M11.png';
+import M12 from '../components/assets/M12.png';
+import M13 from '../components/assets/M13.jpeg';
+import M14 from '../components/assets/M14.jpeg';
+import M15 from '../components/assets/M15.jpeg';
+import M16 from '../components/assets/M16.jpeg';
+import M17 from '../components/assets/M17.jpeg';
+import M18 from '../components/assets/M18.jpeg';
+import M19 from '../components/assets/M19.jpeg';
+import M20 from '../components/assets/M20.jpeg';
+import M21 from '../components/assets/M21.jpeg';
+import M22 from '../components/assets/M22.jpeg';
+import M23 from '../components/assets/M23.jpeg';
+import M24 from '../components/assets/M24.jpeg';
+
+import Flexibility from '../components/assets/flexibility.png';
+import Convenience from '../components/assets/convenience.png';
+import Communication from '../components/assets/communication.png';
+import TextAndUpdates from '../components/assets/textAndUpdates.png';
 
 export const setsUsApartData = [
   {
-    icon: <Flexible />,
+    icon: Flexibility,
     text: 'Flexibility',
+    desc: 'Our walking business stands out with its exceptional flexibility, accommodating diverse schedules and adapting to individual needs. We prioritize offering convenient and customizable walking services, ensuring both clients and their furry companions enjoy the utmost convenience and satisfaction.',
   },
   {
-    icon: <Convenience />,
+    icon: Convenience,
     text: 'Convenience',
+    desc: `Our walking business excels in providing unparalleled convenience. With hassle-free booking, flexible scheduling, and personalized services, we make it effortless for clients to prioritize their dog's exercise needs while fitting seamlessly into their busy lifestyles.`,
   },
   {
-    icon: <Communication />,
-    text: 'Communcation',
+    icon: Communication,
+    text: 'Communication',
+    desc: `Communication is a key strength of our walking business. We prioritize clear and prompt communication with our clients, keeping them informed about their dog's walks, sharing updates and photos, and addressing any concerns or preferences. Building trust through effective communication is our top priority.`,
   },
   {
-    icon: <PhotoUpdates />,
+    icon: TextAndUpdates,
     text: `Photo & Text Updates`,
+    desc: `Our walking business goes the extra mile by providing photo and text updates during each walk. Clients can stay connected with their furry friends, receiving real-time updates and capturing joyful moments, ensuring peace of mind and a delightful experience for both pets and owners.`,
   },
 ];
 
@@ -68,53 +95,31 @@ export const SplitTextToChars = (textNode: any) => {
 
 export const imgArr = [
   {
-    first:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1660264184/M1_cucuux.png',
-    second:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1660265747/M10-min_z6pywe.png',
-    third: Thirteenth,
-    fourth:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1660265350/M2-min_khrx2h.png',
-    fifth:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1660265415/M3-min_lcsyzv.png',
-    sixth:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1660265446/M4-min_kes7ya.png',
-    seventh:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1660265453/M5-min_koc06p.png',
-    eigth:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1660265533/M6-min_rzhgqq.png',
-    ninth:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1660265562/M7-min_jvix21.png',
-    tenth:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1662833624/IMG_5634_jcwygm.png',
-    eleventh:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1663008137/IMG_2013_za0pih.png',
-    twelth:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1663008476/IMG_5597_eo0rsf.jpg',
+    first: M1,
+    second: M2,
+    third: M3,
+    fourth: M4,
+    fifth: M5,
+    sixth: M6,
+    seventh: M7,
+    eigth: M8,
+    ninth: M9,
+    tenth: M10,
+    eleventh: M11,
+    twelth: M12,
   },
   {
-    first:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1663007945/IMG_7775_te5poe.png',
-    second:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1663007808/IMG_7823_lmunws.png',
-    third:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1663007800/IMG_6175_hi89pi.jpg',
-    fourth:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1660265599/M8-min_jtw364.png',
-    fifth:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1662834144/Screenshot_2022-07-28_at_5.10.42_PM_fig1vy.png',
-    sixth:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1660265650/M11-min_s0yxxn.png',
-    seventh: Fifth,
-    eigth:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1663008138/IMG_1192_d7ahmz.png',
-    ninth:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1662833626/IMG_5423_f5dgii.png',
-    tenth:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1662833624/IMG_0271_hzwto8.png',
-    eleventh:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1662833607/IMG_2909_jzizco.png',
-    twelth:
-      'https://res.cloudinary.com/dxc6zj0ir/image/upload/v1662833619/IMG_5661_wmbxxo.png',
+    first: M13,
+    second: M14,
+    third: M15,
+    fourth: M16,
+    fifth: M17,
+    sixth: M18,
+    seventh: M19,
+    eigth: M20,
+    ninth: M21,
+    tenth: M22,
+    eleventh: M23,
+    twelth: M24,
   },
 ];

@@ -1,4 +1,5 @@
 export const categories = [
+  'Choose Category',
   'Clothing',
   'Pet Supplies',
   'Outdoors',

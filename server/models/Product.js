@@ -10,7 +10,7 @@ const ProductSchema = Schema(
       type: String,
       required: true,
     },
-    image: {
+    displayUrl: {
       type: String,
       required: true,
     },
@@ -18,7 +18,7 @@ const ProductSchema = Schema(
       type: String,
     },
     price: {
-      type: String,
+      type: Number,
       required: true,
       default: 0,
     },
@@ -26,9 +26,7 @@ const ProductSchema = Schema(
       type: String,
       default: 0,
     },
-    publicId: {
-      type: String,
-    },
+    category: { type: String },
     sizes: [
       {
         size: String,

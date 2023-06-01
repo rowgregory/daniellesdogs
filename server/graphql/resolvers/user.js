@@ -1,7 +1,7 @@
 const User = require('../../models/User.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const writeToFile = require('../../utils/writeToFile.js');
+const { AuthenticationError } = require('apollo-server-core');
 
 module.exports = {
   Mutation: {
@@ -20,38 +20,17 @@ module.exports = {
     ) {
       try {
         const userExists = await User.findOne({ emailAddress });
-        if (userExists) {
-          writeToFile(
-            '/server/logs/error.txt',
-            '.🔴',
-            '.REGISTER_USER',
-            `.error: user already exists`
-          );
-          throw new Error('Invalid email or password');
-        }
+        if (userExists)
+          throw new AuthenticationError('Invalid email or password');
 
-        if (password !== confirmPassword) {
-          writeToFile(
-            '/server/logs/error.txt',
-            '.🔴',
-            '.REGISTER_USER',
-            `.error: passwords do not match`
-          );
-          throw new Error('Passwords do not match');
-        }
+        if (password !== confirmPassword)
+          throw new AuthenticationError('Passwords do not match');
 
         const olympiasEmail = process.env.OLYMPIA_EMAIL_ADDRESS;
         const daniellesEmail = process.env.DANIELLE_EMAIL_ADDRESS;
 
-        if (emailAddress !== olympiasEmail && emailAddress !== daniellesEmail) {
-          writeToFile(
-            '/server/logs/error.txt',
-            '.🔴',
-            '.REGISTER_USER',
-            `.error: user tried ${emailAddress}`
-          );
-          throw new Error('Invalid email or password');
-        }
+        if (emailAddress !== olympiasEmail && emailAddress !== daniellesEmail)
+          throw new AuthenticationError('Invalid email or password');
 
         const hashedPassword = await bcrypt.hash(password, 12);
 
@@ -75,38 +54,18 @@ module.exports = {
           userType: 'ADMIN',
         });
 
-        writeToFile(
-          '/server/logs/success.txt',
-          '.🟢',
-          '.REGISTER_USER',
-          `.user: ${emailAddress}`
-        );
-
         const res = await createdUser.save();
         return res;
       } catch (err) {
-        writeToFile(
-          '/server/logs/error.txt',
-          '.🔴',
-          '.REGISTER_USER',
-          `.error: ${err.message}`
-        );
-        throw new Error(err.message);
+        throw new AuthenticationError(err.message);
       }
     },
     async login(_, { loginInput: { emailAddress, password } }) {
       try {
         const user = await User.findOne({ emailAddress });
 
-        if (!user) {
-          writeToFile(
-            '/server/logs/error.txt',
-            '.🔴',
-            '.LOGIN_USER',
-            `.error: user not found`
-          );
-          throw new Error('Incorrect email address or password');
-        }
+        if (!user)
+          throw new AuthenticationError('Incorrect email address or password');
 
         if (user && (await bcrypt.compare(password, user.password))) {
           const accessToken = jwt.sign(
@@ -116,6 +75,7 @@ module.exports = {
               last_name: user.lastName,
               email_address: emailAddress,
               user_type: user.userType,
+              last_login_time: user?.lastLoginTime,
             },
             'secret_password',
             {
@@ -125,53 +85,38 @@ module.exports = {
 
           user.token = accessToken;
 
-          writeToFile(
-            '/server/logs/success.txt',
-            '.🟢',
-            '.LOGIN_USER',
-            `.user: ${emailAddress}`
-          );
-
           return {
             id: user.id,
             ...user._doc,
           };
         } else {
-          writeToFile(
-            '/server/logs/error.txt',
-            '.🔴',
-            '.LOGIN_USER',
-            `.error: passwords do not match`
-          );
-          throw new Error('Incorrect email address or password');
+          throw new AuthenticationError('Incorrect email address or password');
         }
       } catch (err) {
-        writeToFile(
-          '/server/logs/error.txt',
-          '.🔴',
-          '.LOGIN_USER',
-          `.error: ${err.message}`
-        );
-        throw new Error(err.message);
+        throw new AuthenticationError(err.message);
       }
     },
     async getRefreshToken(_, args) {
       return {
-        accessToken: jwt.sign(
-          { user_type: args.userType, first_name: args.firstName },
-          'secret_password',
-          {
-            expiresIn: '7d',
-          }
-        ),
         refreshToken: jwt.sign(
           { user_type: args.userType, first_name: args.firstName },
           'secret_password',
           {
-            expiresIn: '7d',
+            expiresIn: '1d',
           }
         ),
       };
+    },
+    logoutUser: async (_, { id }) => {
+      const user = await User.findById(id);
+
+      if (!user) throw new AuthenticationError('User not found');
+
+      user.lastLoginTime = new Date().toISOString();
+
+      const savedUser = await user.save();
+
+      return savedUser;
     },
   },
   Query: {

@@ -1,7 +1,8 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { AuthContext } from '../context/authContext';
+import { NavbarContext } from '../context/navbarContext';
 import { Text } from './elements';
 
 const Wrapper = styled.div`
@@ -23,7 +24,7 @@ const Wrapper = styled.div`
     background-position: right bottom; /* OR left bottom*/
     background-size: 0% 2px;
     background-repeat: no-repeat;
-    transition: background-size 0.5s;
+    transition: background-size 0.3s;
     cursor: pointer;
     :hover {
       background-size: 100% 2px;
@@ -31,9 +32,9 @@ const Wrapper = styled.div`
   }
 `;
 
-const Container = styled.div`
+const Container = styled.aside`
   position: fixed;
-  z-index: 20;
+  z-index: 200;
   top: 0;
   right: 0;
   bottom: 0;
@@ -43,6 +44,13 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: 300ms;
+  transform: translateX(550px);
+  &.move-left {
+    transform: translateX(0px);
+    transition: 300ms;
+    transition-easing: linear;
+  }
 `;
 
 export const headerLinkData = (user: any) => {
@@ -76,31 +84,25 @@ export const headerLinkData = (user: any) => {
       linkPath: '/contact',
     },
     {
-      textKey: 'Login',
-      linkPath: '/login',
+      textKey: user?.userType === 'ADMIN' ? 'Dashboard' : 'Login',
+      linkPath: user?.userType === 'ADMIN' ? '/admin/dashboard' : '/login',
     },
   ];
 };
 
-const Navigation = ({ show, setShowSideBar }: any) => {
-  const mySideMenu = useRef(null) as any;
+const Navigation = () => {
   const { user } = useContext(AuthContext) as any;
-  useEffect(() => {
-    if (mySideMenu.current && show) {
-      mySideMenu.current.style.transform = 'translateX(0px)';
-      mySideMenu.current.style.transition = '0.5s';
-      mySideMenu.current.style.transitionEasing = 'linear';
-    } else {
-      mySideMenu.current.style.transform = 'translateX(550px)';
-    }
-  }, [show]);
+  const { showSideBar, setShowSideBar } = useContext(NavbarContext);
+
+  const animation = showSideBar ? 'move-left' : '';
+
   return (
-    <Container ref={mySideMenu}>
+    <Container className={animation}>
       <Wrapper>
         {headerLinkData(user).map((link, i) => (
           <Link
             replace
-            onClick={() => setShowSideBar(false)}
+            onClick={() => setShowSideBar(!showSideBar)}
             key={i}
             to={link.linkPath}
           >

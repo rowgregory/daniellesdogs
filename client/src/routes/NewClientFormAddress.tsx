@@ -86,7 +86,7 @@ const NewClientFormAddress = () => {
           </FormSelect>
           <ErrorText>{errors?.state}</ErrorText>
         </FormGroup>
-        <FormGroup controlId='zipPostalCode'>
+        <FormGroup controlId='zipPostalCode' className='mb-4'>
           <FormLabel>Zip/Postal Code*</FormLabel>
           <FormInput
             name='zipPostalCode'
@@ -96,7 +96,7 @@ const NewClientFormAddress = () => {
           />
           <ErrorText>{errors?.zipPostalCode}</ErrorText>
         </FormGroup>
-        <ContinueBtn onSubmit={onSubmit} text='Continu' loading1={loading} />
+        <ContinueBtn onSubmit={onSubmit} text='Continue' loading1={loading} />
       </Form>
     </FormContainer>
   );
