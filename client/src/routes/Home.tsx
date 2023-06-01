@@ -179,16 +179,17 @@ const Home = () => {
           }}
         >
           <Text
-            fontSize={['42px']}
+            fontSize={['52px']}
             fontWeight={['600']}
             textAlign={['center']}
             width={['100%']}
+            margin={['0 0 48px 0']}
           >
             Why D Dogs!?
           </Text>
           <div
             className='d-flex-flex-column'
-            style={{ maxWidth: '625px', width: '100%' }}
+            style={{ maxWidth: '710px', width: '100%', marginInline: 'auto' }}
           >
             {setsUsApartData.map((obj: any, i: number) => (
               <div
@@ -203,10 +204,10 @@ const Home = () => {
                   objectfit={['cover']}
                   style={{ border: '4px solid #fff' }}
                 />
-                <Flex flexDirection={['column']} width={['64%']}>
+                <Flex flexDirection={['column']} width={['61%', '71%']}>
                   <Text
-                    style={{ maxWidth: '300px' }}
-                    fontSize={['calc(10px + 3.75vw)']}
+                    style={{ maxWidth: '320px' }}
+                    fontSize={['calc(10px + 5vw)', 'calc(10px + 2vw)']}
                   >
                     {obj.text}
                   </Text>
