@@ -98,7 +98,7 @@ const App = () => {
     components: 'buttons,funding-eligibility',
     'enable-funding': 'venmo',
   } as any;
-  console.log('PAYPAL CLIENT ID: ', process.env.REACT_APP_PAYPAL_CLIENT_ID);
+
   return (
     <PayPalScriptProvider options={PayPalOptions}>
       <AuthProvider>
