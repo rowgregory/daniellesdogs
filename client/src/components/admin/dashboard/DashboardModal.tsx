@@ -11,7 +11,8 @@ import { useMutation } from '@apollo/client';
 import { LOGOUT_USER } from '../../../mutations/logoutUser';
 
 const DashboardModal = () => {
-  const context = useContext(DashboardContext);
+  const { setShowDashboardModal, showDashboardModal } =
+    useContext(DashboardContext);
   const { logout, user } = useContext(AuthContext);
   const { pathname } = useLocation();
   const navigate = useNavigate();
@@ -19,6 +20,8 @@ const DashboardModal = () => {
   const [logoutUser, { loading }] = useMutation(LOGOUT_USER, {
     variables: { id: user?.id },
     onCompleted: () => {
+      logout();
+      setShowDashboardModal(false);
       navigate('/logged-out');
     },
   });
@@ -27,12 +30,12 @@ const DashboardModal = () => {
     <Modal
       className='m-0'
       centered
-      show={context.showDashboardModal}
-      onHide={() => context.setShowDashboardModal(false)}
+      show={showDashboardModal}
+      onHide={() => setShowDashboardModal(false)}
     >
       <Content>
         <Link
-          onClick={() => context.setShowDashboardModal(false)}
+          onClick={() => setShowDashboardModal(false)}
           to='/'
           className='d-flex align-items-center justify-content-center w-100'
           margin={['0 0 32px 0']}
@@ -53,7 +56,7 @@ const DashboardModal = () => {
           {sidebarData().map((obj: any, i: number) => (
             <Flex margin={['0 8px 8px 8px']} key={i}>
               <StyledLink
-                onClick={() => context.setShowDashboardModal(false)}
+                onClick={() => setShowDashboardModal(false)}
                 isactive={[obj.linkKey]
                   .some((path) => pathname.includes(path))
                   .toString()}
@@ -72,9 +75,6 @@ const DashboardModal = () => {
         <LogoutBtn
           onClick={() => {
             logoutUser();
-            logout();
-            context.setShowDashboardModal(false);
-            navigate('/logged-out');
           }}
           cursor='pointer'
           fontFamily='Roboto'

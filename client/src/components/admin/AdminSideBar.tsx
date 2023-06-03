@@ -4,6 +4,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/authContext';
 import { DDLogo } from '../../components/svg/Logo';
 import styled from 'styled-components';
+import { useMutation } from '@apollo/client';
+import { LOGOUT_USER } from '../../mutations/logoutUser';
+import { DashboardContext } from '../../context/dashboardContext';
+import { Spinner } from 'react-bootstrap';
 
 export const sidebarData = () => {
   const prefix = '/admin/';
@@ -72,9 +76,19 @@ export const LogoutBtn = styled(Text)`
 `;
 
 const AdminSideBar = () => {
-  const { logout } = useContext(AuthContext);
+  const { logout, user } = useContext(AuthContext);
+  const { setShowDashboardModal } = useContext(DashboardContext);
   const navigate = useNavigate();
   const { pathname } = useLocation();
+
+  const [logoutUser, { loading }] = useMutation(LOGOUT_USER, {
+    variables: { id: user?.id },
+    onCompleted: () => {
+      logout();
+      setShowDashboardModal(false);
+      navigate('/logged-out');
+    },
+  });
 
   return (
     <div
@@ -125,8 +139,7 @@ const AdminSideBar = () => {
       ))}
       <LogoutBtn
         onClick={() => {
-          logout();
-          navigate('/logged-out');
+          logoutUser();
         }}
         cursor='pointer'
         fontFamily='Roboto'
@@ -135,7 +148,12 @@ const AdminSideBar = () => {
         margin={['40px 0 16px 8px']}
         padding={['10px']}
       >
-        <i className='fas fa-sign-out-alt'></i>&nbsp;&nbsp; Log Out
+        {loading ? (
+          <Spinner animation='border' size='sm' style={{ color: '#5a67ff' }} />
+        ) : (
+          <i className='fas fa-sign-out-alt'></i>
+        )}
+        &nbsp;&nbsp; Log{loading ? 'ging' : ''} Out
       </LogoutBtn>
     </div>
   );
