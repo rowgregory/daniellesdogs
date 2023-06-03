@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Form } from 'react-bootstrap';
 import { useMutation } from '@apollo/client';
 import { useForm } from '../utils/hooks/useForm';
@@ -23,6 +23,7 @@ const Register = () => {
   const context = useContext(AuthContext);
   const [errors, setErrors] = useState([]) as any;
   const [graphqlErrors, setGraphQLErrors] = useState([]) as any;
+  const navigate = useNavigate();
 
   const registerCallback = () => {
     const validForm = validateRegister(setErrors, inputs);
@@ -52,6 +53,9 @@ const Register = () => {
         },
       });
       context.login(user);
+      if (user.userType === 'ADMIN') {
+        navigate('/admin/dashboard');
+      }
     },
     onError({ graphQLErrors }) {
       setGraphQLErrors(graphQLErrors);

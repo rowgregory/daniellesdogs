@@ -28,8 +28,13 @@ module.exports = {
 
         const olympiasEmail = process.env.OLYMPIA_EMAIL_ADDRESS;
         const daniellesEmail = process.env.DANIELLE_EMAIL_ADDRESS;
+        const gregsEmail = process.env.GREG_EMAIL_ADDRESS;
 
-        if (emailAddress !== olympiasEmail && emailAddress !== daniellesEmail)
+        if (
+          emailAddress !== olympiasEmail &&
+          emailAddress !== daniellesEmail &&
+          emailAddress !== gregsEmail
+        )
           throw new AuthenticationError('Invalid email or password');
 
         const hashedPassword = await bcrypt.hash(password, 12);
