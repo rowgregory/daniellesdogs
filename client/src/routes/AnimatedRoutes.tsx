@@ -41,6 +41,8 @@ import ContactFormView from './ContactFormView';
 import ServiceList from './ServiceList';
 import ServiceCreate from './ServiceCreate';
 import ServiceEdit from './ServiceEdit';
+import NewClientFormWaiver from './NewClientFormWaiver';
+import Waiver from './Waiver';
 
 const PrivateRoutes = ({ children }: any) => {
   const { user } = useContext(AuthContext);
@@ -92,6 +94,7 @@ const AnimatedRoutes = () => {
                   <Route path='bios/create' element={<BioCreate />} />
                   <Route path='bios/:id/edit' element={<BioEdit />} />
                   <Route path='contact-forms' element={<ContactFormList />} />
+                  <Route path='waiver' element={<Waiver />} />
                   <Route
                     path='contact-forms/:id/view'
                     element={<ContactFormView />}
@@ -118,6 +121,7 @@ const AnimatedRoutes = () => {
               <Route path='address' element={<NewClientFormAddress />} />
               <Route path='vet' element={<NewClientFormVet />} />
               <Route path='pets' element={<NewClientFormPets />} />
+              <Route path='waiver' element={<NewClientFormWaiver />} />
               <Route path='complete' element={<Complete />} />
             </Routes>
           }

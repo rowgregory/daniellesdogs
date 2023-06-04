@@ -35,7 +35,6 @@ const ServiceCreate = () => {
 
   const createServiceCallback = async () => {
     const validForm = validateService(setErrors, inputs);
-
     if (validForm) {
       setUploading(true);
 
@@ -88,7 +87,10 @@ const ServiceCreate = () => {
       setUploading(false);
       return;
     } else {
-      setInputs((inputs: any) => ({ ...inputs, image: e.target.files[0] }));
+      setInputs((inputs: any) => ({
+        ...inputs,
+        displayUrl: e.target.files[0],
+      }));
       setFile(e.target.files[0]);
     }
   };
@@ -102,10 +104,15 @@ const ServiceCreate = () => {
         </SubNav>
         <ContentWrapper className='create'>
           <Form className='w-100 create'>
-            <FormGroup controlId='image' className='mb-3'>
+            <FormGroup controlId='displayUrl' className='mb-3'>
               <Label className='mb-1'>Service Pic</Label>
-              <Input type='file' id='image' onChange={handleChange} />
-              <ErrorText>{errors?.image}</ErrorText>
+              <Input
+                name='displayUrl'
+                type='file'
+                id='displayUrl'
+                onChange={handleChange}
+              />
+              <ErrorText>{errors?.displayUrl}</ErrorText>
             </FormGroup>
             <FormGroup className='mb-3' controlId='title'>
               <Label className='mb-1'>Title</Label>

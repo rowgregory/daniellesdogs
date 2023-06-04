@@ -61,11 +61,7 @@ const About = () => {
   const { loading, data } = useQuery(GET_BIOS);
 
   return (
-    <div
-      style={{
-        background: 'linear-gradient(to top, #fff 0%, #fff 70%, #ffc7c7 100%)',
-      }}
-    >
+    <div>
       <Container
         style={{
           position: 'relative',

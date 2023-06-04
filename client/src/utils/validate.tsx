@@ -239,23 +239,14 @@ export const validateNewClientFormPets = (setErrors: any, inputs: any) => {
 
 export const validateNewClientFormWaiver = (setErrors: any, inputs: any) => {
   let formIsValid = true;
-  if (!inputs?.signedWaiverSignature) {
+  if (!inputs?.signedWaiver) {
     formIsValid = false;
     setErrors((errors: any) => ({
       ...errors,
-      signedWaiverSignature: 'Sign waiver to complete.',
+      signedWaiver: 'Please accept waiver.',
     }));
   } else {
-    setErrors((errors: any) => ({ ...errors, signedWaiverSignature: '' }));
-  }
-  if (!inputs?.signedWaiverDate) {
-    formIsValid = false;
-    setErrors((errors: any) => ({
-      ...errors,
-      signedWaiverDate: 'Enter date to complete.',
-    }));
-  } else {
-    setErrors((errors: any) => ({ ...errors, signedWaiverDate: '' }));
+    setErrors((errors: any) => ({ ...errors, signedWaiver: '' }));
   }
 
   return formIsValid;
@@ -543,6 +534,7 @@ export const validateService = (
   setErrors: (errors: any) => void,
   inputs: any
 ) => {
+  console.log(inputs);
   let formIsValid = true;
   if (!inputs?.title) {
     formIsValid = false;
@@ -554,6 +546,7 @@ export const validateService = (
     setErrors((errors: any) => ({ ...errors, title: '' }));
   }
   if (!inputs?.displayUrl) {
+    console.log('NO IMAGE');
     formIsValid = false;
     setErrors((errors: any) => ({
       ...errors,

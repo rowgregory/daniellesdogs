@@ -192,8 +192,7 @@ const Footer = () => {
           <LinkWrapper>
             <LinkSection>
               <LinkCategory>Our Address</LinkCategory>
-              <StyledText>Address</StyledText>
-              <StyledText>City, State, Zip Postal Code</StyledText>
+              <StyledText>Marblehead, MA</StyledText>
             </LinkSection>
             <LinkSection>
               <LinkCategory>Quick Links</LinkCategory>
@@ -215,7 +214,7 @@ const Footer = () => {
                 <StyledExternalLink
                   onClick={() =>
                     window.open(
-                      'https://www.privacypolicies.com/live/c37902bc-11cd-430e-a925-2b82ce905c88',
+                      'https://www.privacypolicies.com/live/c63ec530-fe63-4b43-8db7-01bed8531ce6',
                       '_blank'
                     )
                   }
@@ -232,7 +231,7 @@ const Footer = () => {
                 <StyledExternalLink
                   onClick={() =>
                     window.open(
-                      'https://www.termsandconditionsgenerator.com/live.php?token=K9R7fXZjABJKZhIWlXr43oY6qca6jjVn',
+                      'https://www.termsandconditionsgenerator.com/live.php?token=nMrGM5XbRTBMIYpW01UOhwguBgkjRJSt',
                       '_blank'
                     )
                   }

@@ -87,9 +87,11 @@ const RightPanel = () => {
           />
         </>
       )}
-      <Text color='#fff' fontFamily={'Roboto'} margin={['16px 0 16px 0']}>
-        Recent Orders
-      </Text>
+      {recentOrders?.length > 0 && (
+        <Text color='#fff' fontFamily={'Roboto'} margin={['16px 0 16px 0']}>
+          Recent Orders
+        </Text>
+      )}
       <RecentOrdersContainer>
         {recentOrders?.map((obj: any, i: number) => (
           <OrderItem key={i} to={`/order/receipt/${obj?.id}`}>

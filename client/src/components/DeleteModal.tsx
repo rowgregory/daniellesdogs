@@ -15,6 +15,8 @@ import { GET_PRODUCTS } from '../queries/getProducts';
 import { Text } from './elements';
 import { DELETE_SERVICE } from '../mutations/deleteService';
 import { GET_SERVICES } from '../queries/getServices';
+import { GET_WAIVER } from '../queries/getWaiver';
+import { DELETE_WAIVER } from '../mutations/deleteWaiver';
 
 export const Content = styled.div`
   background: #1f252b;
@@ -93,6 +95,12 @@ const DeleteModal = ({ actionFunc, show, handleClose, id, image }: any) => {
       refetchQueries: [{ query: GET_SERVICES }],
     }
   );
+  const [waiverDelete, { loading: loadingWaiver }] = useMutation(
+    DELETE_WAIVER,
+    {
+      refetchQueries: [{ query: GET_WAIVER }],
+    }
+  );
 
   const getAction = async () => {
     setDeleting(true);
@@ -132,6 +140,11 @@ const DeleteModal = ({ actionFunc, show, handleClose, id, image }: any) => {
         break;
       case 'Service':
         serviceDelete({ variables: { id } });
+        handleClose();
+        setDeleting(false);
+        break;
+      case 'Waiver':
+        waiverDelete({ variables: { id } });
         handleClose();
         setDeleting(false);
         break;
@@ -192,7 +205,8 @@ const DeleteModal = ({ actionFunc, show, handleClose, id, image }: any) => {
               loadingContactForm ||
               loadingProduct ||
               loadingNewClientForm ||
-              loadingService) && <Spinner animation='border' size='sm' />}
+              loadingService ||
+              loadingWaiver) && <Spinner animation='border' size='sm' />}
           </Button>
         </Footer>
       </Content>

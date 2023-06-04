@@ -185,7 +185,7 @@ const Home = () => {
             width={['100%']}
             margin={['0 0 48px 0']}
           >
-            Why D Dogs!?
+            Why Danielle's Dogs!?
           </Text>
           <div
             className='d-flex-flex-column'
@@ -260,7 +260,7 @@ const Home = () => {
         </Skew2>
       </div>
       <div style={{ padding: '20rem 0' }}>
-        <Marquee speed={75} gradientWidth={0} pauseOnHover={true}>
+        <Marquee speed={75} gradientWidth={0}>
           {imgArr.map((img: any, i: number) => (
             <div
               key={i}

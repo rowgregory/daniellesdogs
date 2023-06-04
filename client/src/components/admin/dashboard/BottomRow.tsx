@@ -1,9 +1,10 @@
 import { useQuery } from '@apollo/client';
 import styled from 'styled-components';
-import { Text } from '../../elements';
+import { Flex, Text } from '../../elements';
 import { GET_TRANSFORMED_NEW_CLIENT_FORM } from '../../../queries/getTransformedNewClientForm';
 import { Spinner } from 'react-bootstrap';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
   background: #2d363c;
@@ -45,6 +46,7 @@ const Table = styled.table`
 
 const BottomRow = () => {
   let { loading, data, refetch } = useQuery(GET_TRANSFORMED_NEW_CLIENT_FORM);
+  const navigate = useNavigate();
 
   useEffect(() => {
     refetch();
@@ -74,7 +76,6 @@ const BottomRow = () => {
           ) : (
             <>
               <Text
-                fontSize={['16px']}
                 fontFamily='Roboto'
                 color={['#faf9f9']}
                 margin={['0 0 22px 0']}
@@ -93,13 +94,38 @@ const BottomRow = () => {
                 </thead>
                 <tbody>
                   {transformedNewClientForms?.map((client: any, i: number) => (
-                    <tr key={i}>
+                    <tr
+                      key={i}
+                      onClick={() =>
+                        navigate(`/admin/new-client-forms/${client.id}`)
+                      }
+                      style={{ cursor: 'pointer' }}
+                    >
                       <td>{client?.firstName}</td>
                       <td>{client?.lastName}</td>
                       <td>{client?.emailAddress}</td>
                       <td>{client?.phoneNumber}</td>
                       <td style={{ textAlign: 'center' }}>
-                        {client?.pets?.map((petName: any) => petName)}
+                        {client?.pets?.map((petName: any, i: number) => (
+                          <Flex>
+                            <Text
+                              fontFamily='Roboto'
+                              color={['#7b818a']}
+                              margin={['0 4px 0 0']}
+                              fontSize={['14px']}
+                            >
+                              {i + 1}.
+                            </Text>
+                            <Text
+                              fontFamily='Roboto'
+                              color={['#7b818a']}
+                              margin={['0 4px 0 0']}
+                              fontSize={['14px']}
+                            >
+                              {petName}
+                            </Text>
+                          </Flex>
+                        ))}
                       </td>
                     </tr>
                   ))}

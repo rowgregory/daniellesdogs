@@ -9,6 +9,7 @@ const passcode = require('./passcode');
 const order = require('./order');
 const dashboard = require('./dashboard');
 const service = require('./service');
+const waiver = require('./waiver');
 
 module.exports = {
   Query: {
@@ -23,6 +24,7 @@ module.exports = {
     ...order.Query,
     ...dashboard.Query,
     ...service.Query,
+    ...waiver.Query,
   },
   Mutation: {
     ...user.Mutation,
@@ -34,5 +36,6 @@ module.exports = {
     ...product.Mutation,
     ...order.Mutation,
     ...service.Mutation,
+    ...waiver.Mutation,
   },
 };

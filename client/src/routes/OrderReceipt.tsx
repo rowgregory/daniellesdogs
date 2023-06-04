@@ -1,10 +1,13 @@
 import { Image } from 'react-bootstrap';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
-import { Link, Text } from '../components/elements';
+import { Flex, Link, Text } from '../components/elements';
 import { useQuery } from '@apollo/client';
 import { GET_ORDER_BY_ID } from '../queries/getOrderById';
 import { DDLogo } from '../components/svg/Logo';
+import AcrobaticLoader from '../components/AcrobaticLoader/AcrobaticLoader';
+import { useContext, useEffect } from 'react';
+import { AuthContext } from '../context/authContext';
 
 const Container = styled.div`
   background: ${({ theme }) => theme.secondaryBg};
@@ -33,54 +36,42 @@ export const Wrapper = styled.div`
   }
 `;
 
-export const OrderId = styled.div`
-  margin-bottom: 1rem;
-  color: ${({ theme }) => theme.text};
-`;
-
-export const EmailAndShippingDetailsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-export const CategoryTitles = styled.div`
-  margin-bottom: 2rem;
-  background: ${({ theme }) => theme.bg};
-  padding: 0.875rem 1.125rem;
-`;
-
-export const estimatedDelivery = (createdAt: any) => {
-  const firstEstimatedDate =
-    createdAt &&
-    new Date(new Date(createdAt).getTime() + 7 * 24 * 60 * 60 * 1000);
-
-  const secondEstimatedDate =
-    createdAt &&
-    new Date(new Date(createdAt).getTime() + 12 * 24 * 60 * 60 * 1000);
-
-  return `${firstEstimatedDate} - ${secondEstimatedDate}`;
-};
-
 const OrderReceipt = () => {
   const { id } = useParams() as any;
+  const { user } = useContext(AuthContext);
 
-  const { loading, error, data } = useQuery(GET_ORDER_BY_ID, {
+  const { loading, error, data, refetch } = useQuery(GET_ORDER_BY_ID, {
     variables: { id },
-  });
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  }) as any;
 
   const order = data?.getOrderById;
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await refetch();
+      } catch (error) {
+        console.log('ERROR: ', error);
+      }
+    };
+
+    fetchData();
+  }, [refetch]);
+
   return (
     <Container>
+      {loading && <AcrobaticLoader />}
       <Wrapper>
-        <div style={{ background: '#fcfbfe', padding: '20px 0' }}>
+        <Flex
+          alignItems={['center']}
+          padding={['20px 0']}
+          style={{ background: '#fcfbfe' }}
+        >
           <Link
             display={['flex']}
             alignitems={['center']}
             padding={['0 0 0 20px']}
+            margin={['0 24px 0 0']}
             to='/'
           >
             <DDLogo fill='#aaadb1' w='50px' h='50px' />
@@ -92,8 +83,12 @@ const OrderReceipt = () => {
               Danielle's Dogs
             </Text>
           </Link>
-        </div>
+          {user?.userType === 'ADMIN' && (
+            <Link to='/admin/orders'>Go back to orders</Link>
+          )}
+        </Flex>
         <div style={{ padding: '32px' }}>
+          {error && <Text>{error.message}</Text>}
           <Text
             fontSize={['24px']}
             fontWeight={['600']}
@@ -126,47 +121,27 @@ const OrderReceipt = () => {
             <thead>
               <tr>
                 <td>
-                  <Text
-                    fontFamily='Roboto'
-                    fontSize={['14px']}
-                    fontWeight={['200']}
-                  >
+                  <Text fontSize={['14px']} fontWeight={['600']}>
                     Order Date
                   </Text>
                 </td>
                 <td>
-                  <Text
-                    fontFamily='Roboto'
-                    fontSize={['14px']}
-                    fontWeight={['200']}
-                  >
+                  <Text fontSize={['14px']} fontWeight={['600']}>
                     Order No
                   </Text>
                 </td>
                 <td>
-                  <Text
-                    fontFamily='Roboto'
-                    fontSize={['14px']}
-                    fontWeight={['200']}
-                  >
+                  <Text fontSize={['14px']} fontWeight={['600']}>
                     PayPal Order Id
                   </Text>
                 </td>
                 <td>
-                  <Text
-                    fontFamily='Roboto'
-                    fontSize={['14px']}
-                    fontWeight={['200']}
-                  >
+                  <Text fontSize={['14px']} fontWeight={['600']}>
                     {order?.cellPhoneNumber ? 'Cell Phone' : 'Shipping Address'}
                   </Text>
                 </td>
                 <td>
-                  <Text
-                    fontFamily='Roboto'
-                    fontSize={['14px']}
-                    fontWeight={['200']}
-                  >
+                  <Text fontSize={['14px']} fontWeight={['600']}>
                     Shipped
                   </Text>
                 </td>
@@ -176,7 +151,6 @@ const OrderReceipt = () => {
               <tr>
                 <td>
                   <Text
-                    fontFamily='Roboto'
                     fontWeight={['400']}
                     padding={['10px 0 32px']}
                     fontSize={['14px']}
@@ -192,7 +166,6 @@ const OrderReceipt = () => {
                 </td>
                 <td>
                   <Text
-                    fontFamily='Roboto'
                     fontWeight={['400']}
                     padding={['10px 0 32px']}
                     fontSize={['14px']}
@@ -202,7 +175,6 @@ const OrderReceipt = () => {
                 </td>
                 <td>
                   <Text
-                    fontFamily='Roboto'
                     fontWeight={['400']}
                     padding={['10px 0 32px']}
                     fontSize={['14px']}
@@ -223,7 +195,6 @@ const OrderReceipt = () => {
                 </td>
                 <td>
                   <Text
-                    fontFamily='Roboto'
                     fontWeight={['400']}
                     padding={['10px 0 32px']}
                     fontSize={['14px']}

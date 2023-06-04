@@ -19,6 +19,7 @@ interface ImageProps {
   gridarea?: string[];
   borderradius?: string[];
   height?: string;
+  alignself?: string[];
 }
 
 const Picture = styled(Image)<ImageProps>(
@@ -40,6 +41,7 @@ const Picture = styled(Image)<ImageProps>(
     gridarea: '',
     borderradius: '',
     height: '',
+    alignself: '',
   },
   ({
     color,
@@ -58,6 +60,7 @@ const Picture = styled(Image)<ImageProps>(
     gridarea,
     borderradius,
     height,
+    alignself,
   }) => ({
     ...createMediaQueries([
       {
@@ -124,6 +127,10 @@ const Picture = styled(Image)<ImageProps>(
       {
         property: 'height',
         values: height,
+      },
+      {
+        property: 'align-self',
+        values: alignself,
       },
     ]),
   })

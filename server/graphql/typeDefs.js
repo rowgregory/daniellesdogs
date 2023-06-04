@@ -81,6 +81,7 @@ module.exports = gql`
     afterMeetingNotes: String
     user: User
     address: Address
+    signedWaiver: Boolean
   }
 
   type Address {
@@ -191,6 +192,7 @@ module.exports = gql`
     datasets: [Float!]
   }
   type TransformedNewClientForm {
+    id: ID
     firstName: String
     lastName: String
     emailAddress: String
@@ -209,6 +211,11 @@ module.exports = gql`
   type UpdateOrderResult {
     success: Boolean!
     message: String
+  }
+
+  type Waiver {
+    id: ID
+    displayUrl: String
   }
 
   input AddressInput {
@@ -250,6 +257,7 @@ module.exports = gql`
     pets: [PetInput]
     vet: VetInput
     afterMeetingNotes: String
+    signedWaiver: Boolean
   }
 
   input NewClientFormEditInput {
@@ -374,6 +382,7 @@ module.exports = gql`
     getRecentOrders: [RecentOrders]
     serviceList: [Service]
     serviceById(id: ID!): Service
+    getWaiver: [Waiver]
   }
 
   type Mutation {
@@ -414,5 +423,7 @@ module.exports = gql`
     createOrder(orderInput: OrderInput!): Order!
     logoutUser(id: ID!): User
     updateOrderToShipped(id: ID!): UpdateOrderResult
+    createWaiver(displayUrl: String): Waiver
+    deleteWaiver(id: ID!): Waiver
   }
 `;

@@ -6,6 +6,7 @@ import DeleteModal from '../components/DeleteModal';
 import {
   ContentWrapper,
   CreateLink,
+  GoToLink,
   SubNav,
   TableContainer,
   TableData,
@@ -34,6 +35,7 @@ const ServiceList = () => {
       />
       <SubNav>
         <CreateLink to='/admin/services/create'>CREATE SERVICE</CreateLink>
+        <GoToLink to='/services'>Go to services</GoToLink>
       </SubNav>
       <ContentWrapper>
         {loading ? (

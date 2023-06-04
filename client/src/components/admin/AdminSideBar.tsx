@@ -52,6 +52,11 @@ export const sidebarData = () => {
       linkKey: `${prefix}services`,
       icon: <i className='fas fa-bell-concierge'></i>,
     },
+    {
+      textKey: 'Waiver',
+      linkKey: `${prefix}waiver`,
+      icon: <i className='fas fa-signature'></i>,
+    },
   ];
 };
 

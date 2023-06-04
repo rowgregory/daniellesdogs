@@ -1,16 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Alert, Form, Spinner } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
 import { Text } from '../components/elements';
 import DeleteModal from '../components/DeleteModal';
-import { GALLERY_IMAGE_LIST } from '../queries/galleryImageList';
-import ImageType from '../components/svg/ImageType';
 import { API } from '../utils/api';
-import { CREATE_GALLERY_IMAGE } from '../mutations/createGalleryImage';
 import {
   GalleryImage,
   GalleryImageGrid,
-  GoToLink,
   ImageCard,
   Input,
   SubNav,
@@ -20,9 +16,11 @@ import AcrobaticLoader from '../components/AcrobaticLoader/AcrobaticLoader';
 import { NoVideoModal } from '../components/NoVideoModal';
 import { ContentWrapper } from '../components/styles/backend-tables';
 import { Maze } from '../components/ContinueBtn';
+import { GET_WAIVER } from '../queries/getWaiver';
+import { CREATE_WAIVER } from '../mutations/createWaiver';
 
-const GalleryImageList = () => {
-  const { loading, data } = useQuery(GALLERY_IMAGE_LIST);
+const Waiver = () => {
+  const { loading, data, refetch } = useQuery(GET_WAIVER);
   let [uploading, setUploading] = useState(false);
   const [imageData, setImageData] = useState({}) as any;
   const [show, setShow] = useState(false);
@@ -55,18 +53,9 @@ const GalleryImageList = () => {
       }
 
       if (res.data) {
-        galleryImageCreate({
+        waiverCreate({
           variables: {
-            galleryImageInput: {
-              displayUrl: res.data.image.url,
-              width: res.data.width,
-              height: res.data.height,
-              mimetype: res.data.image.mime,
-              title: res.data.title,
-              size: res.data.size,
-              mediumImgUrl: res.data.medium.url,
-              thumbUrl: res.data.thumb.url,
-            },
+            displayUrl: res.data.image.url,
           },
         });
       }
@@ -76,27 +65,28 @@ const GalleryImageList = () => {
     }
   };
 
-  const [galleryImageCreate] = useMutation(CREATE_GALLERY_IMAGE, {
+  const [waiverCreate] = useMutation(CREATE_WAIVER, {
     onError({ graphQLErrors }) {
       setUploading(false);
       setGraphQLErrors(graphQLErrors);
     },
     onCompleted() {
       setUploading(false);
+      refetch();
     },
-    refetchQueries: [{ query: GALLERY_IMAGE_LIST }],
+    refetchQueries: [{ query: GET_WAIVER }],
   });
 
-  const noGalleryImages = data?.galleryImageList?.length === 0;
+  const noWaiver = data?.getWaiver?.length === 0 || data?.getWaiver === null;
 
   return (
     <TableContainer>
       <DeleteModal
-        actionFunc='Gallery Image'
+        actionFunc='Waiver'
         show={show}
         handleClose={handleClose}
         id={imageData.id}
-        image={imageData.mediumImgUrl}
+        image={imageData.displayUrl}
       />
       {uploading && <AcrobaticLoader />}
       <SubNav className='p-0 d-flex align-items-center'>
@@ -107,19 +97,19 @@ const GalleryImageList = () => {
             style={{ border: 0 }}
           ></Input>
         </Form.Group>
-        <GoToLink to='/gallery'>Go to gallery</GoToLink>
       </SubNav>
       <NoVideoModal show={showNoVideo} close={handleClose} />
       <ContentWrapper>
         {loading ? (
           <Maze />
-        ) : noGalleryImages ? (
+        ) : noWaiver ? (
           <Text fontFamily='Roboto' color={['#ededed']} textAlign={['center']}>
-            Select a file from your device to add as an image to the gallery
+            Select a file from your device to add the waiver to the new client
+            form.
           </Text>
         ) : (
           <GalleryImageGrid>
-            {data?.galleryImageList?.map((img: any, i: number) => (
+            {data?.getWaiver?.map((img: any, i: number) => (
               <ImageCard
                 key={i}
                 onClick={() => {
@@ -129,41 +119,12 @@ const GalleryImageList = () => {
               >
                 {isLoading && <Spinner animation='border' />}
                 <GalleryImage
-                  src={img.thumbUrl}
+                  src={img.displayUrl}
                   onLoad={() => setIsLoading(false)}
                   style={{
                     display: isLoading ? 'none' : 'block',
                   }}
                 />
-                <div
-                  style={{
-                    height: '72px',
-                    background: '#0e1117',
-                    borderRadius: '0 0 0.5rem 0.5rem',
-                    width: '100%',
-                  }}
-                >
-                  <div className='d-flex align-items-end justify-content-between h-100 p-2'>
-                    <div className='d-flex align-items-center'>
-                      <ImageType />
-                      <Text
-                        color={['#d1d1d1']}
-                        fontFamily={`Oxygen, sans-serif`}
-                        fontSize={['0.625rem']}
-                        margin={['0 0 0 0.25rem']}
-                      >
-                        {img.mimetype}
-                      </Text>
-                    </div>
-                    <Text
-                      color={['#d1d1d1']}
-                      fontFamily={`Oxygen, sans-serif`}
-                      fontSize={['0.625rem']}
-                    >
-                      {img.size}KB
-                    </Text>
-                  </div>
-                </div>
               </ImageCard>
             ))}
           </GalleryImageGrid>
@@ -176,4 +137,4 @@ const GalleryImageList = () => {
   );
 };
 
-export default GalleryImageList;
+export default Waiver;

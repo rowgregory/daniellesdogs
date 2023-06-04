@@ -21,7 +21,7 @@ const Secure = () => {
         setTimeout(() => {
           navigate('/register', {
             state: {
-              secure_password: inputs.passcode,
+              secure_password: 'UNLOCKED',
             },
           });
         }, 1000);

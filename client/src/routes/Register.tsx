@@ -1,5 +1,5 @@
-import { useContext, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Form } from 'react-bootstrap';
 import { useMutation } from '@apollo/client';
 import { useForm } from '../utils/hooks/useForm';
@@ -24,6 +24,11 @@ const Register = () => {
   const [errors, setErrors] = useState([]) as any;
   const [graphqlErrors, setGraphQLErrors] = useState([]) as any;
   const navigate = useNavigate();
+  const { state } = useLocation();
+
+  useEffect(() => {
+    if (state?.secure_password !== 'UNLOCKED') navigate('/secure');
+  }, [navigate, state]);
 
   const registerCallback = () => {
     const validForm = validateRegister(setErrors, inputs);
@@ -62,7 +67,13 @@ const Register = () => {
     },
   });
 
-  return (
+  return state?.secure_password !== 'UNLOCKED' ? (
+    <FormContainer>
+      <PageTitle>
+        Secure <i className='fas fa-lock ml-1 fa-sm'></i>
+      </PageTitle>
+    </FormContainer>
+  ) : (
     <FormContainer>
       <PageTitle>Register</PageTitle>
       <GraphQLAlert

@@ -24,7 +24,7 @@ const NewClientForms = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const filteredNewClientForms = data?.getNewClientForms?.filter((form: any) =>
-    form?.user.firstName?.toLowerCase().includes(text?.toLowerCase())
+    form?.user?.firstName?.toLowerCase().includes(text?.toLowerCase())
   );
 
   const noClients = filteredNewClientForms?.length === 0;

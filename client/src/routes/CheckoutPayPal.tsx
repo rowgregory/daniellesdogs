@@ -116,7 +116,7 @@ const CheckoutPayPal = () => {
         purchase_units: [
           {
             amount: {
-              value: Number(orderTotal),
+              value: Number(orderTotal)?.toFixed(2),
             },
           },
         ],

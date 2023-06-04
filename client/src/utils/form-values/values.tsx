@@ -104,8 +104,6 @@ const ncfPetsValues = {
 
 const ncfWaiverValues = {
   signedWaiver: false,
-  signedWaiverSignature: '',
-  signedWaiverDate: currentDate,
 };
 
 const serviceValues = {

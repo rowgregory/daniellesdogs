@@ -7,6 +7,7 @@ import DeleteModal from '../components/DeleteModal';
 import {
   ContentWrapper,
   CreateLink,
+  GoToLink,
   SubNav,
   TableContainer,
   TableData,
@@ -34,6 +35,7 @@ const BioList = () => {
       />
       <SubNav>
         <CreateLink to='/admin/bios/create'>CREATE BIO</CreateLink>
+        <GoToLink to='/about'>Go to bios</GoToLink>
       </SubNav>
       <ContentWrapper>
         {loading ? (

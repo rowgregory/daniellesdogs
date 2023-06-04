@@ -72,6 +72,7 @@ const permissions = shield(
       getRecentOrders: isAdmin,
       serviceList: allow,
       serviceById: isAdmin,
+      getWaiver: allow,
     },
     Mutation: {
       login: allow,
@@ -99,6 +100,8 @@ const permissions = shield(
       updateService: isAdmin,
       deleteService: isAdmin,
       updateOrderToShipped: isAdmin,
+      createWaiver: isAdmin,
+      deleteWaiver: isAdmin,
     },
   },
   {

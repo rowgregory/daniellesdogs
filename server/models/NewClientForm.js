@@ -27,12 +27,6 @@ const NewClientFormSchema = Schema(
       type: Boolean,
       default: false,
     },
-    signedWaiverSignature: {
-      type: String,
-    },
-    signedWaiverDate: {
-      type: Date,
-    },
   },
   {
     timestamps: true,

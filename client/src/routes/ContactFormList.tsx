@@ -35,20 +35,18 @@ const ContactFormList = () => {
         actionFunc='Contact Form'
         show={show}
         handleClose={handleClose}
-        id={contactFormId.id}
+        id={contactFormId}
       />
       <SubNav className='p-0 d-flex align-items-center'>
-        {!noContactForms && (
-          <FormGroup style={{ marginLeft: '26px' }}>
-            <FilterInput
-              placeholder='Search by first name'
-              as='input'
-              type='text'
-              value={text || ''}
-              onChange={(e: any) => setText(e.target.value)}
-            ></FilterInput>
-          </FormGroup>
-        )}
+        <FormGroup style={{ marginLeft: '26px' }}>
+          <FilterInput
+            placeholder='Search by first name'
+            as='input'
+            type='text'
+            value={text || ''}
+            onChange={(e: any) => setText(e.target.value)}
+          ></FilterInput>
+        </FormGroup>
       </SubNav>
       <ContentWrapper>
         {loading ? (

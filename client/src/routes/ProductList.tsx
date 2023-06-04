@@ -7,6 +7,7 @@ import { GET_PRODUCTS } from '../queries/getProducts';
 import {
   ContentWrapper,
   CreateLink,
+  GoToLink,
   SubNav,
   TableContainer,
   TableData,
@@ -34,6 +35,7 @@ const ProductList = () => {
       />
       <SubNav>
         <CreateLink to='/admin/products/create'>CREATE PRODUCT</CreateLink>
+        <GoToLink to='/shop'>Go to shop</GoToLink>
       </SubNav>
       <ContentWrapper>
         {loading ? (

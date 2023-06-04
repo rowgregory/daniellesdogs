@@ -145,6 +145,17 @@ export const CreateLink = styled(Link)`
     color: #fff;
   }
 `;
+export const GoToLink = styled(Link)`
+  color: #5a67ff;
+  font-family: Roboto;
+  font-size: 14px;
+  margin-left: 28px;
+  transition: 300ms;
+  :hover {
+    filter: brightness(0.8);
+    color: #5a67ff;
+  }
+`;
 
 export const GoBackLink = styled(Link)`
   transition: 300ms;

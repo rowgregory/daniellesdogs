@@ -14,8 +14,6 @@ import { petValues } from '../utils/form-values/values';
 import { validateNewClientFormPets } from '../utils/validate';
 import ContinueBtn from '../components/ContinueBtn';
 import { useNCFPetsForm } from '../utils/hooks/useNCFPetsForm';
-import { useMutation } from '@apollo/client';
-import { CREATE_NEW_CLIENT_FORM } from '../mutations/createNewClientForm';
 import GraphQLAlert from '../components/elements/GraphQLAlert';
 
 const NewClientFormPets = () => {
@@ -28,7 +26,27 @@ const NewClientFormPets = () => {
     const validForm = validateNewClientFormPets(setErrors, inputs);
 
     if (validForm) {
-      createNewClientForm();
+      navigate('/new-client-form/waiver', {
+        state: {
+          firstName: state?.firstName,
+          lastName: state?.lastName,
+          emailAddress: state?.emailAddress,
+          phoneNumber: state?.phoneNumber,
+          address: {
+            addressLine1: state?.address?.addressLine1,
+            city: state?.address?.city,
+            state: state?.address?.state,
+            zipPostalCode: state?.address?.zipPostalCode,
+          },
+          vet: {
+            name: state?.vet?.name,
+            address: state?.vet?.address,
+            phoneNumber: state?.vet?.phoneNumber,
+          },
+          pets: inputs?.pets,
+          openYard: inputs?.openYard,
+        },
+      });
     }
   };
 
@@ -52,39 +70,6 @@ const NewClientFormPets = () => {
       pets: values,
     }));
   };
-
-  const newClientFormInput = {
-    firstName: state?.firstName,
-    lastName: state?.lastName,
-    emailAddress: state?.emailAddress,
-    phoneNumber: state?.phoneNumber,
-    address: {
-      addressLine1: state?.address?.addressLine1,
-      city: state?.address?.city,
-      state: state?.address?.state,
-      zipPostalCode: state?.address?.zipPostalCode,
-    },
-    vet: {
-      name: state?.vet?.name,
-      address: state?.vet?.address,
-      phoneNumber: state?.vet?.phoneNumber,
-    },
-    pets: inputs?.pets,
-    openYard: inputs?.openYard,
-  };
-
-  const [createNewClientForm, { loading }] = useMutation(
-    CREATE_NEW_CLIENT_FORM,
-    {
-      variables: { newClientFormInput },
-      onCompleted() {
-        navigate('/new-client-form/complete');
-      },
-      onError({ graphQLErrors }) {
-        setGraphQLErrors(graphQLErrors);
-      },
-    }
-  );
 
   return (
     <FormContainer>
@@ -259,7 +244,7 @@ const NewClientFormPets = () => {
             Add Pet
           </Text>
         </div>
-        <ContinueBtn onSubmit={onSubmit} text='Complete' loading1={loading} />
+        <ContinueBtn onSubmit={onSubmit} text='Continue' />
       </Form>
     </FormContainer>
   );

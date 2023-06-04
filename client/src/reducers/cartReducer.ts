@@ -249,7 +249,7 @@ export const cartReducer = (state: any, action: any) => {
             item.size === action.payload.item.size
         ).qty;
 
-        if (qty === qtyWithSize) {
+        if (Number(qty) === Number(qtyWithSize)) {
           return { cart: { ...state?.cart } };
         }
 

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { CartContext } from '../../context/cartContext';
-import { Flex, Text } from '../elements';
+import { Flex, Link, Text } from '../elements';
 import { Spinner } from 'react-bootstrap';
 
 const Container = styled.div`
@@ -38,15 +38,19 @@ const StickyFooter = ({ product, qty, size, outOfStock }: any) => {
   return (
     <Container>
       <Flex
+        display={['none', 'flex', 'flex']}
         alignItems={['center']}
         justifyContent={['center']}
         width={['180px']}
         style={{ borderRight: '2px solid #f5f5f5' }}
       >
-        Order Summary
+        <i className='fas fa-chevron-left fa-xs'></i>
+        <Link margin={['0 0 0 8px']} to='/shop'>
+          Shop
+        </Link>
       </Flex>
       <Flex
-        padding={['0 32px']}
+        padding={['0 8px', '016px', '0 32px']}
         justifyContent={['space-between']}
         alignItems={['center']}
         width={['100%']}

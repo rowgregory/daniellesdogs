@@ -34,6 +34,7 @@ const ProductImg = styled(Image)`
   max-width: 420px;
   border-radius: 0;
   justify-self: center;
+  aspect-ratio: 1/1;
 `;
 
 const Price = styled(Text)`

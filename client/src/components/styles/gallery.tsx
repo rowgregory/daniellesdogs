@@ -6,7 +6,7 @@ export const GalleryGrid = styled.div`
   width: 100%;
   gap: 0.5rem;
 
-  grid-template-columns: auto;
+  grid-template-columns: 1fr;
   @media screen and (min-width: ${({ theme }) => theme.breakpoints[0]}) {
     grid-template-columns: auto auto auto auto;
   }
@@ -14,12 +14,13 @@ export const GalleryGrid = styled.div`
 
 export const GalleryImage = styled(Picture)`
   aspect-ratio: 1/1;
-  object-fit: cover;
+  object-fit: contain;
   height: 100%;
   width: 100%;
   cursor: pointer;
   transition: 300ms ease-out;
-  max-width: 300px;
+  background: ${({ theme }) => theme.colors.primary};
+  padding: 8px;
 `;
 
 export const Toggle = styled.button`

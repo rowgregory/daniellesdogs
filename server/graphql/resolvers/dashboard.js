@@ -67,6 +67,7 @@ module.exports = {
           });
         if (clients) {
           const transformedClients = clients.map(client => ({
+            id: client?.id,
             firstName: client?.user?.firstName,
             lastName: client?.user?.lastName,
             phoneNumber: client?.user?.phoneNumber,
