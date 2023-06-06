@@ -54,7 +54,7 @@ const Gallery = () => {
               data?.galleryImageList?.map((img: any, i: number) => (
                 <GalleryImage
                   key={i}
-                  src={img?.mediumImgUrl}
+                  src={img?.displayUrl}
                   onClick={() => {
                     setIsGrid(false);
                     setIndex(i);
@@ -84,7 +84,7 @@ const Gallery = () => {
               <Image
                 fluid
                 className='h-100 d-block'
-                src={img.mediumImgUrl}
+                src={img.displayUrl}
                 alt={`Gallery Image - ${img._id}`}
                 style={{ objectFit: 'cover' }}
                 width='100%'

@@ -8,7 +8,6 @@ const GalleryImage = Schema(
     mimetype: { type: String },
     title: { type: String },
     size: { type: Number },
-    mediumImgUrl: { type: String },
     thumbUrl: { type: String },
   },
   { timestaps: true }

@@ -55,7 +55,6 @@ module.exports = {
           mimetype,
           title,
           size,
-          mediumImgUrl,
           thumbUrl,
         },
       }
@@ -68,7 +67,6 @@ module.exports = {
           mimetype,
           title,
           size,
-          mediumImgUrl,
           thumbUrl,
         });
 

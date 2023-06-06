@@ -10,7 +10,6 @@ export const GALLERY_IMAGE_LIST = gql`
       mimetype
       title
       size
-      mediumImgUrl
       thumbUrl
     }
   }

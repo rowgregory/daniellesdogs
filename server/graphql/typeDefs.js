@@ -108,7 +108,6 @@ module.exports = gql`
     mimetype: String
     title: String
     size: Int
-    mediumImgUrl: String
     thumbUrl: String
   }
 
@@ -330,7 +329,6 @@ module.exports = gql`
     mimetype: String
     title: String
     size: Int
-    mediumImgUrl: String
     thumbUrl: String
   }
 

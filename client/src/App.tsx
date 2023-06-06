@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from 'react';
+import { Suspense } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { Routes } from './routes';
 import { ThemeProvider } from 'styled-components';
@@ -74,21 +74,21 @@ client = new ApolloClient({
 });
 
 const App = () => {
-  const matchTheme = {
-    theme: window.matchMedia('(prefers-color-scheme: dark)').matches
-      ? 'dark'
-      : 'light',
-  };
+  // const matchTheme = {
+  //   theme: window.matchMedia('(prefers-color-scheme: dark)').matches
+  //     ? 'dark'
+  //     : 'light',
+  // };
 
-  const [theme, setTheme] = useState(matchTheme.theme);
-  useEffect(() => {
-    window
-      .matchMedia('(prefers-color-scheme: dark)')
-      .addEventListener('change', (e) => {
-        const theme = e.matches ? 'dark' : 'light';
-        setTheme(theme);
-      });
-  }, []);
+  // const [theme, setTheme] = useState(matchTheme.theme);
+  // useEffect(() => {
+  //   window
+  //     .matchMedia('(prefers-color-scheme: dark)')
+  //     .addEventListener('change', (e) => {
+  //       const theme = e.matches ? 'dark' : 'light';
+  //       setTheme(theme);
+  //     });
+  // }, []);
 
   const PayPalOptions = {
     'client-id': process.env.REACT_APP_PAYPAL_CLIENT_ID,

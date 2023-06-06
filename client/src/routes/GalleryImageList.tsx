@@ -49,23 +49,22 @@ const GalleryImageList = () => {
     try {
       const res = await API.uploadImageToImgbb(file);
 
-      if (res.status_code === 400) {
+      if (res?.status_code === 400) {
         setUploading(false);
         setShowNoVideo(true);
       }
 
-      if (res.data) {
+      if (res?.data) {
         galleryImageCreate({
           variables: {
             galleryImageInput: {
-              displayUrl: res.data.image.url,
-              width: res.data.width,
-              height: res.data.height,
-              mimetype: res.data.image.mime,
-              title: res.data.title,
-              size: res.data.size,
-              mediumImgUrl: res.data.medium.url,
-              thumbUrl: res.data.thumb.url,
+              displayUrl: res?.data?.image?.url,
+              width: res?.data?.width,
+              height: res?.data?.height,
+              mimetype: res?.data?.image?.mime,
+              title: res?.data?.title,
+              size: res?.data?.size,
+              thumbUrl: res?.data?.thumb?.url,
             },
           },
         });
@@ -96,7 +95,7 @@ const GalleryImageList = () => {
         show={show}
         handleClose={handleClose}
         id={imageData.id}
-        image={imageData.mediumImgUrl}
+        image={imageData.displayUrl}
       />
       {uploading && <AcrobaticLoader />}
       <SubNav className='p-0 d-flex align-items-center'>

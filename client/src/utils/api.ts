@@ -20,7 +20,7 @@ export const API = {
       formData.append('isGalleryImage', 'true');
       let response = axios
         .post(
-          'https://api.imgbb.com/1/upload?key=eac61af21adebeedf728f250f9b4400b',
+          `https://api.imgbb.com/1/upload?key=${process.env.REACT_APP_IMG_BB_KEY}`,
           formData
         )
         .then((res) => {
