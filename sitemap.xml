@@ -1,0 +1,239 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+		<!--	created with www.mysitemapgenerator.com	-->
+		<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>0.6</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/secure</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/login</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/transparent</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/order/receipt/</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>0.6</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/admin/new-client-forms/</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>0.6</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/admin/new-client-forms</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>0.8</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/shop/</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>0.8</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/gallery</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/new-client-form</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/admin/bios/create</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>0.6</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/about</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/admin/bios/</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>0.6</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/admin/bios</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>0.8</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/admin/contact-forms/</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>0.6</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/admin/products/create</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>0.6</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/shop</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/admin/products/</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>0.6</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/admin/products</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>0.8</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/checkout</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/cart</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/admin/orders</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>0.8</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/about/contact-us</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>0.8</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/admin/services/create</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>0.6</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/services</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/admin/services/</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>0.6</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/admin/services</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>0.8</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/admin/dashboard</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>0.8</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/register</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/dashboard</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/services/create</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>0.8</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/gallery-images</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/products</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/products/create</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>0.8</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/orders</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/bios</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/bios/create</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>0.8</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/contact-forms</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/waiver</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/address</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/vet</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/pets</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/complete</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/logged-out</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/contact</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/contact/thank-you</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>0.8</priority>
+</url>
+<url>
+	<loc>https://danielles-dogs.herokuapp.com/confirmation</loc>
+	<lastmod>2023-08-02T22:13:50+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+</urlset>
