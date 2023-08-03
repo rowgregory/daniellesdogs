@@ -1,5 +1,3 @@
-import { currentDate } from '../currentDate';
-
 const petValues = {
   name: '',
   age: '',

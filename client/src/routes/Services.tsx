@@ -21,7 +21,7 @@ const Services = () => {
   const { loading, data } = useQuery(GET_SERVICES);
 
   return (
-    <Flex flexDirection={['column']}>
+    <Flex flexdirection={['column']}>
       <Flex
         style={{
           position: 'relative',
@@ -31,14 +31,14 @@ const Services = () => {
           backgroundSize: 'cover',
           backgroundPositionY: 'center',
         }}
-        flexDirection={['column']}
+        flexdirection={['column']}
       >
         <Flex
           maxWidth={['1120px']}
           margin={['0 auto']}
           width={['100%']}
           padding={['60px 24px 0']}
-          flexDirection={['column']}
+          flexdirection={['column']}
         >
           <Text
             fontSize={['40px', '40px', '60px']}
@@ -126,7 +126,7 @@ const Services = () => {
       <ServiceContainer>
         <Text
           fontSize={['26px', '30px', '48px']}
-          textAlign={['center']}
+          textalign={['center']}
           fontFamily='Roboto'
           color={['rgb(114, 114, 114)']}
           margin={['0 auto 60px']}
@@ -142,7 +142,7 @@ const Services = () => {
             <Flex
               key={i}
               margin={['0 0 3rem 0']}
-              flexDirection={['column', 'column', 'row']}
+              flexdirection={['column', 'column', 'row']}
               padding={['0 0 30px 0']}
               borderBottom={['1px solid #f0f0f0']}
             >
@@ -155,7 +155,7 @@ const Services = () => {
                 margin={['0', '0 1.5rem 0 0']}
                 maxwidth={['100%', '100%', '300px']}
               />
-              <Flex flexDirection={['column']}>
+              <Flex flexdirection={['column']}>
                 <Text
                   fontSize={['2rem']}
                   margin={[

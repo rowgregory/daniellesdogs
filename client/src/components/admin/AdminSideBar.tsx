@@ -22,26 +22,26 @@ export const sidebarData = () => {
       linkKey: `${prefix}new-client-forms`,
       icon: <i className='fas fa-book'></i>,
     },
-    {
-      textKey: 'Orders',
-      linkKey: `${prefix}orders`,
-      icon: <i className='fas fa-box'></i>,
-    },
-    {
-      textKey: 'Contact Forms',
-      linkKey: `${prefix}contact-forms`,
-      icon: <i className='fas fa-id-card'></i>,
-    },
-    {
-      textKey: 'Gallery Images',
-      linkKey: `${prefix}gallery-images`,
-      icon: <i className='fas fa-images'></i>,
-    },
-    {
-      textKey: 'Products',
-      linkKey: `${prefix}products`,
-      icon: <i className='fas fa-store'></i>,
-    },
+    // {
+    //   textKey: 'Orders',
+    //   linkKey: `${prefix}orders`,
+    //   icon: <i className='fas fa-box'></i>,
+    // },
+    // {
+    //   textKey: 'Contact Forms',
+    //   linkKey: `${prefix}contact-forms`,
+    //   icon: <i className='fas fa-id-card'></i>,
+    // },
+    // {
+    //   textKey: 'Gallery Images',
+    //   linkKey: `${prefix}gallery-images`,
+    //   icon: <i className='fas fa-images'></i>,
+    // },
+    // {
+    //   textKey: 'Products',
+    //   linkKey: `${prefix}products`,
+    //   icon: <i className='fas fa-store'></i>,
+    // },
     {
       textKey: 'Bios',
       linkKey: `${prefix}bios`,

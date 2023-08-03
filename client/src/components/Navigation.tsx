@@ -67,22 +67,22 @@ export const headerLinkData = (user: any) => {
       textKey: 'About',
       linkPath: '/about',
     },
-    {
-      textKey: 'Gallery',
-      linkPath: '/gallery',
-    },
-    {
-      textKey: 'Shop',
-      linkPath: '/shop',
-    },
+    // {
+    //   textKey: 'Gallery',
+    //   linkPath: '/gallery',
+    // },
+    // {
+    //   textKey: 'Shop',
+    //   linkPath: '/shop',
+    // },
     {
       textKey: 'New Client Form',
       linkPath: '/new-client-form',
     },
-    {
-      textKey: 'Contact',
-      linkPath: '/contact',
-    },
+    // {
+    //   textKey: 'Contact',
+    //   linkPath: '/contact',
+    // },
     {
       textKey: user?.userType === 'ADMIN' ? 'Dashboard' : 'Login',
       linkPath: user?.userType === 'ADMIN' ? '/admin/dashboard' : '/login',

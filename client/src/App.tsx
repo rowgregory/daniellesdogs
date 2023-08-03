@@ -1,4 +1,3 @@
-import { Suspense } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { Routes } from './routes';
 import { ThemeProvider } from 'styled-components';
@@ -15,9 +14,9 @@ import { AuthProvider } from './context/authContext';
 import { authToken } from './utils/authToken';
 import { GET_REFRESH_TOKEN } from './queries/getRefreshToken';
 import jwtDecode from 'jwt-decode';
-import { CartProvider } from './context/cartContext';
+// import { CartProvider } from './context/cartContext';
 import { NavbarProvider } from './context/navbarContext';
-import { PayPalScriptProvider } from '@paypal/react-paypal-js';
+// import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { DashboardProvider } from './context/dashboardContext';
 
 const httpLink = createHttpLink({
@@ -64,61 +63,41 @@ const authLink = setContext(async (req, { headers }) => {
   };
 });
 
-const link = concat(authLink, httpLink);
-
 client = new ApolloClient({
-  link,
+  link: concat(authLink, httpLink),
   cache: new InMemoryCache({
     addTypename: false,
   }),
 });
 
 const App = () => {
-  // const matchTheme = {
-  //   theme: window.matchMedia('(prefers-color-scheme: dark)').matches
-  //     ? 'dark'
-  //     : 'light',
-  // };
-
-  // const [theme, setTheme] = useState(matchTheme.theme);
-  // useEffect(() => {
-  //   window
-  //     .matchMedia('(prefers-color-scheme: dark)')
-  //     .addEventListener('change', (e) => {
-  //       const theme = e.matches ? 'dark' : 'light';
-  //       setTheme(theme);
-  //     });
-  // }, []);
-
-  const PayPalOptions = {
-    'client-id': process.env.REACT_APP_PAYPAL_CLIENT_ID,
-    'merchant-id': process.env.REACT_APP_PAYPAL_MERCHANT_ID,
-    currency: 'USD',
-    intent: 'capture',
-    components: 'buttons,funding-eligibility',
-    'enable-funding': 'venmo',
-  } as any;
+  // const PayPalOptions = {
+  //   'client-id': process.env.REACT_APP_PAYPAL_CLIENT_ID,
+  //   'merchant-id': process.env.REACT_APP_PAYPAL_MERCHANT_ID,
+  //   currency: 'USD',
+  //   intent: 'capture',
+  //   components: 'buttons,funding-eligibility',
+  //   'enable-funding': 'venmo',
+  // } as any;
 
   return (
-    <PayPalScriptProvider options={PayPalOptions}>
-      <AuthProvider>
-        <ApolloProvider client={client}>
-          <CartProvider>
-            <NavbarProvider>
-              <DashboardProvider>
-                <BrowserRouter>
-                  <ThemeProvider theme={themes['light']}>
-                    <Suspense fallback={<></>}>
-                      <Routes />
-                    </Suspense>
-                  </ThemeProvider>
-                </BrowserRouter>
-              </DashboardProvider>
-            </NavbarProvider>
-          </CartProvider>
-        </ApolloProvider>
-      </AuthProvider>
-    </PayPalScriptProvider>
+    // <PayPalScriptProvider options={PayPalOptions}>
+    <AuthProvider>
+      <ApolloProvider client={client}>
+        {/* <CartProvider> */}
+        <NavbarProvider>
+          <DashboardProvider>
+            <BrowserRouter>
+              <ThemeProvider theme={themes['light']}>
+                <Routes />
+              </ThemeProvider>
+            </BrowserRouter>
+          </DashboardProvider>
+        </NavbarProvider>
+        {/* </CartProvider> */}
+      </ApolloProvider>
+    </AuthProvider>
+    // </PayPalScriptProvider>
   );
 };
 

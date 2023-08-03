@@ -21,7 +21,7 @@ const UserInitial = () => {
         {firstInitial}
         {lastInitial}
       </UserInitials>
-      <Flex flexDirection={['column']}>
+      <Flex flexdirection={['column']}>
         <Text fontFamily='Roboto' color='#999ea4'>
           {context?.user?.firstName}
         </Text>

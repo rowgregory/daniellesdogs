@@ -12,9 +12,7 @@ const Container = styled.div`
   align-items: center;
   flex-direction: column;
   transition: 300ms;
-  margin-right: 84px;
-  transition-easing: linear; 
-  position: fixed; 
+  transition-easing: linear;
   z-index: 500;
 `;
 

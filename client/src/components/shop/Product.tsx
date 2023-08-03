@@ -50,7 +50,7 @@ const Product = ({ product }: any) => {
   return (
     <Container to={`/shop/${product?.id}`}>
       <ProductImg src={product.displayUrl} />
-      <Flex flexDirection={['column']} padding={['8px']}>
+      <Flex flexdirection={['column']} padding={['8px']}>
         <ProductName>{product?.name}</ProductName>
         <Price>${product?.price}</Price>
       </Flex>

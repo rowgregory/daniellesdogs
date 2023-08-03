@@ -52,7 +52,7 @@ const DashboardModal = () => {
             DANIELLE'S DOGS
           </Text>
         </Link>
-        <Flex flexDirection={['column']}>
+        <Flex flexdirection={['column']}>
           {sidebarData().map((obj: any, i: number) => (
             <Flex margin={['0 8px 8px 8px']} key={i}>
               <StyledLink

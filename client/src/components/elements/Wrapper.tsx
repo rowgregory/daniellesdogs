@@ -6,8 +6,8 @@ const Wrapper = styled.div<{
   width?: any;
   justifyContent?: any;
   display?: any;
-  alignItems?: any;
-  flexDirection?: any;
+  alignitems?: any;
+  flexdirection?: any;
   borderBottom?: any;
   paddingBottom?: any;
   padding?: any;
@@ -17,8 +17,8 @@ const Wrapper = styled.div<{
     width: '100%',
     justifyContent: '',
     display: '',
-    alignItems: '',
-    flexDirection: undefined,
+    alignitems: '',
+    flexdirection: undefined,
     borderBottom: '',
     paddingBottom: '',
     padding: '',
@@ -28,8 +28,8 @@ const Wrapper = styled.div<{
     width,
     justifyContent,
     display,
-    alignItems,
-    flexDirection,
+    alignitems,
+    flexdirection,
     borderBottom,
     paddingBottom,
     padding,
@@ -53,11 +53,11 @@ const Wrapper = styled.div<{
       },
       {
         property: 'align-items',
-        values: alignItems,
+        values: alignitems,
       },
       {
         property: 'flex-direction',
-        values: flexDirection,
+        values: flexdirection,
       },
       {
         property: 'border-bottom',

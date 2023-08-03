@@ -46,7 +46,7 @@ const Gallery = () => {
                 style={{ aspectRatio: '1/1' }}
                 width={['100%']}
                 justifyContent={['center']}
-                alignItems={['center']}
+                alignitems={['center']}
               >
                 <Spinner animation='border' />
               </Flex>

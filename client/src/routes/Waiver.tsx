@@ -103,7 +103,7 @@ const Waiver = () => {
         {loading ? (
           <Maze />
         ) : noWaiver ? (
-          <Text fontFamily='Roboto' color={['#ededed']} textAlign={['center']}>
+          <Text fontFamily='Roboto' color={['#ededed']} textalign={['center']}>
             Select a file from your device to add the waiver to the new client
             form.
           </Text>

@@ -58,7 +58,7 @@ const ContinueBtn: FC<ContineBtnProps> = ({
   const isLoading = loading1 || loading2 || loading3;
 
   return (
-    <Flex alignItems={['center']}>
+    <Flex alignitems={['center']}>
       <Continue onClick={onSubmit} className={isLoading ? 'loading' : ''}>
         <Text
           texttransform='capitalize'

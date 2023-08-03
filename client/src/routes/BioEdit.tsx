@@ -129,8 +129,8 @@ const BioEdit = () => {
         </SubNav>
         <ContentWrapper className='edit'>
           <Flex
-            flexDirection={['column']}
-            alignItems={['center']}
+            flexdirection={['column']}
+            alignitems={['center']}
             margin={['0 0 0 0', '0 0 0 32px']}
           >
             <Label>CURRENT PIC</Label>

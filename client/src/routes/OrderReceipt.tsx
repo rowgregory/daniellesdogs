@@ -63,7 +63,7 @@ const OrderReceipt = () => {
       {loading && <AcrobaticLoader />}
       <Wrapper>
         <Flex
-          alignItems={['center']}
+          alignitems={['center']}
           padding={['20px 0']}
           style={{ background: '#fcfbfe' }}
         >

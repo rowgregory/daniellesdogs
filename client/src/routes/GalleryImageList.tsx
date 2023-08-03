@@ -113,7 +113,7 @@ const GalleryImageList = () => {
         {loading ? (
           <Maze />
         ) : noGalleryImages ? (
-          <Text fontFamily='Roboto' color={['#ededed']} textAlign={['center']}>
+          <Text fontFamily='Roboto' color={['#ededed']} textalign={['center']}>
             Select a file from your device to add as an image to the gallery
           </Text>
         ) : (

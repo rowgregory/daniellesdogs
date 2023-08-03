@@ -132,8 +132,8 @@ const ServiceEdit = () => {
         <ContentWrapper className='edit'>
           <Form className='d-flex flex-column w-100'>
             <Flex
-              flexDirection={['column']}
-              alignItems={['center']}
+              flexdirection={['column']}
+              alignitems={['center']}
               margin={['0 0 0 0', '0 0 0 32px']}
             >
               <Label>CURRENT PIC</Label>

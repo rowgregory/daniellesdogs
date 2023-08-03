@@ -2,7 +2,7 @@ import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { Flex } from '../elements';
 import BurgerIcon from './BurgerIcon';
-import CartIcon from './CartIcon';
+// import CartIcon from './CartIcon';
 import Logo from './Logo';
 import { useContext } from 'react';
 import { NavbarContext } from '../../context/navbarContext';
@@ -10,6 +10,7 @@ import { NavbarContext } from '../../context/navbarContext';
 const Container = styled(Flex)<{ block?: any; p?: any }>`
   display: ${({ block }) => (block === 'true' ? 'none' : 'flex')};
   justify-content: space-between;
+  align-items: center;
   height: 56px;
   padding-inline: 12px;
   width: 100%;
@@ -48,10 +49,7 @@ const Navbar = () => {
   return (
     <Container className={animations} block={pagesToBlock} p={pathname}>
       <Logo />
-      <Flex cursor={['pointer']} alignItems={['center']}>
-        <CartIcon />
-        <BurgerIcon />
-      </Flex>
+      <BurgerIcon />
     </Container>
   );
 };

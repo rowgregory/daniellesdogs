@@ -16,7 +16,7 @@ interface TextProps {
   cursor?: string;
   background?: string[];
   lineHeight?: string[];
-  textAlign?: string[];
+  textalign?: string[];
   texttransform?: string;
   bottom?: string;
   right?: string[];
@@ -42,7 +42,7 @@ const Text = styled.div<TextProps>(
     cursor: '',
     background: '',
     lineHeight: '',
-    textAlign: undefined,
+    textalign: undefined,
     texttransform: '',
     bottom: '',
     right: '',
@@ -66,7 +66,7 @@ const Text = styled.div<TextProps>(
     cursor,
     background,
     lineHeight,
-    textAlign,
+    textalign,
     texttransform,
     bottom,
     right,
@@ -134,7 +134,7 @@ const Text = styled.div<TextProps>(
       },
       {
         property: 'text-align',
-        values: textAlign,
+        values: textalign,
       },
       {
         property: 'text-transform',

@@ -264,7 +264,7 @@ const NewClientFormEdit = () => {
                 >
                   Pet
                 </Text>
-                <Flex flexDirection={['column']}>
+                <Flex flexdirection={['column']}>
                   {data?.getNewClientFormById?.pets?.map(
                     (pet: any, i: number) => (
                       <PetCard

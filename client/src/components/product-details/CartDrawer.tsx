@@ -29,7 +29,7 @@ const CartDrawer = () => {
 
   return (
     <Container ref={cartRef} className={animation}>
-      <Flex flexDirection={['column']}>
+      <Flex flexdirection={['column']}>
         {cartItems?.map((item: any, i: number) => (
           <Flex key={i} width={['100%']} margin={['0 0 36px 0']}>
             <Picture
@@ -40,7 +40,7 @@ const CartDrawer = () => {
               borderradius={['6px']}
               background={['#ddd']}
             />
-            <Flex flexDirection={['column']} width={['100%']}>
+            <Flex flexdirection={['column']} width={['100%']}>
               <Text fontWeight={['500']} fontFamily='Roboto'>
                 {item.name}
               </Text>
@@ -50,7 +50,7 @@ const CartDrawer = () => {
                 </Text>
               )}
               <Flex justifyContent={['space-between']} margin={['24px 0 0 0']}>
-                <Flex alignItems={['baseline']}>
+                <Flex alignitems={['baseline']}>
                   <QtyBtn
                     style={{ fontSize: '10px' }}
                     onClick={(e: any) => deleteOneItem(e, item)}
@@ -84,9 +84,9 @@ const CartDrawer = () => {
       </Flex>
       {cartItemsAmount === 0 ? (
         <Flex
-          flexDirection={['column']}
+          flexdirection={['column']}
           justifyContent={['center']}
-          alignItems={['center']}
+          alignitems={['center']}
           style={{ minHeight: '100vh' }}
         >
           <Text
@@ -109,12 +109,12 @@ const CartDrawer = () => {
           </Link>
         </Flex>
       ) : (
-        <Flex flexDirection={['column']}>
+        <Flex flexdirection={['column']}>
           <Flex justifyContent={['space-between']}>
             <Text fontFamily='Roboto' fontWeight={['600']}>
               Subtotal
             </Text>
-            <Flex alignItems={['baseline']}>
+            <Flex alignitems={['baseline']}>
               <Text
                 fontWeight={['600']}
                 fontFamily='Roboto'

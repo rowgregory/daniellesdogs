@@ -120,7 +120,7 @@ const RightPanel = () => {
                       {obj.name}
                     </Text>
                   </div>
-                  <Flex alignItems={['center']}>
+                  <Flex alignitems={['center']}>
                     <Text
                       fontSize={['12px']}
                       fontWeight={['600']}

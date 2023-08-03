@@ -67,7 +67,7 @@ const ProductDetails = () => {
             alt={product?.name}
             width='100%'
           />
-          <Flex flexDirection={['column']}>
+          <Flex flexdirection={['column']}>
             <Text
               fontSize={['38px']}
               fontWeight={['600']}

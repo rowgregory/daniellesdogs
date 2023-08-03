@@ -3,9 +3,9 @@ import { createMediaQueries } from '../../utils/createMediaQueries';
 
 interface FlexProps {
   display?: string[];
-  flexDirection?: string[];
+  flexdirection?: string[];
   justifyContent?: string[];
-  alignItems?: string[];
+  alignitems?: string[];
   flexWrap?: string[];
   flex?: string[];
   margin?: string[];
@@ -21,9 +21,9 @@ interface FlexProps {
 const Flex = styled.div<FlexProps>(
   {
     display: 'flex',
-    flexDirection: undefined,
+    flexdirection: undefined,
     justifyContent: '',
-    alignItems: '',
+    alignitems: '',
     flexWrap: undefined,
     flex: '',
     margin: '',
@@ -37,9 +37,9 @@ const Flex = styled.div<FlexProps>(
   },
   ({
     display,
-    flexDirection,
+    flexdirection,
     justifyContent,
-    alignItems,
+    alignitems,
     flex,
     flexWrap,
     margin,
@@ -58,7 +58,7 @@ const Flex = styled.div<FlexProps>(
       },
       {
         property: 'flex-direction',
-        values: flexDirection,
+        values: flexdirection,
       },
       {
         property: 'justify-content',
@@ -66,7 +66,7 @@ const Flex = styled.div<FlexProps>(
       },
       {
         property: 'align-items',
-        values: alignItems,
+        values: alignitems,
       },
       {
         property: 'flex-wrap',

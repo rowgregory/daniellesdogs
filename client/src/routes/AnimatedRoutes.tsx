@@ -8,36 +8,36 @@ import NewClientForms from './NewClientFormList';
 import { DashboardLayoutWithSideBar } from '../components/layouts/DashboardLayoutWithSideBar';
 import NewClientFormEdit from './NewClientFormEdit';
 import LoggedOut from './LoggedOut';
-import Gallery from './Gallery';
-import Shop from './Shop';
-import Contact from './Contact';
+// import Gallery from './Gallery';
+// import Shop from './Shop';
+// import Contact from './Contact';
 import About from './About';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import NewClientFormAddress from './NewClientFormAddress';
 import NewClientFormVet from './NewClientFormVet';
 import NewClientFormPets from './NewClientFormPets';
 import Complete from './Complete';
-import GalleryImageList from './GalleryImageList';
+// import GalleryImageList from './GalleryImageList';
 import Services from './Services';
 import { AuthContext } from '../context/authContext';
-import ContactThankYou from './ContactThankYou';
+// import ContactThankYou from './ContactThankYou';
 import BioList from './BioList';
 import BioCreate from './BioCreate';
 import BioEdit from './BioEdit';
-import ContactFormList from './ContactFormList';
-import ProductList from './ProductList';
-import ProductCreate from './ProductCreate';
-import ProductEdit from './ProductEdit';
+// import ContactFormList from './ContactFormList';
+// import ProductList from './ProductList';
+// import ProductCreate from './ProductCreate';
+// import ProductEdit from './ProductEdit';
 import Secure from './Secure';
 import Footer from '../components/Footer';
-import ProductDetails from './ProductDetails';
-import Confirmation from './Confirmation';
+// import ProductDetails from './ProductDetails';
+// import Confirmation from './Confirmation';
 import AdminSideBar from '../components/admin/AdminSideBar';
-import Cart from './Cart';
-import CheckoutPayPal from './CheckoutPayPal';
-import OrderReceipt from './OrderReceipt';
-import OrderList from './OrderList';
-import ContactFormView from './ContactFormView';
+// import Cart from './Cart';
+// import CheckoutPayPal from './CheckoutPayPal';
+// import OrderReceipt from './OrderReceipt';
+// import OrderList from './OrderList';
+// import ContactFormView from './ContactFormView';
 import ServiceList from './ServiceList';
 import ServiceCreate from './ServiceCreate';
 import ServiceEdit from './ServiceEdit';
@@ -85,20 +85,10 @@ const AnimatedRoutes = () => {
                   <Route path='services' element={<ServiceList />} />
                   <Route path='services/create' element={<ServiceCreate />} />
                   <Route path='services/:id/edit' element={<ServiceEdit />} />
-                  <Route path='gallery-images' element={<GalleryImageList />} />
-                  <Route path='products' element={<ProductList />} />
-                  <Route path='products/create' element={<ProductCreate />} />
-                  <Route path='products/:id/edit' element={<ProductEdit />} />
-                  <Route path='orders' element={<OrderList />} />
                   <Route path='bios' element={<BioList />} />
                   <Route path='bios/create' element={<BioCreate />} />
                   <Route path='bios/:id/edit' element={<BioEdit />} />
-                  <Route path='contact-forms' element={<ContactFormList />} />
                   <Route path='waiver' element={<Waiver />} />
-                  <Route
-                    path='contact-forms/:id/view'
-                    element={<ContactFormView />}
-                  />
                   <Route
                     path='new-client-forms/*'
                     element={
@@ -108,6 +98,17 @@ const AnimatedRoutes = () => {
                       </Routes>
                     }
                   ></Route>
+                  <Route path='*' element={<Navigate to='/' replace />} />
+                  {/* <Route path='gallery-images' element={<GalleryImageList />} /> */}
+                  {/* <Route path='products' element={<ProductList />} /> */}
+                  {/* <Route path='products/create' element={<ProductCreate />} /> */}
+                  {/* <Route path='products/:id/edit' element={<ProductEdit />} /> */}
+                  {/* <Route path='orders' element={<OrderList />} /> */}
+                  {/* <Route path='contact-forms' element={<ContactFormList />} /> */}
+                  {/* <Route
+                    path='contact-forms/:id/view'
+                    element={<ContactFormView />}
+                  /> */}
                 </Routes>
               </PrivateRoutes>
             </DashboardLayoutWithSideBar>
@@ -127,8 +128,11 @@ const AnimatedRoutes = () => {
           }
         />
         <Route path='/logged-out' element={<LoggedOut />} />
-        <Route path='/gallery' element={<Gallery />} />
-        <Route
+        <Route path='/about' element={<About />} />
+        <Route path='/services' element={<Services />} />
+        <Route path='*' element={<Navigate to='/' replace />} />
+        {/* <Route path='/gallery' element={<Gallery />} /> */}
+        {/* <Route
           path='/shop/*'
           element={
             <Routes>
@@ -136,16 +140,13 @@ const AnimatedRoutes = () => {
               <Route path=':id' element={<ProductDetails />} />
             </Routes>
           }
-        />
-        <Route path='/contact' element={<Contact />} />
-        <Route path='/contact/thank-you' element={<ContactThankYou />} />
-        <Route path='/about' element={<About />} />
-        <Route path='/services' element={<Services />} />
-        <Route path='/checkout/:id?' element={<CheckoutPayPal />} />
-        <Route path='/confirmation' element={<Confirmation />} />
-        <Route path='/cart' element={<Cart />} />
-        <Route path='/order/receipt/:id' element={<OrderReceipt />} />
-        <Route path='*' element={<Navigate to='/' replace />} />
+        /> */}
+        {/* <Route path='/contact' element={<Contact />} /> */}
+        {/* <Route path='/contact/thank-you' element={<ContactThankYou />} /> */}
+        {/* <Route path='/checkout/:id?' element={<CheckoutPayPal />} /> */}
+        {/* <Route path='/confirmation' element={<Confirmation />} /> */}
+        {/* <Route path='/cart' element={<Cart />} /> */}
+        {/* <Route path='/order/receipt/:id' element={<OrderReceipt />} /> */}
       </Routes>
       <Footer />
     </>

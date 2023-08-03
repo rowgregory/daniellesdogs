@@ -39,7 +39,7 @@ const StickyFooter = ({ product, qty, size, outOfStock }: any) => {
     <Container>
       <Flex
         display={['none', 'flex', 'flex']}
-        alignItems={['center']}
+        alignitems={['center']}
         justifyContent={['center']}
         width={['180px']}
         style={{ borderRight: '2px solid #f5f5f5' }}
@@ -52,11 +52,11 @@ const StickyFooter = ({ product, qty, size, outOfStock }: any) => {
       <Flex
         padding={['0 8px', '016px', '0 32px']}
         justifyContent={['space-between']}
-        alignItems={['center']}
+        alignitems={['center']}
         width={['100%']}
       >
         <Text fontWeight={['600']}>{product?.name}</Text>
-        <Flex alignItems={['center']}>
+        <Flex alignitems={['center']}>
           <Text
             fontWeight={['600']}
             fontSize={['24px']}

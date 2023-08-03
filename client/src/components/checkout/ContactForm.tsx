@@ -18,7 +18,7 @@ const ContactForm = ({ data }: any) => {
     formIsValid,
   } = data;
   return (
-    <Flex flexDirection={['column']}>
+    <Flex flexdirection={['column']}>
       <FormInput
         name='userFullName'
         value={userFullName}

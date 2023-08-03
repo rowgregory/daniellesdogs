@@ -111,7 +111,7 @@ const BarChart = () => {
         </div>
       ) : noSales ? (
         <Text
-          textAlign={['center']}
+          textalign={['center']}
           width={['100%']}
           color={['#faf9f9']}
           fontFamily='Roboto'

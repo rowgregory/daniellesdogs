@@ -31,7 +31,7 @@ const BreadCrumb = ({ breadCrumbData }: any) => {
   } = breadCrumbData;
 
   return (
-    <Flex alignItems={['baseline']} margin={['20px 0 36px 0']}>
+    <Flex alignitems={['baseline']} margin={['20px 0 36px 0']}>
       <CrumbLink to='/cart'>Cart</CrumbLink>
       <ChevronRight />
       <Crumb

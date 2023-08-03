@@ -144,7 +144,7 @@ const Home = () => {
               margin={['0 2rem 0 0']}
             />
             <Flex
-              alignItems={['center', 'flex-start']}
+              alignitems={['center', 'flex-start']}
               className='d-flex flex-column justify-content-center'
             >
               <Text
@@ -156,7 +156,7 @@ const Home = () => {
                 Danielle's Dogs
               </Text>
               <Text
-                textAlign={['center']}
+                textalign={['center']}
                 lineHeight={['30px']}
                 fontWeight={['600']}
                 fontSize={['20px', '1.15rem', '1.45rem', '1.55rem']}
@@ -181,7 +181,7 @@ const Home = () => {
           <Text
             fontSize={['52px']}
             fontWeight={['600']}
-            textAlign={['center']}
+            textalign={['center']}
             width={['100%']}
             margin={['0 0 48px 0']}
           >
@@ -204,7 +204,7 @@ const Home = () => {
                   objectfit={['cover']}
                   style={{ border: '4px solid #fff' }}
                 />
-                <Flex flexDirection={['column']} width={['61%', '71%']}>
+                <Flex flexdirection={['column']} width={['61%', '71%']}>
                   <Text
                     style={{ maxWidth: '320px' }}
                     fontSize={['calc(10px + 5vw)', 'calc(10px + 2vw)']}

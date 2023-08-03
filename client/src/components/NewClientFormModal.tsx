@@ -78,7 +78,7 @@ const NewClientFormModal: FC<NewClientFormModalProps> = ({
           style={{ height: '40rem' }}
           display={['flex']}
           justifyContent={['center']}
-          alignItems={['center']}
+          alignitems={['center']}
         >
           <Spinner animation='border' />
         </Wrapper>
@@ -128,7 +128,7 @@ const NewClientFormModal: FC<NewClientFormModalProps> = ({
           </Text>
           <Wrapper
             display={['flex']}
-            flexDirection={['column', 'column', 'row', 'row']}
+            flexdirection={['column', 'column', 'row', 'row']}
           >
             {petsData
               ?.filter((obj: any) => obj.textKey !== '__typename')
@@ -137,7 +137,7 @@ const NewClientFormModal: FC<NewClientFormModalProps> = ({
                   key={i}
                   style={{ flex: 1 }}
                   display={['flex']}
-                  flexDirection={['column']}
+                  flexdirection={['column']}
                   borderBottom={[
                     '1px solid rgba(0, 0, 0, 0.075)',
                     '1px solid rgba(0, 0, 0, 0.075)',

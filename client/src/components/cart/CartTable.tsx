@@ -45,7 +45,7 @@ const CartTable = ({ height }: any) => {
               <Text>${Number(item?.price)?.toFixed(2)}</Text>
             </td>
             <td style={{ width: '100px' }}>
-              <Flex alignItems={['baseline']}>
+              <Flex alignitems={['baseline']}>
                 <QtyBtn
                   style={{ fontSize: '10px' }}
                   onClick={(e: any) => cart.deleteOneItem(e, item)}

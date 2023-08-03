@@ -98,7 +98,7 @@ const RightRail = () => {
           <Text fontSize={['17px']} fontFamily='Roboto' fontWeight={['600']}>
             Total
           </Text>
-          <Flex alignItems={['baseline']}>
+          <Flex alignitems={['baseline']}>
             <Text
               fontSize={['12px']}
               fontWeight={['300']}

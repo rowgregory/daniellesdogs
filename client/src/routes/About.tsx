@@ -71,14 +71,14 @@ const About = () => {
           backgroundSize: 'cover',
           backgroundPositionY: 'center',
         }}
-        flexDirection={['column']}
+        flexdirection={['column']}
       >
         <Flex
           maxWidth={['1120px']}
           margin={['0 auto']}
           width={['100%']}
           padding={['60px 24px 0']}
-          flexDirection={['column']}
+          flexdirection={['column']}
           position={['relative']}
         >
           <Text
@@ -127,8 +127,8 @@ const About = () => {
           ></path>
         </svg>
       </Container>
-      <Flex flexDirection={['column']} maxWidth={['796px']} margin={['0 auto']}>
-        <Text fontSize={['18px']}>
+      <Flex flexdirection={['column']} maxWidth={['796px']} margin={['0 auto']}>
+        <Text fontSize={['22px']} margin={['0 16px']}>
           Danielle and Olympia, two passionate dog lovers, embarked on a
           remarkable journey that led to the creation of Danielle Dogs dog
           walking business. Bound by their shared devotion to canines, they
@@ -146,11 +146,11 @@ const About = () => {
         <BioCardsContainer>
           {data?.bioList?.map((bio: any, i: number) => (
             <BioCard key={i}>
-              <Flex flexDirection={['column']}>
+              <Flex flexdirection={['column']}>
                 <Image src={bio?.displayUrl} />
                 <Text
                   fontSize={['32px']}
-                  textAlign={['center']}
+                  textalign={['center']}
                   width={['100%']}
                   margin={['16px 0 0 0']}
                 >
@@ -159,7 +159,7 @@ const About = () => {
                 <Text
                   margin={['0 0 16px 0']}
                   fontSize={['24px']}
-                  textAlign={['center']}
+                  textalign={['center']}
                   fontWeight={['bold']}
                   width={['100%']}
                 >

@@ -15,7 +15,7 @@ const ContactFormView = () => {
   });
 
   return (
-    <Flex padding={['32px 32px 48px']} flexDirection={['column']}>
+    <Flex padding={['32px 32px 48px']} flexdirection={['column']}>
       <PageTitle>Contact Form</PageTitle>
       {loading && <Spinner animation='border' />}
       <Text margin={['0 0 32px 0']} color={['#d1d1d1']} fontFamily='Roboto'>
