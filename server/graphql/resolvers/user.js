@@ -1,7 +1,6 @@
 const User = require('../../models/User.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { AuthenticationError } = require('apollo-server-core');
 
 module.exports = {
   Mutation: {
@@ -21,10 +20,10 @@ module.exports = {
       try {
         const userExists = await User.findOne({ emailAddress });
         if (userExists)
-          throw new AuthenticationError('Invalid email or password');
+          throw new Error('Invalid email or password');
 
         if (password !== confirmPassword)
-          throw new AuthenticationError('Passwords do not match');
+          throw new Error('Passwords do not match');
 
         const olympiasEmail = process.env.OLYMPIA_EMAIL_ADDRESS;
         const daniellesEmail = process.env.DANIELLE_EMAIL_ADDRESS;
@@ -35,7 +34,7 @@ module.exports = {
           emailAddress !== daniellesEmail &&
           emailAddress !== gregsEmail
         )
-          throw new AuthenticationError('Invalid email or password');
+          throw new Error('Invalid email or password');
 
         const hashedPassword = await bcrypt.hash(password, 12);
 
@@ -62,7 +61,7 @@ module.exports = {
         const res = await createdUser.save();
         return res;
       } catch (err) {
-        throw new AuthenticationError(err.message);
+        throw new Error(err.message);
       }
     },
     async login(_, { loginInput: { emailAddress, password } }) {
@@ -70,7 +69,7 @@ module.exports = {
         const user = await User.findOne({ emailAddress });
 
         if (!user)
-          throw new AuthenticationError('Incorrect email address or password');
+          throw new Error('Incorrect email address or password');
 
         if (user && (await bcrypt.compare(password, user.password))) {
           const accessToken = jwt.sign(
@@ -95,10 +94,10 @@ module.exports = {
             ...user._doc,
           };
         } else {
-          throw new AuthenticationError('Incorrect email address or password');
+          throw new Error('Incorrect email address or password');
         }
       } catch (err) {
-        throw new AuthenticationError(err.message);
+        throw new Error(err.message);
       }
     },
     async getRefreshToken(_, args) {
@@ -115,7 +114,7 @@ module.exports = {
     logoutUser: async (_, { id }) => {
       const user = await User.findById(id);
 
-      if (!user) throw new AuthenticationError('User not found');
+      if (!user) throw new Error('User not found');
 
       user.lastLoginTime = new Date().toISOString();
 
