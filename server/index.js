@@ -10,16 +10,15 @@ const colors = require('colors');
 const path = require('path');
 const express = require('express');
 const http = require('http');
-const {
-  ApolloServerPluginDrainHttpServer,
-  ApolloServerPluginLandingPageLocalDefault,
-} = require('apollo-server-core');
 const { InMemoryLRUCache } = require('@apollo/utils.keyvaluecache');
 const cors = require('cors');
 const { json } = require('body-parser');
-
-const { ApolloServer } =require('@apollo/server');
-const { expressMiddleware } =require('@apollo/server/express4');
+const { 
+  ApolloServer
+} = require('@apollo/server');
+const { expressMiddleware,  } = require('@apollo/server/express4');
+const { ApolloServerPluginDrainHttpServer } = require('@apollo/server/plugin/drainHttpServer');
+const { ApolloServerPluginLandingPageLocalDefault } = require('@apollo/server/plugin/landingPage/default');
 
 const app = express();
 app.use(express.json());
