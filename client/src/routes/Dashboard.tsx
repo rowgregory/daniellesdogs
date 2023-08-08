@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import BottomRow from '../components/admin/dashboard/BottomRow';
-import MiddleRow from '../components/admin/dashboard/MiddleRow';
+// import MiddleRow from '../components/admin/dashboard/MiddleRow';
 import RightPanel from '../components/admin/dashboard/RightPanel';
 import TopRow from '../components/admin/dashboard/TopRow';
 import UserInitial from '../components/admin/dashboard/UserInitial';
@@ -29,11 +29,14 @@ const Dashboard = () => {
   return (
     <Container>
       <Middle>
-        <Flex display={['block', 'none']} margin={['0 0 24px 0']}>
+        <Flex
+          display={['block', 'block', 'block', 'none']}
+          margin={['0 0 24px 0']}
+        >
           <UserInitial />
         </Flex>
         <TopRow />
-        <MiddleRow />
+        {/* <MiddleRow /> */}
         <BottomRow />
       </Middle>
       <RightPanel />

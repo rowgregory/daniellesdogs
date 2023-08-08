@@ -12,8 +12,8 @@ const SquareContainer = styled.div`
   gap: 16px;
   width: 100%;
 
-  @media screen and (min-width: ${({ theme }) => theme.breakpoints[1]}) {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+  @media screen and (min-width: ${({ theme }) => theme.breakpoints[3]}) {
+    grid-template-columns: 1fr 1fr;
   }
 `;
 
@@ -71,14 +71,14 @@ const TotalAmount = styled.div`
 
 export const topRowData = (amount: any) => {
   return [
-    {
-      textKey: 'Total Orders',
-      icon: <i className='fas fa-home'></i>,
-      iconBg: '#5a68fe',
-      background: '#4a486f',
-      total: amount?.orderCount,
-      linkKey: '/admin/orders',
-    },
+    // {
+    //   textKey: 'Total Orders',
+    //   icon: <i className='fas fa-home'></i>,
+    //   iconBg: '#5a68fe',
+    //   background: '#4a486f',
+    //   total: amount?.orderCount,
+    //   linkKey: '/admin/orders',
+    // },
     {
       textKey: 'Total Clients',
       icon: <i className='fas fa-users-cog'></i>,
@@ -87,22 +87,22 @@ export const topRowData = (amount: any) => {
       total: amount?.newClientFormCount,
       linkKey: '/admin/new-client-forms',
     },
-    {
-      textKey: 'Gallery Images',
-      icon: <i className='fas fa-camera-retro'></i>,
-      iconBg: '#1c8be3',
-      background: '#547085',
-      total: amount?.galleryImageCount,
-      linkKey: '/admin/gallery-images',
-    },
-    {
-      textKey: 'Contact Forms',
-      icon: <i className='fas fa-rocket'></i>,
-      iconBg: '#fda525',
-      background: '#9d8661',
-      total: amount?.contactFormCount,
-      linkKey: '/admin/contact-forms',
-    },
+    // {
+    //   textKey: 'Gallery Images',
+    //   icon: <i className='fas fa-camera-retro'></i>,
+    //   iconBg: '#1c8be3',
+    //   background: '#547085',
+    //   total: amount?.galleryImageCount,
+    //   linkKey: '/admin/gallery-images',
+    // },
+    // {
+    //   textKey: 'Contact Forms',
+    //   icon: <i className='fas fa-rocket'></i>,
+    //   iconBg: '#fda525',
+    //   background: '#9d8661',
+    //   total: amount?.contactFormCount,
+    //   linkKey: '/admin/contact-forms',
+    // },
   ];
 };
 

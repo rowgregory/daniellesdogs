@@ -52,7 +52,14 @@ tr {
 .react-calendar__tile--active {
   background: #5a68fe !important;
   color: white;
-  border-radius: 50%;
+}
+
+@media screen and (min-width: 900px) {
+  .react-calendar__tile--active {
+    background: #5a68fe !important;
+    color: white;
+    border-radius: 50%;
+  }
 }
 
 .react-calendar__month-view__weekdays__weekday {
@@ -83,7 +90,14 @@ abbr[title] {
 
 .react-calendar__month-view__days__day:hover {
   background: #5a68fe;
-  border-radius: 50%;
+}
+
+@media screen and (min-width: 900px) {
+  .react-calendar__month-view__days__day:hover {
+    background: #5a68fe !important;
+    color: white;
+    border-radius: 50%;
+  }
 }
 
 .react-calendar__navigation__prev-button,

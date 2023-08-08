@@ -1,11 +1,15 @@
-import { useEffect, useState } from 'react';
+import {
+  // useEffect,
+  useState,
+} from 'react';
 import styled from 'styled-components';
 import Calendar from 'react-calendar';
-import { Image, Spinner } from 'react-bootstrap';
-import { Flex, Link, Text } from '../../elements';
-import { useQuery } from '@apollo/client';
-import { GET_RECENT_ORDERS } from '../../../queries/getRecentOrders';
+// import { Image, Spinner } from 'react-bootstrap';
+// import { Flex, Link, Text } from '../../elements';
+// import { useQuery } from '@apollo/client';
+// import { GET_RECENT_ORDERS } from '../../../queries/getRecentOrders';
 import UserInitial from './UserInitial';
+import { Flex } from '../../elements';
 
 const Container = styled.div`
   padding-inline: 12px;
@@ -31,40 +35,40 @@ export const UserInitials = styled.div`
   margin-right: 10px;
 `;
 
-const RecentOrdersContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
+// const RecentOrdersContainer = styled.div`
+//   display: flex;
+//   flex-direction: column;
+// `;
 
-const OrderItem = styled(Link)`
-  padding: 10px;
-  display: flex;
-  background: #3d444c;
-  border-radius: 12px;
-  margin-bottom: 16px;
-  cursor: pointer;
-  width: 100%;
-  :hover {
-    filter: brightness(0.9);
-  }
-  img {
-    width: 45px;
-    height: 45px;
-    object-fit: cover;
-    border-radius: 50%;
-    margin-right: 12px;
-  }
-`;
+// const OrderItem = styled(Link)`
+//   padding: 10px;
+//   display: flex;
+//   background: #3d444c;
+//   border-radius: 12px;
+//   margin-bottom: 16px;
+//   cursor: pointer;
+//   width: 100%;
+//   :hover {
+//     filter: brightness(0.9);
+//   }
+//   img {
+//     width: 45px;
+//     height: 45px;
+//     object-fit: cover;
+//     border-radius: 50%;
+//     margin-right: 12px;
+//   }
+// `;
 
 const RightPanel = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const { loading, data, refetch } = useQuery(GET_RECENT_ORDERS);
+  // const { loading, data, refetch } = useQuery(GET_RECENT_ORDERS);
 
-  useEffect(() => {
-    refetch();
-  }, [refetch]);
+  // useEffect(() => {
+  //   refetch();
+  // }, [refetch]);
 
-  const recentOrders = data?.getRecentOrders;
+  // const recentOrders = data?.getRecentOrders;
 
   const handleDateSelection = (date: any) => {
     setSelectedDate(date);
@@ -72,22 +76,21 @@ const RightPanel = () => {
 
   return (
     <Container>
-      {window.innerWidth > 720 && (
-        <>
-          <div className='mb-5'>
-            <UserInitial />
-          </div>
-          <Calendar
-            showNeighboringMonth={false}
-            value={selectedDate}
-            formatMonth={(locale, date) =>
-              date.toLocaleString(locale, { month: 'short' })
-            }
-            onChange={handleDateSelection}
-          />
-        </>
-      )}
-      {recentOrders?.length > 0 && (
+      <>
+        <Flex display={['none', 'none', 'none', 'block']} className='mb-5'>
+          <UserInitial />
+        </Flex>
+        <Calendar
+          showNeighboringMonth={false}
+          value={selectedDate}
+          formatMonth={(locale, date) =>
+            date.toLocaleString(locale, { month: 'short' })
+          }
+          onChange={handleDateSelection}
+        />
+      </>
+
+      {/* {recentOrders?.length > 0 && (
         <Text color='#fff' fontFamily={'Roboto'} margin={['16px 0 16px 0']}>
           Recent Orders
         </Text>
@@ -135,7 +138,7 @@ const RightPanel = () => {
             )}
           </OrderItem>
         ))}
-      </RecentOrdersContainer>
+      </RecentOrdersContainer> */}
     </Container>
   );
 };
