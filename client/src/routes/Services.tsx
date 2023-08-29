@@ -21,7 +21,10 @@ const Services = () => {
   const { loading, data } = useQuery(GET_SERVICES);
 
   return (
-    <Flex flexdirection={['column']}>
+    <Flex
+      flexdirection={['column']}
+      style={{ minHeight: 'calc(100vh - 617px)' }}
+    >
       <Flex
         style={{
           position: 'relative',

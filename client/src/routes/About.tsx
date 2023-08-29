@@ -61,7 +61,10 @@ const About = () => {
   const { loading, data } = useQuery(GET_BIOS);
 
   return (
-    <div>
+    <Flex
+      flexdirection={['column']}
+      style={{ minHeight: 'calc(100vh - 617px)' }}
+    >
       <Container
         style={{
           position: 'relative',
@@ -171,7 +174,7 @@ const About = () => {
           ))}
         </BioCardsContainer>
       </Flex>
-    </div>
+    </Flex>
   );
 };
 

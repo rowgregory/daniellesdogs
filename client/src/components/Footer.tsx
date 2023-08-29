@@ -11,20 +11,12 @@ const quickLinks = () => {
       linkPath: '/services',
     },
     {
-      linkKey: 'Gallery',
-      linkPath: '/gallery',
-    },
-    {
-      linkKey: 'Shop',
-      linkPath: '/shop',
+      linkKey: 'About Us',
+      linkPath: '/about',
     },
     {
       linkKey: 'New Client Form',
       linkPath: '/new-client-form',
-    },
-    {
-      linkKey: 'Contact Us',
-      linkPath: '/contact',
     },
   ];
 };
